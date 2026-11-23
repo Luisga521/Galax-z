@@ -14,6 +14,7 @@
 
 ```bash
 Tools/package-mac.sh                       # the Mac app, build/Galax-z.app and a zip; with no Apple account it is signed for this Mac only
+PUBLIC=1 Tools/package-mac.sh              # the same to hand out: no Developer ID, no app id of yours, no debug symbols
 ./run-mac.sh -hub                          # build with your team (Mac Catalyst) and open the hub
 ./deploy-ipad.sh <device-udid>             # build, install, launch; plugged in and unlocked
 xcodegen                                   # Galaxz.xcodeproj again, after project.yml changed

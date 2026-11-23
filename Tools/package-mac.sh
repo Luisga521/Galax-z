@@ -19,7 +19,7 @@ APP="$OUT/Galax-z.app"
 rm -rf "$APP"
 ditto "$DD/Build/Products/Release-maccatalyst/Galaxz.app" "$APP"
 ID=$(security find-identity -v -p codesigning | sed -n 's/.*"\(Developer ID Application: [^"]*\)".*/\1/p' | head -1)
-[ -z "$PUBLIC" ] || ID=""
+[ -z "$PUBLIC" ] || { ID=""; xcrun strip -S -x "$APP/Contents/MacOS/Galaxz"; }    # no debug symbols: they carry the folders it was built in
 if [ -n "$ID" ]; then codesign --force --deep --options runtime --timestamp --entitlements Galaxz-mac.entitlements --sign "$ID" "$APP"; else codesign --force --deep --entitlements Galaxz-mac.entitlements --sign - "$APP"; fi
 codesign --verify --deep --strict "$APP"
 VERSION=$(/usr/libexec/PlistBuddy -c 'Print CFBundleShortVersionString' "$APP/Contents/Info.plist")

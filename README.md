@@ -50,8 +50,8 @@ Every picture is the app's own demo. The eleventh page, **LOAD**, shows [how har
 
 **The app** follows the OP-Z over a USB-C cable, or over Bluetooth on iPad and iPhone. Looking sends nothing that changes it; **touching a control
 changes the OP-Z by MIDI**, as a knob on it would. It learns any MIDI controller, backs up your projects (reading only), plays the OP-Z's sound through
-your device, and, on a Mac, installs Galax-z OS. No OP-Z? **Settings › DEMO OP-Z** plays a pretend one. It is built from source, with one
-command for the Mac ([BUILDING.md](docs/BUILDING.md)); it is not in the App Store.
+your device, and, on a Mac, installs Galax-z OS. No OP-Z? **Settings › DEMO OP-Z** plays a pretend one. **On a Mac, try the test build** from [Releases](https://github.com/Luisga521/Galax-z/releases) (not notarized: allow it once in
+System Settings › Privacy & Security), or build it with one command ([BUILDING.md](docs/BUILDING.md)). It is not in the App Store.
 
 **On the OP-Z itself**, the keys light up when it starts. Six of the sixteen boot animations (Galaxy, Radar, Comet, Rain, Bars, Snake), drawn where the
 OP-Z's lights are; each takes your own colours:
@@ -87,7 +87,7 @@ and what has not is in [STATUS.md](docs/STATUS.md), line by line.
 
 | You want to | Go to | Risk to your OP-Z |
 |---|---|---|
-| Look at it | Build the Mac app, open the demo ([BUILDING.md](docs/BUILDING.md)) | None |
+| Look at it | The Mac test build from [Releases](https://github.com/Luisga521/Galax-z/releases), Settings › DEMO OP-Z | None |
 | Use the screen | [USING.md](docs/USING.md) | Very low: looking only reads |
 | Play it from the app | [USING.md](docs/USING.md) | Low: MIDI changes what you touch; nothing is written into it |
 | Add synths and effects | [OP-FREE](https://github.com/mutlisensor/op-free), the project this stands on | Low: nothing is flashed |
