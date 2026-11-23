@@ -8,8 +8,6 @@ public struct StageInput: Sendable {
     /// Under the name while there is no OP-Z.
     public var linkLine = "LOOKING FOR YOUR OP-Z"
     public var linkHint = ""
-    /// Who made this build, under the name on the start screen ("BY …"); empty: nobody named.
-    public var byline = ""
     /// USB, BLUETOOTH, DEMO
     public var linkName = ""
     public var bank: Bank?

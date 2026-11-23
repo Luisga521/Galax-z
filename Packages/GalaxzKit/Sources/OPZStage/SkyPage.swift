@@ -99,9 +99,6 @@ extension Stage {
         if !input.linkHint.isEmpty {
             c.text(input.linkHint, Int(cx), Int(cy) + 30, Palette.ink, 0.6 * amount, font: .tiny, align: .center)
         }
-        if !input.byline.isEmpty {
-            c.text(input.byline.uppercased(), Int(cx), c.height - 44, Palette.ink, 0.45 * amount, font: .tiny, align: .center)
-        }
         let buttons = (showsPairing ? [("PAIR", Action.pair)] : []) + [("SETTINGS", .settings)]
         var bx = Int(cx) - (buttons.reduce(-8) { $0 + DotFont.tiny.width($1.0) + 20 }) / 2
         let y2 = c.height - 26

@@ -491,7 +491,7 @@ final class Live {
         #endif
     }
 
-    /// Who made this build (GALAXZ_BYLINE, from `git config galaxz.byline` when it was built); empty in a build nobody named.
+    /// Who made this build (GALAXZ_BYLINE), shown in Settings › Credits; empty in a build nobody named.
     static let byline = (Bundle.main.object(forInfoDictionaryKey: "GalaxzByline") as? String ?? "").trimmingCharacters(in: .whitespaces)
 
     /// Everything the screens show, as it is now.
@@ -500,7 +500,6 @@ final class Live {
         i.link = link
         i.linkName = linkName
         i.linkLine = linkLine
-        i.byline = Self.byline
         i.linkHint = stage.showsPairing ? "SWITCH IT ON, CLOSE TE'S OP-Z APP, OR PLUG IN A CABLE" : ""
         i.bank = bank
         i.revision = client.bankRevision &* 1_000_003 &+ client.editRevision

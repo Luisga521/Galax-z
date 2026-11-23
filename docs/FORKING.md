@@ -20,7 +20,7 @@ Until you do, your app asks **this** repository for updates and trusts **its** k
 |---|---|---|
 | 1. **Where updates come from** | `ReleaseFeed.defaultURL`, `Packages/GalaxzKit/Sources/OPZFirmware/Release.swift` | your repository |
 | 2. **Who may sign them** | `Packages/GalaxzKit/Sources/OPZFirmware/ReleaseKeys.swift` | your public key: `swift run galaxz-release keygen` ([RELEASING.md](RELEASING.md)) |
-| 3. **Who you are to Apple** | nothing in the code: `git config galaxz.team <your team>` and `git config galaxz.id <your.app.id>`, which the scripts pass on (in Xcode: `DEVELOPMENT_TEAM`, `GALAXZ_ID`); `git config galaxz.byline "by …"` puts your name on the start screen in place of "by Luis Tosado". For a published fork change `org.galax-z` in `project.yml` and `App/` too, then `xcodegen` | your team and your ids |
+| 3. **Who you are to Apple** | nothing in the code: `git config galaxz.team <your team>` and `git config galaxz.id <your.app.id>`, which the scripts pass on (in Xcode: `DEVELOPMENT_TEAM`, `GALAXZ_ID`); `git config galaxz.byline "by …"` puts your name in Settings › Credits in place of "by Luis Tosado". For a published fork change `org.galax-z` in `project.yml` and `App/` too, then `xcodegen` | your team and your ids |
 | 4. **The iPad** | nothing in the code | `./deploy-ipad.sh <udid>`, or once `git config galaxz.ipad <udid>` |
 | 5. **The name and the numbers** | the app's name and its byline (`GALAXZ_BYLINE` in `project.yml`); `galaxz-vN` is how a release and a build are named (`Release.swift`, `Catalog.swift`) | your own name. **Please do not publish another "Galax-z v14"**: two different images under one name is how somebody writes the wrong one |
 
