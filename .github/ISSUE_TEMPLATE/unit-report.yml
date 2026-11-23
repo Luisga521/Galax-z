@@ -1,0 +1,34 @@
+name: Unit report
+description: What happened on your OP-Z, good or bad. The most useful thing you can give.
+labels: [unit report]
+body:
+  - type: markdown
+    attributes:
+      value: Thank you. No backups, dumps or `os.ldr` here, please.
+  - type: input
+    id: version
+    attributes: { label: Galax-z OS version, placeholder: "v9, or none (app only)" }
+    validations: { required: true }
+  - type: input
+    id: te
+    attributes: { label: TE's OS it was on before, placeholder: "1.2.45" }
+    validations: { required: true }
+  - type: input
+    id: hardware
+    attributes: { label: Your OP-Z, placeholder: "year bought; repairs or mods; battery original or not" }
+  - type: input
+    id: from
+    attributes: { label: Installed from, placeholder: "Mac model, macOS; app's hub or Firmware/flash" }
+  - type: dropdown
+    id: result
+    attributes:
+      label: Result
+      options: [Works, Works in part, Does not work, Does not start, Went back to TE's OS]
+    validations: { required: true }
+  - type: textarea
+    id: what
+    attributes: { label: What you saw, description: "What you did, what you saw, and what you did not try." }
+    validations: { required: true }
+  - type: textarea
+    id: files
+    attributes: { label: Anything else, description: "The load meter's figures, LINK CHECK's file (look at it first), the hub's log." }

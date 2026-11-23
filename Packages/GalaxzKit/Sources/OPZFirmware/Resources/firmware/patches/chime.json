@@ -1,0 +1,40 @@
+{
+  "name": "galaxz-chime",
+  "status": "Tested off the OP-Z, not yet on the unit",
+  "description": "Two Quindar tones when the OP-Z is switched on, through its own volume. See chime/chime.c.",
+  "source": {
+    "file": "os.ldr",
+    "firmware": "1.2.45",
+    "size": 828136,
+    "sha256": "5be99760c8797bdd4797ed20cfb9a92b6588889d3a81109bae5a45646a9bde07",
+    "crc32": 2403806141
+  },
+  "edits": [
+    {
+      "what": "as the mix is handed on, the start's two tones are added to it",
+      "hook": "_hook_mix",
+      "device_address": "0x80023434",
+      "file_offset": "0x4eddc",
+      "expected": "07 e3 50 a4",
+      "new": "68 e3 e6 e5",
+      "evidence": "[code] 'CALL 0x80117cd4' after 'CALL 0x801184c0' (Synth::render) in the audio callback 0x8002325c; R1 = R7 = the mix, 64 frames of interleaved stereo, 32 bits, before USB out (0x8002f944) and the volume's ramp (0x80023308)"
+    }
+  ],
+  "blocks": [
+    {
+      "what": "the hook and the tones",
+      "target": "0x80d40000",
+      "source": "chime/chime.S",
+      "entries": {
+        "_hook_mix": "0x80d40000"
+      },
+      "state": {
+        "chime_at": "0x80d401b8"
+      },
+      "data": "6701400141010130a66f00e31300666c31903090270109e1d47c49e11180510047414c41585a2d4348494d452d30303148e1d480e30508e1b801459149e1010009e1d70510324d0a9010420c8e1829e140002be1854d4d5adb5a590a4193851828e19bb2005a20e17bb24d30084f455bfe6348e1d480fd634ce1d480015008e1b40146e1ff3f45e1ff7f0ce1bc01f96301e1f564080a661022e1bc3f100a6a1c24e143c0e05027e1102b3b0a681021e1ff010b0a7a1c24e1efd6a3500a0a771427e1102bdf52934f019182c61189f148b1541c345c1482c6428f0f32cc5c59954c5c4fa8424ecf53d242fa40814f515093300a4e020c021c894380c00b1883c6805111c00b8611c0199822e1bc3f83c68811100a0bc43f02351c42e15e0e02e1720a1a32419113918b50d3591159e755595a870c41930314fb4dab5853a012938b50d35951584f54810c111852b008647d3038080a18f96301e1f564080a426c9c1f426c0864942fa3051000fb4dab58ee2f183027e1102b3b0a9a1f01600193e72f42e1a80e02e13c58cc2f0960f14f915282c642890c32cc5c59952be1400059089f130260a32f934f8f2f0b60db4f8c2f000000000000000000000000240348066a098c0cab0fc812e215f9180b1c1a1f2322282526281f2b112efb30df33ba368c39563c173fce417a441c47b4493f4cbf4e33519b53f5554258825ab35cd75eeb60f162e864cf66a6686d6a236cc96d5e6fe2705472b573047541766b77847889797c7a5c7b297ce37c897d1d7e9c7e097f617fa67fd87ff57fff7f0000",
+      "sha256": "000c28312183f7129f4423aa6dba265d21df441f4cff5d39f9b7c06ff9872560"
+    }
+  ],
+  "revert": "Flash Galax-z v11 without the chime, or v10 (the hub, or Firmware/flash).",
+  "risk": "Our code runs in the audio interrupt for the first 1.6 seconds after a start, and for a few instructions a block after that. If it fails, the OP-Z stops at its start: switch off, update mode (SCREEN), flash Galax-z v10 or the original."
+}

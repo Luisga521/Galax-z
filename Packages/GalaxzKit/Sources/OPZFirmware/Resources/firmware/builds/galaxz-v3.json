@@ -1,0 +1,5 @@
+{
+  "title": "Galax-z v3",
+  "description": "Galax-z v2 plus the A/B bars: the playhead is white on odd patterns (A), purple on even ones (B).",
+  "patches": ["debounce.json", "galaxy-boot.json", "ab-bars.json"]
+}

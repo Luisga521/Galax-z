@@ -1,0 +1,22 @@
+[
+  {"slot": 0, "index": 0, "default_octave": -2, "name": "grand", "values": [128, 128, 0, 255, 255, 20, 0, 0, 128, 0, 128, 215, 0, 128, 100, 255, 0, 0]},
+  {"slot": 0, "index": 1, "default_octave": -2, "name": "bright", "values": [215, 150, 0, 255, 255, 18, 0, 0, 128, 0, 128, 205, 0, 128, 100, 255, 0, 0]},
+  {"slot": 0, "index": 2, "default_octave": -2, "name": "felt", "values": [40, 70, 0, 255, 255, 32, 0, 0, 128, 0, 128, 235, 0, 128, 100, 255, 0, 0]},
+  {"slot": 0, "index": 3, "default_octave": -2, "name": "staccato", "values": [140, 165, 0, 70, 0, 12, 0, 0, 128, 0, 128, 215, 0, 128, 100, 255, 0, 0]},
+  {"slot": 0, "index": 4, "default_octave": -2, "name": "pedal", "values": [120, 120, 0, 255, 255, 120, 0, 0, 128, 0, 128, 205, 0, 128, 100, 255, 0, 0]},
+  {"slot": 1, "index": 0, "default_octave": 0, "name": "grand", "values": [128, 128, 0, 255, 255, 20, 0, 0, 128, 0, 128, 215, 0, 128, 100, 255, 0, 0]},
+  {"slot": 1, "index": 1, "default_octave": 0, "name": "bright", "values": [215, 150, 0, 255, 255, 18, 0, 0, 128, 0, 128, 205, 0, 128, 100, 255, 0, 0]},
+  {"slot": 1, "index": 2, "default_octave": 0, "name": "felt", "values": [40, 70, 0, 255, 255, 32, 0, 0, 128, 0, 128, 235, 0, 128, 100, 255, 0, 0]},
+  {"slot": 1, "index": 3, "default_octave": 0, "name": "staccato", "values": [140, 165, 0, 70, 0, 12, 0, 0, 128, 0, 128, 215, 0, 128, 100, 255, 0, 0]},
+  {"slot": 1, "index": 4, "default_octave": 0, "name": "pedal", "values": [120, 120, 0, 255, 255, 120, 0, 0, 128, 0, 128, 205, 0, 128, 100, 255, 0, 0]},
+  {"slot": 2, "index": 0, "default_octave": 0, "name": "grand", "values": [128, 128, 0, 255, 255, 20, 0, 0, 128, 0, 128, 215, 0, 128, 100, 255, 0, 0]},
+  {"slot": 2, "index": 1, "default_octave": 0, "name": "bright", "values": [215, 150, 0, 255, 255, 18, 0, 0, 128, 0, 128, 205, 0, 128, 100, 255, 0, 0]},
+  {"slot": 2, "index": 2, "default_octave": 0, "name": "felt", "values": [40, 70, 0, 255, 255, 32, 0, 0, 128, 0, 128, 235, 0, 128, 100, 255, 0, 0]},
+  {"slot": 2, "index": 3, "default_octave": 0, "name": "staccato", "values": [140, 165, 0, 70, 0, 12, 0, 0, 128, 0, 128, 215, 0, 128, 100, 255, 0, 0]},
+  {"slot": 2, "index": 4, "default_octave": 0, "name": "pedal", "values": [120, 120, 0, 255, 255, 120, 0, 0, 128, 0, 128, 205, 0, 128, 100, 255, 0, 0]},
+  {"slot": 3, "index": 0, "default_octave": 0, "name": "grand", "values": [128, 128, 0, 255, 255, 20, 0, 0, 128, 0, 128, 195, 0, 128, 100, 255, 0, 0]},
+  {"slot": 3, "index": 1, "default_octave": 0, "name": "bright", "values": [215, 150, 0, 255, 255, 18, 0, 0, 128, 0, 128, 185, 0, 128, 100, 255, 0, 0]},
+  {"slot": 3, "index": 2, "default_octave": 0, "name": "felt", "values": [40, 70, 0, 255, 255, 32, 0, 0, 128, 0, 128, 235, 0, 128, 100, 255, 0, 0]},
+  {"slot": 3, "index": 3, "default_octave": 0, "name": "staccato", "values": [140, 165, 0, 70, 0, 12, 0, 0, 128, 0, 128, 215, 0, 128, 100, 255, 0, 0]},
+  {"slot": 3, "index": 4, "default_octave": 0, "name": "pedal", "values": [120, 120, 0, 255, 255, 120, 0, 0, 128, 0, 128, 185, 0, 128, 100, 255, 0, 0]}
+]

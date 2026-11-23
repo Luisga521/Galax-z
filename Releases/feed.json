@@ -1,0 +1,18 @@
+{
+  "releases" : [
+    {
+      "date" : "2026-11-22",
+      "file" : "galaxz-v13.galaxz",
+      "label" : "galaxz-v13",
+      "number" : 13,
+      "title" : "Galax-z v13"
+    },
+    {
+      "date" : "2026-11-22",
+      "file" : "galaxz-v9.galaxz",
+      "label" : "galaxz-v9",
+      "number" : 9,
+      "title" : "Galax-z v9"
+    }
+  ]
+}

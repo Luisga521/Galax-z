@@ -1,0 +1,24 @@
+# The grand preset on the chord track: four-voice chords at three velocities, then a fifth note steals a voice.
+tempo 100
+steps 24
+tail 2
+track chord
+sample ../opzk_piano.aif samplepacks/opzk_piano.aif
+preset 128 128 0 255 255 20 0 0 128 0 128 215 0 128 100 255 0 0
+note 0 C3 5 110
+note 0 G3 5 110
+note 0 E4 5 110
+note 0 B4 5 110
+note 6 A2 5 60
+note 6 E3 5 60
+note 6 C4 5 60
+note 6 G4 5 60
+note 12 F2 6 127
+note 12 C4 6 127
+note 12 A4 6 127
+note 12 E5 6 127
+note 15 D5 4 90
+note 20 C4 3 30
+expect sound 0 18
+expect idle 34
+expect peak_below 0

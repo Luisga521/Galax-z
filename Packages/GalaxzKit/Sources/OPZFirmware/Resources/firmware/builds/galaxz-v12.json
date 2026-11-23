@@ -1,0 +1,21 @@
+{
+  "title": "Galax-z v12",
+  "description": "Galax-z v11 with the Quindar tones in place of TE's start sound, not after it.",
+  "notes": [
+    "When the OP-Z is switched on, the two Quindar tones are its start sound; TE's is not played any more.",
+    "disable_start_sound in the OP-Z's general.json turns the tones off too. Galax-z v12 quiet is the same with no start sound at all."
+  ],
+  "patches": [
+    "debounce.json",
+    "galaxy-boot.json",
+    "ab-bars.json",
+    "pages7.json",
+    "usbhost.json",
+    "keys.json",
+    "keep-presets.json",
+    "voices.json",
+    "meter.json",
+    "tell7.json",
+    "chime2.json"
+  ]
+}

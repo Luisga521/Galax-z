@@ -1,0 +1,25 @@
+# The staccato preset on the arp track, sixteenths up the keyboard with two voices overlapping.
+tempo 120
+steps 32
+tail 1.5
+track arp
+sample ../opzk_piano.aif samplepacks/opzk_piano.aif
+preset 140 165 0 70 0 12 0 0 128 0 128 215 0 0 0 0 0 0
+note 0 36 1 60
+note 2 40 1 64
+note 4 44 1 68
+note 6 48 1 72
+note 8 52 1 76
+note 10 56 1 80
+note 12 60 1 84
+note 14 64 1 88
+note 16 68 1 92
+note 18 72 1 96
+note 20 76 1 100
+note 22 80 1 104
+note 24 84 1 108
+note 26 88 1 112
+note 28 92 1 116
+note 30 96 1 120
+expect sound 0 30
+expect peak_below 0

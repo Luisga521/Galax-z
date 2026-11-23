@@ -1,0 +1,24 @@
+{
+  "name": "galaxz-no-start-sound",
+  "status": "Tested off the OP-Z, not yet on the unit",
+  "description": "No sound when the OP-Z is switched on: TE's is not played.",
+  "source": {
+    "file": "os.ldr",
+    "firmware": "1.2.45",
+    "size": 828136,
+    "sha256": "5be99760c8797bdd4797ed20cfb9a92b6588889d3a81109bae5a45646a9bde07",
+    "crc32": 2403806141
+  },
+  "edits": [
+    {
+      "what": "TE's start sound is not played",
+      "device_address": "0x8011a16c",
+      "file_offset": "0x8f914",
+      "expected": "ff e3 0b ed",
+      "new": "00 00 00 00",
+      "evidence": "[code] 'CALL 0x80117b82', skipped by the OS itself when general.json has disable_start_sound (0x8011a0fe); two NOPs"
+    }
+  ],
+  "revert": "Flash Galax-z v11 (the hub, or Firmware/flash).",
+  "risk": "The OS's own way with disable_start_sound."
+}

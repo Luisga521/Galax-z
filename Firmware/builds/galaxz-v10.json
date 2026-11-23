@@ -1,0 +1,9 @@
+{
+  "title": "Galax-z v10",
+  "description": "Galax-z v9 plus what the Galax-z app needs to show the tumbler and EUCLID: the OP-Z tells it where the balls and the rings are.",
+  "notes": [
+    "The Galax-z app shows the tumbler's balls and EUCLID's rings as they are, with their dials, on FX and on TRACK.",
+    "It is told only while the Galax-z app is connected. TE's app and everything else on the OP-Z are as in v9."
+  ],
+  "patches": ["debounce.json", "galaxy-boot.json", "ab-bars.json", "pages.json", "usbhost.json", "keys.json", "keep-presets.json", "voices.json", "meter.json", "tell.json"]
+}

@@ -1,0 +1,33 @@
+{
+  "name": "galaxz-led-walker",
+  "status": "TESTING (a test build: install, write down the map, then flash Galax-z v1 or the original back)",
+  "description": "Lights one LED at a time so the LED index -> key map can be written down. While installed the keys show only the walk. See notes/leds.md and walker/led_walker.S.",
+  "source": {
+    "file": "os.ldr",
+    "firmware": "1.2.45",
+    "size": 828136,
+    "sha256": "5be99760c8797bdd4797ed20cfb9a92b6588889d3a81109bae5a45646a9bde07",
+    "crc32": 2403806141
+  },
+  "edits": [
+    {
+      "what": "the UI frame's LED send calls the walker first (which then jumps on to the send)",
+      "device_address": "0x8010a9de",
+      "file_offset": "0x80186",
+      "expected": "f9 e3 21 96",
+      "new": "57 e3 11 ab",
+      "evidence": "[code] 'CALL 0x8003d620' at 0x8010a9de is the only LED send of the UI frame (every path of 0x8010a904 ends there); 'CALL 0x80c00000' has the same size; notes/leds.md"
+    }
+  ],
+  "blocks": [
+    {
+      "what": "the LED walker",
+      "target": "0x80c00000",
+      "source": "walker/led_walker.S",
+      "data": "08e1a00048e1c0800091086481e1780088080a18006042a00a6483e136009a080218026042b0009309e1a4d349e10208006083e10901089afb67030cfd1309e1a4d349e1020842a0020c0b1080e1400083e13500089b296cfb67030cfc131b20fa6782c61286d3501332515a80e1ff0081e10a008a0803188a52fd2f020c0918089b88e6010088e6020088e60300032088e6010009e120d649e1038051000000000000000000000047414c41585a2d57414c4b45522d3100",
+      "sha256": "73d7e15c64f9c3efd74bb1faae1fdf6a9bec1cd604170101f91f04d62c7be953"
+    }
+  ],
+  "revert": "Flash Galax-z v1 or the original (Firmware/flash, or the Galax-z hub on the Mac).",
+  "risk": "First code of ours on the unit. If 0x80C00000 is not free after all, the OS crashes or the LEDs misbehave: switch off, update mode, flash the original."
+}

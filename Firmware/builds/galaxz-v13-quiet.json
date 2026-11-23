@@ -1,0 +1,21 @@
+{
+  "title": "Galax-z v13 quiet",
+  "description": "Galax-z v13 with no sound when the OP-Z is switched on.",
+  "notes": [
+    "The seventh page, GROOVE, is light green (it was red).",
+    "No sound when the OP-Z is switched on."
+  ],
+  "patches": [
+    "debounce.json",
+    "galaxy-boot.json",
+    "ab-bars.json",
+    "pages8.json",
+    "usbhost.json",
+    "keys.json",
+    "keep-presets.json",
+    "voices.json",
+    "meter.json",
+    "tell8.json",
+    "no-start-sound.json"
+  ]
+}

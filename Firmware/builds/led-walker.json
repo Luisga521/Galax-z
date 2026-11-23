@@ -1,0 +1,8 @@
+{
+  "title": "LED walker (test)",
+  "description": "Galax-z v1 plus the LED walker: lights one LED index at a time (a test). Flash Galax-z v2 back afterwards.",
+  "patches": [
+    "debounce.json",
+    "led-walker.json"
+  ]
+}

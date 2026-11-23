@@ -1,0 +1,13 @@
+# Long notes: the recorded part, the join and many passes of the loop, at both ends and in the middle.
+tempo 60
+steps 48
+tail 2
+track lead
+sample ../opzk_piano.aif samplepacks/opzk_piano.aif
+preset 128 128 0 255 255 20 0 0 128 0 128 215 0 128 100 255 0 0
+note 0 A0 46 104
+note 0 A3 46 104
+note 0 Eb6 46 104
+expect sound 0 40
+expect idle 56
+expect peak_below 0

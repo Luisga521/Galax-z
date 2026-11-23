@@ -1,0 +1,20 @@
+{
+  "title": "Galax-z v12 quiet",
+  "description": "Galax-z v12 with no sound when the OP-Z is switched on.",
+  "notes": [
+    "No sound when the OP-Z is switched on."
+  ],
+  "patches": [
+    "debounce.json",
+    "galaxy-boot.json",
+    "ab-bars.json",
+    "pages7.json",
+    "usbhost.json",
+    "keys.json",
+    "keep-presets.json",
+    "voices.json",
+    "meter.json",
+    "tell7.json",
+    "no-start-sound.json"
+  ]
+}

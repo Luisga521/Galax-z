@@ -1,0 +1,818 @@
+{
+ "source": "op-free site/scripts/catalogue.ts buildCatalogue() and each engine's README",
+ "engines": [
+  {
+   "dir": "8bit",
+   "label": "8bit",
+   "kind": "drum",
+   "plug": 61024,
+   "summary": "Chiptune drums for the kick, snare, perc and sample tracks — no samples.",
+   "p1": {
+    "name": "tune",
+    "help": "Transposes the tone and the noise clock in semitone steps, −12 at 0 … 0 at 123–133 … +12 at 246–255 (10.24 values per…"
+   },
+   "p2": {
+    "name": "crunch",
+    "help": "0–63 clean: band-limited (PolyBLEP) pulses, a smooth triangle, a 16-bit output."
+   },
+   "presets": [
+    "chip",
+    "clean",
+    "handheld",
+    "crushed",
+    "high score"
+   ]
+  },
+  {
+   "dir": "chip",
+   "label": "chip",
+   "kind": "synth",
+   "plug": 61203,
+   "summary": "An 8-bit console voice for the bass, lead, arp and chord tracks: the pulse waves with the classic duty cycles, the 4-bit stepped triangle, a 4-bit saw, LFSR…",
+   "p1": {
+    "name": "wave",
+    "help": "8 steps of 32, stepped like the real chips (no morphing): see the table below"
+   },
+   "p2": {
+    "name": "arpeggio",
+    "help": "0 plain; 1–31 a delayed vibrato; 32–223 six arpeggios at four speeds; 224–255 pitch sweeps: see the table below"
+   },
+   "presets": [
+    "tri bass",
+    "pulse bass",
+    "oct bass",
+    "thin bass",
+    "drop bass",
+    "chip lead",
+    "square",
+    "duty lead",
+    "thin lead",
+    "jump",
+    "major arp",
+    "minor arp",
+    "noise hat",
+    "metal hit",
+    "zap",
+    "chip chord",
+    "tri organ",
+    "saw pad",
+    "sus arp",
+    "7th arp"
+   ]
+  },
+  {
+   "dir": "clouds",
+   "label": "clouds",
+   "kind": "fx",
+   "plug": 61007,
+   "summary": "Granular texture for FX1.",
+   "p1": {
+    "name": "size",
+    "help": "one macro from sparse long grains to dense short clouds."
+   },
+   "p2": {
+    "name": "texture",
+    "help": "0 = tight: every grain starts within the last 10 ms (plus what its pitch needs), all in the centre: a grainy, slightly…"
+   },
+   "presets": [
+    "cloud"
+   ]
+  },
+  {
+   "dir": "dx",
+   "label": "dx",
+   "kind": "synth",
+   "plug": 61013,
+   "summary": "Six-operator FM voice for the bass, lead, arp and chord tracks, with the 32 DX7 algorithms and a bank of 32 patches of our own: e-pianos, basses, brass,…",
+   "p1": {
+    "name": "patch",
+    "help": "picks one of the 32 patches, 8 values each (P1 ÷ 8, table below; presets sit in the middle of a step, 8 n + 4)."
+   },
+   "p2": {
+    "name": "bright",
+    "help": "scales every modulator of the patch (every operator that feeds another one; a modulator's feedback follows its level)."
+   },
+   "presets": [
+    "dx bass",
+    "pick bass",
+    "slap bass",
+    "wow bass",
+    "fretless",
+    "dx brass",
+    "synth lead",
+    "flute",
+    "clarinet",
+    "oboe",
+    "marimba",
+    "kalimba",
+    "harp",
+    "glock",
+    "steel drum",
+    "tine ep",
+    "strings",
+    "organ",
+    "warm pad",
+    "clav"
+   ]
+  },
+  {
+   "dir": "echo",
+   "label": "echo",
+   "kind": "fx",
+   "plug": 61005,
+   "summary": "Tape echo for FX1, in the spirit of an Echoplex or Space Echo.",
+   "p1": {
+    "name": "time",
+    "help": "echo time, 19.8 ms to 5 s, exponential at 32 steps per octave (each step 2.2 %), and exact at 120 BPM: 85 = 125 ms…"
+   },
+   "p2": {
+    "name": "feedback",
+    "help": "one macro for how long the echo lasts and how worn the tape sounds."
+   },
+   "presets": [
+    "tape"
+   ]
+  },
+  {
+   "dir": "ensemble",
+   "label": "ensemble",
+   "kind": "synth",
+   "plug": 61201,
+   "summary": "A 70s string machine for the chord track (and bass, lead and arp): divide-down style string registrations — dark cello, viola, bright violin with the 4'…",
+   "p1": {
+    "name": "registration",
+    "help": "a smooth morph through five registrations, each a mix of three footages (8' saw, 8' square, 4' saw = an octave up)…"
+   },
+   "p2": {
+    "name": "ensemble",
+    "help": "0 dry: the bare registration."
+   },
+   "presets": [
+    "string bass",
+    "cello bass",
+    "octave bass",
+    "ensemble bs",
+    "wobble bass",
+    "violin",
+    "string lead",
+    "viola",
+    "solo cello",
+    "seasick",
+    "string arp",
+    "pizzicato",
+    "glass arp",
+    "organ arp",
+    "drift arp",
+    "solina",
+    "string pad",
+    "cello pad",
+    "full string",
+    "seasick pad"
+   ]
+  },
+  {
+   "dir": "filter",
+   "label": "filter",
+   "kind": "fx",
+   "plug": 61002,
+   "summary": "Resonant stereo filter for the FX tracks, with an envelope follower (auto-wah), played by notes sequenced on its own track.",
+   "p1": {
+    "name": "cutoff",
+    "help": "30 Hz–18 kHz, exponential (0.43 semitone per step; 128 ≈ 745 Hz)."
+   },
+   "p2": {
+    "name": "character",
+    "help": "one macro over resonance, shape and movement (table below)"
+   },
+   "presets": [
+    "warm"
+   ]
+  },
+  {
+   "dir": "fm2",
+   "label": "fm2",
+   "kind": "synth",
+   "plug": 61011,
+   "summary": "Two-operator FM voice for the bass, lead, arp and chord tracks: one sine modulator, with feedback, phase-modulates one sine carrier.",
+   "p1": {
+    "name": "ratio",
+    "help": "modulator : carrier frequency ratio, in 16 fixed steps of 16 values (P1 ÷ 16 picks the step; the table below)."
+   },
+   "p2": {
+    "name": "index",
+    "help": "modulation depth."
+   },
+   "presets": [
+    "fm bass",
+    "sub bass",
+    "slap bass",
+    "grit bass",
+    "wood bass",
+    "fm lead",
+    "clarinet",
+    "brass",
+    "grit lead",
+    "glass lead",
+    "pluck",
+    "bell",
+    "marimba",
+    "chime",
+    "blip",
+    "e-piano",
+    "organ",
+    "fm pad",
+    "tine piano",
+    "bell pad"
+   ]
+  },
+  {
+   "dir": "fmperc",
+   "label": "fmperc",
+   "kind": "drum",
+   "plug": 61021,
+   "summary": "Two-operator FM percussion for the kick, snare, perc and sample tracks — no samples.",
+   "p1": {
+    "name": "ratio",
+    "help": "the key's harmonic ratio (whole or half numbers: tonal, woody, hollow)"
+   },
+   "p2": {
+    "name": "sweep",
+    "help": "no pitch sweep; index and level decays ×¼ (short and dry)"
+   },
+   "presets": [
+    "fm drums",
+    "wood",
+    "metal",
+    "zappy",
+    "tight"
+   ]
+  },
+  {
+   "dir": "glue",
+   "label": "glue",
+   "kind": "fx",
+   "plug": 61004,
+   "summary": "Stereo bus compressor and soft clipper for FX1 and FX2: send tracks to it to glue them together.",
+   "p1": {
+    "name": "amount",
+    "help": "how hard it compresses."
+   },
+   "p2": {
+    "name": "character",
+    "help": "0–127: from slow, clean glue (20 ms attack, auto release 150 ms–0.7 s, wide 12 dB knee) to fast and pumping (1 ms…"
+   },
+   "presets": [
+    "glue"
+   ]
+  },
+  {
+   "dir": "harmonizer",
+   "label": "harmonizer",
+   "kind": "fx",
+   "plug": 61104,
+   "summary": "Two pitch-shifted voices over a short, moving delay network for FX1 and FX2: a slow detune shimmer at the centre of P1, harmonised intervals towards its ends,…",
+   "p1": {
+    "name": "shift",
+    "help": "bipolar around 128."
+   },
+   "p2": {
+    "name": "space",
+    "help": "0 = the voices alone; up: a stereo delay network (20 → 110 ms left, 1.37× right, slowly moving) mixes in and feeds…"
+   },
+   "presets": [
+    "halo"
+   ]
+  },
+  {
+   "dir": "hats",
+   "label": "hats",
+   "kind": "drum",
+   "plug": 61023,
+   "summary": "Metallic hi-hats and cymbals for the kick, snare, perc and sample tracks, synthesized the TR-808 way: six detuned square waves plus a little noise, through a…",
+   "p1": {
+    "name": "tone",
+    "help": "dark/trashy at 0 → bright/glassy at 255, continuous; 128 is each key's nominal sound."
+   },
+   "p2": {
+    "name": "decay",
+    "help": "the length, and with it how open a hat sounds."
+   },
+   "presets": [
+    "808",
+    "tight",
+    "trashy",
+    "glassy",
+    "washy"
+   ]
+  },
+  {
+   "dir": "kit",
+   "label": "kit",
+   "kind": "drum",
+   "plug": 61020,
+   "summary": "Synthesized drum kit for the kick, snare, perc and sample tracks — no samples.",
+   "p1": {
+    "name": "tune",
+    "help": "±1 octave on every pitch and filter of the model (128 = nominal)"
+   },
+   "p2": {
+    "name": "decay",
+    "help": "×¼ … ×2 on every decay (128 = nominal)"
+   },
+   "presets": [
+    "analog",
+    "tight",
+    "big room",
+    "snappy",
+    "low",
+    "deep",
+    "pitched up",
+    "blips"
+   ]
+  },
+  {
+   "dir": "lofi",
+   "label": "lofi",
+   "kind": "fx",
+   "plug": 61102,
+   "summary": "Worn tape and cheap converters for FX1 and FX2: wow and flutter, a narrowing band, saturation, hiss and crackle, then bit and sample-rate reduction — and a…",
+   "p1": {
+    "name": "age",
+    "help": "one macro, 0 = clean (transparent apart from a 12 ms delay): wow (0.6 Hz with a drifting rate, up to ±3 ms ≈ ±20…"
+   },
+   "p2": {
+    "name": "noise",
+    "help": "0–127: tape hiss (−66 → −30 dBFS) and vinyl crackle (0 → 40 pops/s) fade in."
+   },
+   "presets": [
+    "cassette"
+   ]
+  },
+  {
+   "dir": "mallet",
+   "label": "mallet",
+   "kind": "drum",
+   "plug": 61022,
+   "summary": "Modal percussion for the kick, snare, perc and sample tracks: marimba, xylophone, vibes, glockenspiel, steel drum, bells, gongs, glass and wood blocks, played…",
+   "p1": {
+    "name": "material",
+    "help": "a continuous morph through nine materials, 32 apart: 0 wood (wood block / log drum: a thick free bar, very short, a…"
+   },
+   "p2": {
+    "name": "ring",
+    "help": "from dead to long, three things together."
+   },
+   "presets": [
+    "marimba",
+    "vibes",
+    "steel drum",
+    "bells",
+    "wood block"
+   ]
+  },
+  {
+   "dir": "modal",
+   "label": "modal",
+   "kind": "synth",
+   "plug": 61017,
+   "summary": "Struck and bowed resonating bodies for the bass, lead, arp and chord tracks: mallets, bars, bells, glass, drums and bowed metal.",
+   "p1": {
+    "name": "structure",
+    "help": "a continuous morph through six anchors, 51 apart."
+   },
+   "p2": {
+    "name": "damping",
+    "help": "two zones."
+   },
+   "presets": [
+    "mallet bass",
+    "string bass",
+    "tom bass",
+    "bowed bass",
+    "metal bass",
+    "vibes",
+    "glass lead",
+    "glass harp",
+    "steel drum",
+    "dulcimer",
+    "marimba",
+    "glock",
+    "kalimba",
+    "celesta",
+    "crystal",
+    "bell pad",
+    "chimes",
+    "bowl",
+    "tine keys",
+    "gamelan"
+   ]
+  },
+  {
+   "dir": "pd",
+   "label": "pd",
+   "kind": "synth",
+   "plug": 61200,
+   "summary": "A phase-distortion voice in the tradition of Casio's CZ synthesizers, for the bass, lead, arp and chord tracks: a cosine read through a bent phase.",
+   "p1": {
+    "name": "distortion",
+    "help": "how far the wave is bent, from 0 = a pure sine on every wave to 255 = the full wave."
+   },
+   "p2": {
+    "name": "wave",
+    "help": "eight waves, each holding over a plateau, with a crossfade between neighbours (both are computed from the same phase,…"
+   },
+   "presets": [
+    "cz bass",
+    "reso bass",
+    "square bass",
+    "pulse bass",
+    "sine bass",
+    "cz lead",
+    "reso lead",
+    "brass",
+    "double lead",
+    "hollow lead",
+    "pd pluck",
+    "reso pluck",
+    "pulse arp",
+    "glass arp",
+    "sync arp",
+    "cz strings",
+    "pd piano",
+    "reso pad",
+    "pd organ",
+    "brass pad"
+   ]
+  },
+  {
+   "dir": "plate",
+   "label": "plate",
+   "kind": "fx",
+   "plug": 61006,
+   "summary": "Lush stereo plate reverb for FX1 and FX2.",
+   "p1": {
+    "name": "size",
+    "help": "one macro over size, decay and pre-delay (table below)."
+   },
+   "p2": {
+    "name": "tone",
+    "help": "dark and warm → bright and shimmering, in one sweep: the input's band limit opens from 2 to 18 kHz, the damping inside…"
+   },
+   "presets": [
+    "plate"
+   ]
+  },
+  {
+   "dir": "pluck",
+   "label": "pluck",
+   "kind": "synth",
+   "plug": 61014,
+   "summary": "Plucked and struck strings for the bass, lead, arp and chord tracks: one Karplus-Strong waveguide per voice, from nylon and steel guitar strings through a…",
+   "p1": {
+    "name": "material",
+    "help": "three zones."
+   },
+   "p2": {
+    "name": "decay",
+    "help": "0–191: the fundamental's T60, 0.1 s at 0 → 25.6 s at 191, exponential (1.6 s at 96, 7.6 s at 150)."
+   },
+   "presets": [
+    "pluck bass",
+    "palm bass",
+    "upright",
+    "piano bass",
+    "metal bass",
+    "steel gtr",
+    "nylon gtr",
+    "koto",
+    "e-bow",
+    "banjo",
+    "harp",
+    "kalimba",
+    "dulcimer",
+    "music box",
+    "pizzicato",
+    "steel pad",
+    "piano",
+    "guitar",
+    "harpsichord",
+    "bell pad"
+   ]
+  },
+  {
+   "dir": "repeat",
+   "label": "repeat",
+   "kind": "fx",
+   "plug": 61100,
+   "summary": "Beat repeat / stutter for FX1 and FX2: captures what is sent to it and loops a slice of it in time with the sequencer — from a knob or from keys held on its…",
+   "p1": {
+    "name": "division",
+    "help": "0–31 off (the input passes through); then 1/4, 1/8, 1/8T, 1/16, 1/16T, 1/32, 1/64 (32 per zone)."
+   },
+   "p2": {
+    "name": "decay",
+    "help": "each repeat against the one before: 0 = all at full level, 128 = −3 dB, 255 = −12 dB (−12·u² dB)"
+   },
+   "presets": [
+    "roll"
+   ]
+  },
+  {
+   "dir": "resonator",
+   "label": "resonator",
+   "kind": "fx",
+   "plug": 61003,
+   "summary": "Tuned string resonator for FX1 and FX2.",
+   "p1": {
+    "name": "decay",
+    "help": "how long the strings ring: 40 ms (a short knock) to 16 s, exponential (64 ≈ 0.18 s, 128 ≈ 0.8 s, 192 ≈ 3.6 s)."
+   },
+   "p2": {
+    "name": "structure",
+    "help": "one macro over tone and partials."
+   },
+   "presets": [
+    "string"
+   ]
+  },
+  {
+   "dir": "shift",
+   "label": "shift",
+   "kind": "fx",
+   "plug": 61103,
+   "summary": "Ring modulator and frequency shifter in one knob for FX1 and FX2; keys on the FX track tune the carrier.",
+   "p1": {
+    "name": "carrier",
+    "help": "0.2 Hz (0) → 3.3 kHz (255), exponential over 14 octaves (128 ≈ 26 Hz)."
+   },
+   "p2": {
+    "name": "mode",
+    "help": "a continuous morph: 0 = shift down (lower sideband only), 128 = ring modulation (both sidebands), 255 = shift up…"
+   },
+   "presets": [
+    "bell ring"
+   ]
+  },
+  {
+   "dir": "shimmer",
+   "label": "shimmer",
+   "kind": "fx",
+   "plug": 61008,
+   "summary": "A lush stereo reverb with a pitch shifter inside its loop, the Eventide/Strymon \"shimmer\" sound, for FX1 and FX2.",
+   "p1": {
+    "name": "size",
+    "help": "one macro over size, decay and pre-delay, as on plate (table below)."
+   },
+   "p2": {
+    "name": "shimmer",
+    "help": "how much of the loop passes through the pitch shifter each lap (table below)."
+   },
+   "presets": [
+    "shimmer"
+   ]
+  },
+  {
+   "dir": "snap",
+   "label": "snap",
+   "kind": "drum",
+   "plug": 61025,
+   "summary": "Noise-burst percussion for the kick, snare, perc and sample tracks — claps, finger snaps, rimshots, sticks, clave, woodblock, shakers, maracas, tambourines,…",
+   "p1": {
+    "name": "spread",
+    "help": "tight: two bursts fewer (never below one), bursts half as far apart, no timing, level or stereo jitter (mono)"
+   },
+   "p2": {
+    "name": "decay",
+    "help": "short, dry, dark: tail ×¼ (also its hold), tail level ×0.75, bursts ×0.71, bodies ×0.5, noise filter −¾ octave"
+   },
+   "presets": [
+    "studio",
+    "tight",
+    "big room",
+    "live hands",
+    "dry"
+   ]
+  },
+  {
+   "dir": "spring",
+   "label": "spring",
+   "kind": "fx",
+   "plug": 61101,
+   "summary": "Dispersive spring reverb for FX1 and FX2: two springs whose echoes chirp — the descending \"drip\" of a spring tank — and a tank you can kick from the FX…",
+   "p1": {
+    "name": "tension",
+    "help": "loose (0) → tight (255): spring A's round trip 75 → 25 ms (spring B 12.7 % longer); late decay (T60, measured) ~3.1 s…"
+   },
+   "p2": {
+    "name": "drip",
+    "help": "how much each pass disperses and how bright it stays: chirp coefficient 0.35 → 0.82 (the low end of an echo trails the…"
+   },
+   "presets": [
+    "tank"
+   ]
+  },
+  {
+   "dir": "super",
+   "label": "super",
+   "kind": "synth",
+   "plug": 61015,
+   "summary": "JP-8000-style supersaw for the bass, lead, arp and chord tracks: seven band-limited saws detuned on the Roland JP-8000's non-linear curve, with real stereo…",
+   "p1": {
+    "name": "detune",
+    "help": "the spread of the seven saws, on the JP-8000's curve (slow at first, then steep at the very top)."
+   },
+   "p2": {
+    "name": "mix",
+    "help": "0–192: the six side saws come in on the JP-8000's mix curves."
+   },
+   "presets": [
+    "wide bass",
+    "saw bass",
+    "sub stack",
+    "pluck bass",
+    "reese",
+    "trance lead",
+    "anthem",
+    "soft lead",
+    "wild lead",
+    "thin lead",
+    "shimmer arp",
+    "pluck arp",
+    "gate arp",
+    "bell arp",
+    "rave arp",
+    "super pad",
+    "trance stab",
+    "string pad",
+    "rave chord",
+    "wide keys"
+   ]
+  },
+  {
+   "dir": "swarm",
+   "label": "swarm",
+   "kind": "synth",
+   "plug": 61202,
+   "summary": "Tonal noise and oscillator swarms for the bass, lead, arp and chord tracks.",
+   "p1": {
+    "name": "density",
+    "help": "0–112: particles only."
+   },
+   "p2": {
+    "name": "spread",
+    "help": "0–128: unison → chorus."
+   },
+   "presets": [
+    "swarm bass",
+    "drop bass",
+    "fizz bass",
+    "hive bass",
+    "metal bass",
+    "swarm lead",
+    "fizz lead",
+    "bees",
+    "glass rain",
+    "dust lead",
+    "spark arp",
+    "drop arp",
+    "bell arp",
+    "saw arp",
+    "fizz arp",
+    "swarm pad",
+    "drone",
+    "cloud pad",
+    "rain",
+    "metal pad"
+   ]
+  },
+  {
+   "dir": "swirl",
+   "label": "swirl",
+   "kind": "fx",
+   "plug": 61001,
+   "summary": "Stereo phaser / flanger for FX1 and FX2, that follows notes sequenced on its own track.",
+   "p1": {
+    "name": "rate",
+    "help": "LFO 0.03–10 Hz, exponential"
+   },
+   "p2": {
+    "name": "character",
+    "help": "one macro over mode, depth and feedback (table below)"
+   },
+   "presets": [
+    "slow phase"
+   ]
+  },
+  {
+   "dir": "sync",
+   "label": "sync",
+   "kind": "synth",
+   "plug": 61019,
+   "summary": "A hard-sync lead for the bass, lead, arp and chord tracks: a band-limited saw (the slave) hard-synced to a master oscillator at the note's pitch, with a…",
+   "p1": {
+    "name": "ratio",
+    "help": "The slave's frequency over the master's, on 2^(4x + 4x²) with x = P1 / 255: fine steps at the bottom (where the sync…"
+   },
+   "p2": {
+    "name": "sub noise",
+    "help": "0: the synced saw alone."
+   },
+   "presets": [
+    "sync bass",
+    "sub sync",
+    "nasal bass",
+    "pluck bass",
+    "growl bass",
+    "sync lead",
+    "scream",
+    "sub lead",
+    "nasal lead",
+    "breath lead",
+    "sync arp",
+    "zap arp",
+    "bell arp",
+    "sub arp",
+    "noise arp",
+    "sync pad",
+    "sync stab",
+    "brass",
+    "glass keys",
+    "air pad"
+   ]
+  },
+  {
+   "dir": "table",
+   "label": "table",
+   "kind": "synth",
+   "plug": 61016,
+   "summary": "A wavetable synth for the bass, lead, arp and chord tracks: 42 of our own band-limited waves on a 7 × 6 grid, and a smooth 2-D morph through it.",
+   "p1": {
+    "name": "position",
+    "help": "moves through the six waves of the current bank, interpolated in between: the waves sit at 0, 51, 102, 153, 204 and…"
+   },
+   "p2": {
+    "name": "bank",
+    "help": "moves through the seven banks, interpolated in between: analog 0, organ 43, vocal 85, reso 128, sync 170, fm 213,…"
+   },
+   "presets": [
+    "wave bass",
+    "reso bass",
+    "fm bass",
+    "sub organ",
+    "sync bass",
+    "table lead",
+    "vox lead",
+    "sync lead",
+    "square lead",
+    "glass lead",
+    "pluck arp",
+    "bell arp",
+    "digi arp",
+    "fm arp",
+    "organ arp",
+    "table pad",
+    "choir pad",
+    "organ",
+    "glass keys",
+    "warm keys"
+   ]
+  },
+  {
+   "dir": "vowel",
+   "label": "vowel",
+   "kind": "synth",
+   "plug": 61018,
+   "summary": "A formant voice for the bass, lead, arp and chord tracks: sung vowels, \"aah\" choir pads, talking leads and vocal basses.",
+   "p1": {
+    "name": "vowel",
+    "help": "a smooth morph along hum [m] – oo [u] – oh [o] – ah [a] – eh [e] – ee [i] – ue [y] – er [ɝ], each vowel at one point:…"
+   },
+   "p2": {
+    "name": "voice",
+    "help": "0–191: body size."
+   },
+   "presets": [
+    "vocal bass",
+    "monk",
+    "doo bass",
+    "hum bass",
+    "yah bass",
+    "aah lead",
+    "ooh lead",
+    "ee lead",
+    "whisper",
+    "er lead",
+    "doo arp",
+    "dah arp",
+    "bee arp",
+    "choir arp",
+    "breath arp",
+    "aah choir",
+    "ooh choir",
+    "mmm pad",
+    "boys choir",
+    "whisper pad"
+   ]
+  }
+ ]
+}

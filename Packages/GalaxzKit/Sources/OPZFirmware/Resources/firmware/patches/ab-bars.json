@@ -1,0 +1,42 @@
+{
+  "name": "galaxz-ab-bars",
+  "status": "TESTING (not yet on the unit)",
+  "description": "The step row's playhead stays white on odd patterns (A) and is purple on even ones (B), so a chain of two patterns reads as 32 steps. See ab/ab_bars.S.",
+  "source": {
+    "file": "os.ldr",
+    "firmware": "1.2.45",
+    "size": 828136,
+    "sha256": "5be99760c8797bdd4797ed20cfb9a92b6588889d3a81109bae5a45646a9bde07",
+    "crc32": 2403806141
+  },
+  "edits": [
+    {
+      "what": "the UI frame's call after the screens have drawn goes through the A/B bars first (which then jump on to it)",
+      "device_address": "0x8010a97a",
+      "file_offset": "0x80122",
+      "expected": "f9 e3 a7 8e",
+      "new": "58 e3 43 ab",
+      "evidence": "[code] 'CALL 0x8003c6c8' at 0x8010a97a, its only caller, one argument in R0; 'CALL 0x80c20000' has the same size; notes/device-guide.md 10"
+    }
+  ],
+  "blocks": [
+    {
+      "what": "the A/B bars",
+      "target": "0x80c20000",
+      "source": "ab/ab_bars.S",
+      "data": "08e11c9d48e105814091400c411809e1bc6349e13400485a09910ae160624ae13400905a52301108331001e4110001492f1009e1a80049e1c2800ae1a4d34ae102088068119992e40100515692e402005156010c191091e40300010c151809640a99ca40424e129b8ae40100ca40424e92e601008ae40200ca40424e92e60200026092e603002a6cf86f400cdc1309e1c8c649e10380510047414c41585a2d41422d424152532d31b040ff00",
+      "sha256": "acf4defd9be0f94d49264731f19d001093059a5a748c03bd3ce328ff7a16c858"
+    }
+  ],
+  "revert": "Flash Galax-z v2 (the hub, or Firmware/flash).",
+  "risk": "Our code runs every UI frame, reading two sequencer fields and changing 16 LED records. If it fails, the OS fails right after start-up: switch off, update mode (SCREEN), flash Galax-z v2 or the original.",
+  "earlier": [
+    {
+      "what": "the A/B bars, first version (light blue / light purple), flashed 2026-11-21",
+      "target": "0x80c20000",
+      "source": "git history of ab/ab_bars.S",
+      "data": "08e11c9d48e105814091400c421809e1bc6349e13400485a09910ae160624ae13400905a52301108341001e4110009e1ac0049e1c28001490210216c0ae1a4d34ae102088068119992e40100515692e402005156010c191091e40300010c151809640a99ca40424e129b8ae40100ca40424e92e601008ae40200ca40424e92e60200026092e603002a6cf86f400cdc1309e1c8c649e103805100000047414c41585a2d41422d424152532d3120a0ff00b040ff00",
+      "sha256": "0718492659ab5f0bf5eaa526bf277b750fdc69689a6808bff23f1e579696e926"
+    }
+  ]
+}

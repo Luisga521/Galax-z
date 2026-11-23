@@ -1,0 +1,23 @@
+{
+  "title": "Galax-z v13",
+  "description": "Galax-z v12 with the GROOVE page light green.",
+  "notes": [
+    "GROOVE, a seventh page on tracks 1-8, light green after the teal one: keys are kept and played by one of 69 grooves; on a melodic track one of 133 progressions takes them through its chords. Hold SHIFT two seconds for its other four dials.",
+    "Two Quindar tones when the OP-Z is switched on, in place of TE's start sound. disable_start_sound in general.json turns them off; Galax-z v13 quiet has none.",
+    "The Galax-z app is told where the tumbler's balls, EUCLID's rings and GROOVE's notes are, and shows them on FX and TRACK. Only while it is connected.",
+    "Everything of v9: the tumbler, EUCLID, older USB keyboards, pedal and wheel, presets that stay, the load meter, more live voices, A/B bars, boot animations, the debounce."
+  ],
+  "patches": [
+    "debounce.json",
+    "galaxy-boot.json",
+    "ab-bars.json",
+    "pages8.json",
+    "usbhost.json",
+    "keys.json",
+    "keep-presets.json",
+    "voices.json",
+    "meter.json",
+    "tell8.json",
+    "chime2.json"
+  ]
+}

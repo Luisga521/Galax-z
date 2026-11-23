@@ -1,0 +1,5 @@
+{
+  "title": "Galax-z v2",
+  "description": "Galax-z v1 (the debounce) plus the galaxy boot animation.",
+  "patches": ["debounce.json", "galaxy-boot.json"]
+}

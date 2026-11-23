@@ -1,0 +1,39 @@
+# Whose each file is, for people and for `uvx --from "reuse[charset-normalizer]" reuse lint` (https://reuse.software). OWNERSHIP.md says it in words.
+# A file's own header comes first; then the last match here.
+version = 1
+
+# Galax-z's own, everything not named below
+[[annotations]]
+path = "**"
+precedence = "closest"
+SPDX-FileCopyrightText = "2026 Luis Tosado"
+SPDX-License-Identifier = "MIT"
+
+# Made out of OP-FREE: its catalogue, and recordings of its fake OP-Z
+[[annotations]]
+path = [
+  "Packages/GalaxzKit/Sources/OPZModel/Resources/OPFree/**",
+  "Packages/GalaxzKit/Sources/OPZLink/Resources/OPFree/**",
+  "Packages/GalaxzKit/Tests/GalaxzKitTests/Fixtures/statesync-vector.json",
+  "Packages/GalaxzKit/Tests/GalaxzKitTests/Fixtures/file-session.json",
+]
+SPDX-FileCopyrightText = ["2026 Lourens Smit and the op-z-engines contributors (OP-FREE)", "2026 Luis Tosado"]
+SPDX-License-Identifier = "MIT"
+
+# Galax-z's, but after OP-FREE in part: ports of our flash.py and patch.py, and engines built with its SDK
+[[annotations]]
+path = [
+  "Packages/GalaxzKit/Sources/OPZFirmware/Patch.swift",
+  "Packages/GalaxzKit/Sources/OPZFirmware/UpdateConsole.swift",
+  "Firmware/engines/piano/piano.engine",
+  "Firmware/engines/ott/ott.engine",
+  "Firmware/engines/*/tests/*.scn",
+]
+SPDX-FileCopyrightText = ["2026 Luis Tosado", "2026 Lourens Smit and the op-z-engines contributors (OP-FREE)"]
+SPDX-License-Identifier = "MIT"
+
+# The piano's recordings
+[[annotations]]
+path = "Firmware/engines/piano/opzk_piano.aif"
+SPDX-FileCopyrightText = ["Alexander Holm (Salamander Grand Piano V3)", "2026 Luis Tosado (cut, levelled, re-tuned and re-encoded)"]
+SPDX-License-Identifier = "CC-BY-3.0"

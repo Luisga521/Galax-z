@@ -1,0 +1,14 @@
+#!/bin/sh
+# Galax-z Flash: opens the flashing page (tools/flash_ui.py). Makes Firmware/.venv with pyserial the first time.
+#   Firmware/flash                 the page
+#   Firmware/flash check           any flash.py command, in the terminal (images, frames, check, flash LABEL)
+set -e
+here="$(cd "$(dirname "$0")" && pwd)"
+venv="$here/.venv"
+if [ ! -x "$venv/bin/python" ] || ! "$venv/bin/python" -c "import serial" 2>/dev/null; then
+  echo "setting up $venv (pyserial)"
+  python3 -m venv "$venv"
+  "$venv/bin/python" -m pip install --quiet pyserial==3.5
+fi
+if [ $# -eq 0 ]; then exec "$venv/bin/python" "$here/tools/flash_ui.py"; fi
+exec "$venv/bin/python" "$here/tools/flash.py" "$@"

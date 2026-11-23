@@ -1,0 +1,89 @@
+# The Xcode project is generated from this file: `xcodegen` in this folder.
+name: Galaxz
+options:
+  bundleIdPrefix: org.galax-z
+  deploymentTarget:
+    iOS: "18.0"
+settings:
+  base:
+    DEVELOPMENT_TEAM: ""                # yours: git config galaxz.team, which the scripts pass on
+    GALAXZ_ID: org.galax-z.app          # yours: git config galaxz.id
+    GALAXZ_BYLINE: "by Luis Tosado"     # under the name on the start screen; a fork's own: git config galaxz.byline
+    CODE_SIGN_STYLE: Automatic
+    SWIFT_VERSION: "6.0"
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+packages:
+  GalaxzKit:
+    path: Packages/GalaxzKit
+targets:
+  Galaxz:
+    type: application
+    platform: iOS
+    supportedDestinations: [iOS, macCatalyst]   # the same app on the Mac: the hub flashes the OP-Z from there
+    sources:
+      - App
+      - path: THIRD_PARTY.md                     # shown in Settings › Credits: the notices go where the app goes
+        buildPhase: resources
+      - path: LICENSE
+        buildPhase: resources
+    dependencies:
+      - package: GalaxzKit
+        product: OPZModel
+      - package: GalaxzKit
+        product: OPZLink
+      - package: GalaxzKit
+        product: OPZFirmware
+      - package: GalaxzKit
+        product: OPZStage
+      - package: GalaxzKit
+        product: DotKit
+      - package: GalaxzKit
+        product: OPZPlay
+      - package: GalaxzKit
+        product: ChopKit
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: Galax-z
+        GalaxzByline: $(GALAXZ_BYLINE)
+        NSBluetoothAlwaysUsageDescription: >-
+          Galax-z uses Bluetooth only to find your OP-Z and connect it as a MIDI device. Nothing leaves this iPad.
+        NSMicrophoneUsageDescription: >-
+          Galax-z plays your OP-Z's sound, which comes over the USB cable, through this device, and records the sounds you make into chops when you touch RECORD. They stay on this device.
+        UIBackgroundModes: [audio]               # the OP-Z through this device goes on behind another app
+        UILaunchScreen:
+          UIColorName: ""
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        UIRequiresFullScreen: false
+        UIStatusBarHidden: true
+        UIFileSharingEnabled: true               # Backups in the Files app (Galax-z › Backups)
+        LSSupportsOpeningDocumentsInPlace: true
+        ITSAppUsesNonExemptEncryption: false
+        UTExportedTypeDeclarations:              # a Galax-z OS release
+          - UTTypeIdentifier: org.galax-z.release
+            UTTypeDescription: Galax-z OS release
+            UTTypeConformsTo: [public.json]
+            UTTypeTagSpecification:
+              public.filename-extension: [galaxz]
+        CFBundleDocumentTypes:
+          - CFBundleTypeName: Galax-z OS release
+            LSItemContentTypes: [org.galax-z.release]
+            CFBundleTypeRole: Viewer
+            LSHandlerRank: Owner
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(GALAXZ_ID)
+        "CODE_SIGN_ENTITLEMENTS[sdk=macosx*]": Galaxz-mac.entitlements
+        TARGETED_DEVICE_FAMILY: "1,2"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon

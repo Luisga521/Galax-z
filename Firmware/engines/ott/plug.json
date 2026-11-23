@@ -1,0 +1,8 @@
+{
+  "engine": "ott",
+  "memoryslot": 67,
+  "engine_version": 1,
+  "plug": { "id": 61105, "version": 1, "name": "ott", "trackmask": 768, "flags": 17,
+            "parameter_names": ["depth", "time"] },
+  "presets": "presets.json"
+}

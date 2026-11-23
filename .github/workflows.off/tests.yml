@@ -1,0 +1,16 @@
+# Switched off: GitHub runs only what is in .github/workflows. What a clean machine can check: no OP-Z, no os.ldr, no Blackfin tools
+# (tests that need those skip themselves). Ran green once, on 2026-11-22.
+name: tests
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  firmware-tools:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: for t in Firmware/tools/test_*.py; do echo "== $t"; python3 -I "$t" || exit 1; done
+  kit:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: swift test --package-path Packages/GalaxzKit

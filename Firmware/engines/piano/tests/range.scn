@@ -1,0 +1,42 @@
+# The whole MIDI range, below A0 and above C8 included.
+tempo 120
+steps 64
+tail 1
+track lead
+sample ../opzk_piano.aif samplepacks/opzk_piano.aif
+preset 128 128 0 255 255 20 0 0 128 0 128 215 0 128 100 255 0 0
+note 0 0 2 100
+note 2 4 2 100
+note 4 8 2 100
+note 6 12 2 100
+note 8 16 2 100
+note 10 20 2 100
+note 12 24 2 100
+note 14 28 2 100
+note 16 32 2 100
+note 18 36 2 100
+note 20 40 2 100
+note 22 44 2 100
+note 24 48 2 100
+note 26 52 2 100
+note 28 56 2 100
+note 30 60 2 100
+note 32 64 2 100
+note 34 68 2 100
+note 36 72 2 100
+note 38 76 2 100
+note 40 80 2 100
+note 42 84 2 100
+note 44 88 2 100
+note 46 92 2 100
+note 48 96 2 100
+note 50 100 2 100
+note 52 104 2 100
+note 54 108 2 100
+note 56 112 2 100
+note 58 116 2 100
+note 60 120 2 100
+note 62 124 2 100
+note 62 127 2 127
+expect sound 0 40
+expect peak_below 0

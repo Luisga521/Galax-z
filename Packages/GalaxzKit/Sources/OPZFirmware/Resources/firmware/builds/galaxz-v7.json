@@ -1,0 +1,5 @@
+{
+  "title": "Galax-z v7",
+  "description": "Galax-z v6 plus the sustain pedal and the modulation wheel of a keyboard plugged in, and presets that come back at every start.",
+  "patches": ["debounce.json", "galaxy-boot.json", "ab-bars.json", "pages.json", "usbhost.json", "keys.json", "keep-presets.json"]
+}

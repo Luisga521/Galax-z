@@ -1,0 +1,5 @@
+{
+  "title": "Galax-z v5",
+  "description": "Galax-z v4 plus EUCLID: a sixth parameter page (teal) with TO-2's EUCLID on tracks 1-8, MORE on SHIFT held 2 s. REC records both pages' dials too.",
+  "patches": ["debounce.json", "galaxy-boot.json", "ab-bars.json", "pages.json"]
+}

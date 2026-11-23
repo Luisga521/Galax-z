@@ -1,0 +1,5 @@
+{
+  "title": "Galax-z v1",
+  "description": "TE's 1.2.45 with the Galax-z debounce for keys that double-trigger.",
+  "patches": ["debounce.json"]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "galaxz-keep-presets",
+  "status": "WORKS on the unit (2026-11-22)",
+  "description": "The OP-Z reads settings/plugs_patch.json at every start and then deletes it, so the presets of sounds that are not TE's come back once. This keeps the file: they come back every time. A preset stored on the OP-Z by hand still wins (it is read after).",
+  "source": {
+    "file": "os.ldr",
+    "firmware": "1.2.45",
+    "size": 828136,
+    "sha256": "5be99760c8797bdd4797ed20cfb9a92b6588889d3a81109bae5a45646a9bde07",
+    "crc32": 2403806141
+  },
+  "edits": [
+    {
+      "what": "the boot file is not deleted after it was read",
+      "device_address": "0x80100894",
+      "file_offset": "0x7603c",
+      "expected": "01 e3 60 3f",
+      "new": "00 00 00 00",
+      "evidence": "[code] 'CALL 0x80128754' (delete) at the end of the plug manager's boot (0x801007c2), its result unused; op-free research/presets.md step 5. Two NOPs"
+    }
+  ],
+  "revert": "Flash Galax-z v6: the next start reads the file once more and deletes it. Or write an empty one: op-free opz.py presets persist --off.",
+  "risk": "A boot file the OS cannot read is refused by the OS each time (it logs and goes on). One that crashed it would do so at every start: flash v6 or the original, whose start reads it once and deletes it."
+}

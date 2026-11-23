@@ -1,0 +1,5 @@
+{
+  "title": "Galax-z v8",
+  "description": "Galax-z v7 plus the load meter (SHIFT + TEMPO shows how hard the OP-Z works) and more voices: lead 4, chord 6.",
+  "patches": ["debounce.json", "galaxy-boot.json", "ab-bars.json", "pages.json", "usbhost.json", "keys.json", "keep-presets.json", "more-voices.json", "meter.json"]
+}

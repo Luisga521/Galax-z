@@ -1,0 +1,5 @@
+{
+  "title": "Galax-z v4",
+  "description": "Galax-z v3 plus the tumbler: a fifth parameter page (pink) with TO-2's tombola on tracks 1-8.",
+  "patches": ["debounce.json", "galaxy-boot.json", "ab-bars.json", "tumbler.json"]
+}

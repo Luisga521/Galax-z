@@ -1,0 +1,8 @@
+{
+  "engine": "piano",
+  "memoryslot": 30,
+  "engine_version": 2,
+  "plug": { "id": 61204, "version": 2, "name": "piano", "samples": "samplepacks/opzk_piano.aif", "trackmask": 240, "flags": 24,
+            "parameter_names": ["tone", "hammer"] },
+  "presets": "presets.json"
+}

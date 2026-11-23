@@ -1,0 +1,12 @@
+name: Fork
+description: You are carrying something on. Tell people.
+labels: [fork]
+body:
+  - type: input
+    id: link
+    attributes: { label: Link }
+    validations: { required: true }
+  - type: textarea
+    id: what
+    attributes: { label: What it is for, and where you would like help }
+    validations: { required: true }

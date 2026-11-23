@@ -1,0 +1,5 @@
+{
+  "title": "Galax-z v6",
+  "description": "Galax-z v5 plus older USB keyboards (Yamaha Motif and the like) on the OP-Z as host, and SHIFT + P (PROJECT) for HOST or INSTRUMENT (only receives MIDI).",
+  "patches": ["debounce.json", "galaxy-boot.json", "ab-bars.json", "pages.json", "usbhost.json"]
+}

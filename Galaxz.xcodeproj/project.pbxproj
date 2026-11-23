@@ -1,0 +1,498 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		03870062CC9FDE1A2DCB8837 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8113F0849A6EABFE4ABF4C05 /* Assets.xcassets */; };
+		064C3FEF7F6B700D1D4152AA /* OPZStage in Frameworks */ = {isa = PBXBuildFile; productRef = 70BBD303200A4E72836D492F /* OPZStage */; };
+		066F97A3B2A3264BF0BA8208 /* Hub.swift in Sources */ = {isa = PBXBuildFile; fileRef = F641D8FEBDE7E11092AE0171 /* Hub.swift */; };
+		0A82AD0BFED0F173EAB53513 /* DotDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE9DCCBAFEFE50E26501FFDD /* DotDisplay.swift */; };
+		1E9F0DF64C07035D9CAFF63E /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = DF97089718CA70A411C3DDB7 /* LICENSE */; };
+		1FB13A1D1C41CAC06FBCD889 /* Root.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F483768C7BB9AAE0E9E293 /* Root.swift */; };
+		25ADFD11C85E483DFAFC10A7 /* Controllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DEA0C5D87FD3FDBBD968FC2 /* Controllers.swift */; };
+		282B49FF9EA83BC745F5CFC1 /* AnimationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1B0205A9B67BFAB2C644CE /* AnimationStore.swift */; };
+		2B65ED8ED02FD0CA9313D8D7 /* OPZPlay in Frameworks */ = {isa = PBXBuildFile; productRef = 710025AD6E617DA72FB9A859 /* OPZPlay */; };
+		3945A1B703A1C9F46C091269 /* SelfTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77E10979BE84159EA3EA527 /* SelfTest.swift */; };
+		40A6CF9E226098F7C80311C6 /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC6A60977D615C586D0BADE3 /* SettingsScreen.swift */; };
+		454D3776B32AA5B590663181 /* OPZFirmware in Frameworks */ = {isa = PBXBuildFile; productRef = 04791E655DE6C18873934614 /* OPZFirmware */; };
+		470F8BEBB29EEBB7E529630D /* Credits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AE3B5B51FEFFF578A6BC30 /* Credits.swift */; };
+		5980B1C603505E2950818FB7 /* DeltaLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5E61E588BC8571C8A1C7E2 /* DeltaLog.swift */; };
+		5A45F74E2136D5E5BB02302B /* Live.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A47C7463E36743C4F903BE /* Live.swift */; };
+		5F39AD4695A43B41116CC199 /* Backups.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE8ACF2DFDFEF2AB7F9DEAEE /* Backups.swift */; };
+		6154EEAA3C664FE4E4A3425A /* DotKit in Frameworks */ = {isa = PBXBuildFile; productRef = 69A6505C6801D75F31CCACF1 /* DotKit */; };
+		624A6DDF71B6A53F1680E035 /* ChopKit in Frameworks */ = {isa = PBXBuildFile; productRef = 07D2C84B6DF6AFE5F234DEBB /* ChopKit */; };
+		643BF8F8F2B5466B1F0280C2 /* BluetoothPairing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684F4EE245A68E5061768E89 /* BluetoothPairing.swift */; };
+		6684FC66878BE55474269958 /* AudioOut.swift in Sources */ = {isa = PBXBuildFile; fileRef = DECEAEBC8992B9AE56B7F66E /* AudioOut.swift */; };
+		6DD792BCF2FB3665743A3B55 /* Face.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079C144758A04F669918BFDB /* Face.swift */; };
+		6F9C19793EFC47AB4DF8EC03 /* KeyTestScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09C0202457C1C0477F781E7E /* KeyTestScreen.swift */; };
+		7BF21EF9DEDC11F0B197A12E /* OPZLink in Frameworks */ = {isa = PBXBuildFile; productRef = A85115E34D9C3BD8A030709D /* OPZLink */; };
+		834EF479A5CE04E96D9CAF2B /* GalaxzApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB24E51A360076844953E6A5 /* GalaxzApp.swift */; };
+		90FD9529DAE78D73E5E2CCF9 /* AnimationLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B23C8F9E1B956911EE083D1 /* AnimationLibrary.swift */; };
+		923CE3F483D8E533255CC9F5 /* OPZModel in Frameworks */ = {isa = PBXBuildFile; productRef = 683A27493AD2DD5057ED1A6D /* OPZModel */; };
+		AEB878EFA33F04AAAB3C838D /* Sampler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C6EE6E56E049A3C7D019C9C /* Sampler.swift */; };
+		BF979B9A2226D6B15E5F060C /* HubScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97CE87038343C3905D72BA7 /* HubScreen.swift */; };
+		CBB1F184712829575813CAAC /* LearnScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABE773FA3271A8AD5CDDA8A2 /* LearnScreen.swift */; };
+		D38FC3C7FB75E21BAE43520A /* DotShaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BD3AA1907C4AEE53388196 /* DotShaders.swift */; };
+		D67785D3D4E9A847AE9C30B9 /* DotText.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6F57C9D0FEA44EB9B20A63 /* DotText.swift */; };
+		EF8C2754F614A7B36E4EC12A /* THIRD_PARTY.md in Resources */ = {isa = PBXBuildFile; fileRef = 645F5B10286738A7CFE4569D /* THIRD_PARTY.md */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		03F483768C7BB9AAE0E9E293 /* Root.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Root.swift; sourceTree = "<group>"; };
+		079C144758A04F669918BFDB /* Face.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Face.swift; sourceTree = "<group>"; };
+		09C0202457C1C0477F781E7E /* KeyTestScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyTestScreen.swift; sourceTree = "<group>"; };
+		13AE3B5B51FEFFF578A6BC30 /* Credits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Credits.swift; sourceTree = "<group>"; };
+		1EA1951EE955F65E19F9E5B5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		4C6EE6E56E049A3C7D019C9C /* Sampler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sampler.swift; sourceTree = "<group>"; };
+		645F5B10286738A7CFE4569D /* THIRD_PARTY.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = THIRD_PARTY.md; sourceTree = "<group>"; };
+		684F4EE245A68E5061768E89 /* BluetoothPairing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothPairing.swift; sourceTree = "<group>"; };
+		69A47C7463E36743C4F903BE /* Live.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Live.swift; sourceTree = "<group>"; };
+		7A1B0205A9B67BFAB2C644CE /* AnimationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationStore.swift; sourceTree = "<group>"; };
+		8113F0849A6EABFE4ABF4C05 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8B23C8F9E1B956911EE083D1 /* AnimationLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationLibrary.swift; sourceTree = "<group>"; };
+		92BD3AA1907C4AEE53388196 /* DotShaders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DotShaders.swift; sourceTree = "<group>"; };
+		9DEA0C5D87FD3FDBBD968FC2 /* Controllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Controllers.swift; sourceTree = "<group>"; };
+		AA5E61E588BC8571C8A1C7E2 /* DeltaLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeltaLog.swift; sourceTree = "<group>"; };
+		ABE773FA3271A8AD5CDDA8A2 /* LearnScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearnScreen.swift; sourceTree = "<group>"; };
+		AC6A60977D615C586D0BADE3 /* SettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
+		AE8ACF2DFDFEF2AB7F9DEAEE /* Backups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backups.swift; sourceTree = "<group>"; };
+		B77E10979BE84159EA3EA527 /* SelfTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfTest.swift; sourceTree = "<group>"; };
+		CB6F57C9D0FEA44EB9B20A63 /* DotText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DotText.swift; sourceTree = "<group>"; };
+		D5DF5855E9F34D447BDBF649 /* GalaxzKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = GalaxzKit; path = Packages/GalaxzKit; sourceTree = SOURCE_ROOT; };
+		DB24E51A360076844953E6A5 /* GalaxzApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalaxzApp.swift; sourceTree = "<group>"; };
+		DECEAEBC8992B9AE56B7F66E /* AudioOut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioOut.swift; sourceTree = "<group>"; };
+		DF97089718CA70A411C3DDB7 /* LICENSE */ = {isa = PBXFileReference; path = LICENSE; sourceTree = "<group>"; };
+		E239B3ED99FC06B46DF2E8C9 /* Galaxz.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Galaxz.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E97CE87038343C3905D72BA7 /* HubScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubScreen.swift; sourceTree = "<group>"; };
+		EE9DCCBAFEFE50E26501FFDD /* DotDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DotDisplay.swift; sourceTree = "<group>"; };
+		F641D8FEBDE7E11092AE0171 /* Hub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hub.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5D4FB0A586BB77AAA5A1FED5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				923CE3F483D8E533255CC9F5 /* OPZModel in Frameworks */,
+				7BF21EF9DEDC11F0B197A12E /* OPZLink in Frameworks */,
+				454D3776B32AA5B590663181 /* OPZFirmware in Frameworks */,
+				064C3FEF7F6B700D1D4152AA /* OPZStage in Frameworks */,
+				6154EEAA3C664FE4E4A3425A /* DotKit in Frameworks */,
+				2B65ED8ED02FD0CA9313D8D7 /* OPZPlay in Frameworks */,
+				624A6DDF71B6A53F1680E035 /* ChopKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		32423E71A89E7F1925C96A89 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				D5DF5855E9F34D447BDBF649 /* GalaxzKit */,
+			);
+			path = Packages;
+			sourceTree = "<group>";
+		};
+		664622E588A294240598CDFB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E239B3ED99FC06B46DF2E8C9 /* Galaxz.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		ADF21263C127C25CF42235F4 = {
+			isa = PBXGroup;
+			children = (
+				DF97089718CA70A411C3DDB7 /* LICENSE */,
+				645F5B10286738A7CFE4569D /* THIRD_PARTY.md */,
+				C928AE18C8CCC47B9867E670 /* App */,
+				32423E71A89E7F1925C96A89 /* Packages */,
+				664622E588A294240598CDFB /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C928AE18C8CCC47B9867E670 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				8B23C8F9E1B956911EE083D1 /* AnimationLibrary.swift */,
+				7A1B0205A9B67BFAB2C644CE /* AnimationStore.swift */,
+				8113F0849A6EABFE4ABF4C05 /* Assets.xcassets */,
+				DECEAEBC8992B9AE56B7F66E /* AudioOut.swift */,
+				AE8ACF2DFDFEF2AB7F9DEAEE /* Backups.swift */,
+				684F4EE245A68E5061768E89 /* BluetoothPairing.swift */,
+				9DEA0C5D87FD3FDBBD968FC2 /* Controllers.swift */,
+				13AE3B5B51FEFFF578A6BC30 /* Credits.swift */,
+				AA5E61E588BC8571C8A1C7E2 /* DeltaLog.swift */,
+				EE9DCCBAFEFE50E26501FFDD /* DotDisplay.swift */,
+				92BD3AA1907C4AEE53388196 /* DotShaders.swift */,
+				CB6F57C9D0FEA44EB9B20A63 /* DotText.swift */,
+				079C144758A04F669918BFDB /* Face.swift */,
+				DB24E51A360076844953E6A5 /* GalaxzApp.swift */,
+				F641D8FEBDE7E11092AE0171 /* Hub.swift */,
+				E97CE87038343C3905D72BA7 /* HubScreen.swift */,
+				1EA1951EE955F65E19F9E5B5 /* Info.plist */,
+				09C0202457C1C0477F781E7E /* KeyTestScreen.swift */,
+				ABE773FA3271A8AD5CDDA8A2 /* LearnScreen.swift */,
+				69A47C7463E36743C4F903BE /* Live.swift */,
+				03F483768C7BB9AAE0E9E293 /* Root.swift */,
+				4C6EE6E56E049A3C7D019C9C /* Sampler.swift */,
+				B77E10979BE84159EA3EA527 /* SelfTest.swift */,
+				AC6A60977D615C586D0BADE3 /* SettingsScreen.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D4188227ECB7B774FB168C55 /* Galaxz */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 33485C967F937710090CE565 /* Build configuration list for PBXNativeTarget "Galaxz" */;
+			buildPhases = (
+				C226C2F21ED0D4DCC29024A7 /* Sources */,
+				C9FF8365E6926B8BDF6BAEEA /* Resources */,
+				5D4FB0A586BB77AAA5A1FED5 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Galaxz;
+			packageProductDependencies = (
+				683A27493AD2DD5057ED1A6D /* OPZModel */,
+				A85115E34D9C3BD8A030709D /* OPZLink */,
+				04791E655DE6C18873934614 /* OPZFirmware */,
+				70BBD303200A4E72836D492F /* OPZStage */,
+				69A6505C6801D75F31CCACF1 /* DotKit */,
+				710025AD6E617DA72FB9A859 /* OPZPlay */,
+				07D2C84B6DF6AFE5F234DEBB /* ChopKit */,
+			);
+			productName = Galaxz;
+			productReference = E239B3ED99FC06B46DF2E8C9 /* Galaxz.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A1ACDDBA3246F9F97800D663 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					D4188227ECB7B774FB168C55 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 5AB4741C1EAEBF3387FBDFA8 /* Build configuration list for PBXProject "Galaxz" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = ADF21263C127C25CF42235F4;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				6DB995200EC5CDC097D2A49D /* XCLocalSwiftPackageReference "Packages/GalaxzKit" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 664622E588A294240598CDFB /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D4188227ECB7B774FB168C55 /* Galaxz */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C9FF8365E6926B8BDF6BAEEA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				03870062CC9FDE1A2DCB8837 /* Assets.xcassets in Resources */,
+				1E9F0DF64C07035D9CAFF63E /* LICENSE in Resources */,
+				EF8C2754F614A7B36E4EC12A /* THIRD_PARTY.md in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C226C2F21ED0D4DCC29024A7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				90FD9529DAE78D73E5E2CCF9 /* AnimationLibrary.swift in Sources */,
+				282B49FF9EA83BC745F5CFC1 /* AnimationStore.swift in Sources */,
+				6684FC66878BE55474269958 /* AudioOut.swift in Sources */,
+				5F39AD4695A43B41116CC199 /* Backups.swift in Sources */,
+				643BF8F8F2B5466B1F0280C2 /* BluetoothPairing.swift in Sources */,
+				25ADFD11C85E483DFAFC10A7 /* Controllers.swift in Sources */,
+				470F8BEBB29EEBB7E529630D /* Credits.swift in Sources */,
+				5980B1C603505E2950818FB7 /* DeltaLog.swift in Sources */,
+				0A82AD0BFED0F173EAB53513 /* DotDisplay.swift in Sources */,
+				D38FC3C7FB75E21BAE43520A /* DotShaders.swift in Sources */,
+				D67785D3D4E9A847AE9C30B9 /* DotText.swift in Sources */,
+				6DD792BCF2FB3665743A3B55 /* Face.swift in Sources */,
+				834EF479A5CE04E96D9CAF2B /* GalaxzApp.swift in Sources */,
+				066F97A3B2A3264BF0BA8208 /* Hub.swift in Sources */,
+				BF979B9A2226D6B15E5F060C /* HubScreen.swift in Sources */,
+				6F9C19793EFC47AB4DF8EC03 /* KeyTestScreen.swift in Sources */,
+				CBB1F184712829575813CAAC /* LearnScreen.swift in Sources */,
+				5A45F74E2136D5E5BB02302B /* Live.swift in Sources */,
+				1FB13A1D1C41CAC06FBCD889 /* Root.swift in Sources */,
+				AEB878EFA33F04AAAB3C838D /* Sampler.swift in Sources */,
+				3945A1B703A1C9F46C091269 /* SelfTest.swift in Sources */,
+				40A6CF9E226098F7C80311C6 /* SettingsScreen.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1FF11D734DC697F3C2C231F7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GALAXZ_BYLINE = "by Luis Tosado";
+				GALAXZ_ID = "org.galax-z.app";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		8C15E9F257DE3C60B72634D7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "Galaxz-mac.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(GALAXZ_ID)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		C1E5C2112A31DBEFEBF7F6E7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GALAXZ_BYLINE = "by Luis Tosado";
+				GALAXZ_ID = "org.galax-z.app";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		DA94990B9412E3FD33EE996A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "Galaxz-mac.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(GALAXZ_ID)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		33485C967F937710090CE565 /* Build configuration list for PBXNativeTarget "Galaxz" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA94990B9412E3FD33EE996A /* Debug */,
+				8C15E9F257DE3C60B72634D7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		5AB4741C1EAEBF3387FBDFA8 /* Build configuration list for PBXProject "Galaxz" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1FF11D734DC697F3C2C231F7 /* Debug */,
+				C1E5C2112A31DBEFEBF7F6E7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		6DB995200EC5CDC097D2A49D /* XCLocalSwiftPackageReference "Packages/GalaxzKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/GalaxzKit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		04791E655DE6C18873934614 /* OPZFirmware */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = OPZFirmware;
+		};
+		07D2C84B6DF6AFE5F234DEBB /* ChopKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ChopKit;
+		};
+		683A27493AD2DD5057ED1A6D /* OPZModel */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = OPZModel;
+		};
+		69A6505C6801D75F31CCACF1 /* DotKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DotKit;
+		};
+		70BBD303200A4E72836D492F /* OPZStage */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = OPZStage;
+		};
+		710025AD6E617DA72FB9A859 /* OPZPlay */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = OPZPlay;
+		};
+		A85115E34D9C3BD8A030709D /* OPZLink */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = OPZLink;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = A1ACDDBA3246F9F97800D663 /* Project object */;
+}

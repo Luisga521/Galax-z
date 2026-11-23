@@ -1,0 +1,10 @@
+{
+  "title": "Galax-z v9",
+  "description": "Galax-z v8 with more voices played live: bass 6, lead 10, arp 6, chord 10.",
+  "notes": [
+    "Hold more keys: played live, lead and chord sound 10 notes at once, bass and arp 6.",
+    "Patterns keep their own voices, so playing over them no longer cuts them off.",
+    "If far too much is held for the OP-Z to keep up, the oldest live note is let go, so it does not freeze."
+  ],
+  "patches": ["debounce.json", "galaxy-boot.json", "ab-bars.json", "pages.json", "usbhost.json", "keys.json", "keep-presets.json", "voices.json", "meter.json"]
+}

@@ -1,0 +1,10 @@
+# Another pack under the plug's path: the engine does not recognise it and stays silent (pack_ok).
+tempo 120
+steps 8
+tail 0.2
+track lead
+sample builtin samplepacks/opzk_piano.aif
+preset 128 128 0 255 255 20 0 0 128 0 128 215 0 128 100 255 0 0
+note 0 C4 4 100
+expect silence 0 8
+expect idle 10

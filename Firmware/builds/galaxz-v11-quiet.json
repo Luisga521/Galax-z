@@ -1,0 +1,20 @@
+{
+  "title": "Galax-z v11 quiet",
+  "description": "Galax-z v11 without the tones when it is switched on.",
+  "notes": [
+    "A seventh page on tracks 1-8, red, after the teal one: GROOVE. Keys are kept and played by one of TO-2's 69 grooves; on a melodic track a progression (133 of them) takes them through its chords.",
+    "Its dials: GROOVE, RATE, GATE, ORDER (chord, up, down, played, random). Hold SHIFT two seconds for the other four: PROGRESSION (all the way down: none), KEY, how long a chord lasts (half a bar to four), SWING. STOP on the page empties it; REC records it."
+  ],
+  "patches": [
+    "debounce.json",
+    "galaxy-boot.json",
+    "ab-bars.json",
+    "pages7.json",
+    "usbhost.json",
+    "keys.json",
+    "keep-presets.json",
+    "voices.json",
+    "meter.json",
+    "tell7.json"
+  ]
+}

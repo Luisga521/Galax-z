@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Synths, effects, how the OP-Z works
+    url: https://github.com/mutlisensor/op-free
+    about: OP-FREE is the project this stands on.
+  - name: My OP-Z does not start
+    url: https://github.com/Luisga521/Galax-z/blob/main/docs/SAFETY.md#if-it-does-not-start
+    about: Read this first.

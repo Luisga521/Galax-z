@@ -1,0 +1,32 @@
+# Windows and Linux
+
+Both are being worked towards, and help is very welcome. There is nothing to run yet: this is where things stand, so that nobody starts from zero.
+
+## What carries over
+
+Counted on 2026-11-22. Most of the app is plain Swift that knows nothing of Apple's frameworks.
+
+| Module | Lines | Needs of Apple's | To do |
+|---|---|---|---|
+| `OPZModel` formats, live edits, playhead | 1,055 | nothing | build it |
+| `DotKit` the dot matrix | 438 | nothing | build it |
+| `OPZPlay` chords, grooves, moves | 1,251 | nothing | build it |
+| `OPZStage` every page | 2,304 | nothing | build it |
+| `ChopKit` the sampler | 691 | nothing (Foundation, Synchronization) | build it |
+| `OPZFirmware` images, patches, releases | 1,167 | CryptoKit, Darwin's serial port | [swift-crypto](https://github.com/apple/swift-crypto); termios on Linux, a COM port on Windows |
+| `OPZLink` SysEx, sessions | 1,315 | CoreMIDI, CoreBluetooth, Compression | split: `OPFree/` needs only zlib; MIDI and Bluetooth need each system's own |
+| `App` | | SwiftUI, Metal, AVFoundation | new: a window, a GPU pass, sound out |
+
+None of it has been built on Linux or Windows yet.
+
+## Where to begin
+
+1. **Flashing from Linux.** `Firmware/tools/flash.py` is Python with pyserial, and looks for one port name, `/dev/cu.usbmodem*` (`flash_ui.py` too). Linux
+   says `/dev/ttyACM*`, Windows `COMn`. Try it against `fake_update_port.py` first, never straight on an OP-Z.
+2. **`swift build --target OPZStage`** on Linux, and the tests that need nothing of Apple's.
+3. **`galaxz-shots` without CoreGraphics**: a PNG writer, and every page can be looked at with no window.
+4. **A window**: upload a `DotCanvas` (about 360 × 240) as a texture, draw the round lights in one pass. `App/DotShaders.swift` is the whole of it, in Metal.
+5. **MIDI**: SysEx in and out, notes and CCs. ALSA on Linux, WinMM or Windows MIDI Services on Windows. `galaxz-fakeopz` is what to talk to.
+6. **Bluetooth, sound, the sampler** last.
+
+Tell people what you are taking on with a *Help wanted* or *Fork* issue, so that two do not do the same.

@@ -1,0 +1,40 @@
+{
+  "name": "galaxz-more-voices",
+  "status": "WORKS on the unit (2026-11-22)",
+  "description": "More notes at once on lead (3 -> 4) and chord (4 -> 6), in the pattern's layer and in the live one: 22 voices each instead of 19. They are records the OS already makes and the tables leave unused; 6 is the OS's own number for chord with generous_chords. The OS's overload line stays 265,000 cycles.",
+  "source": {
+    "file": "os.ldr",
+    "firmware": "1.2.45",
+    "size": 828136,
+    "sha256": "5be99760c8797bdd4797ed20cfb9a92b6588889d3a81109bae5a45646a9bde07",
+    "crc32": 2403806141
+  },
+  "edits": [
+    {
+      "what": "lead: 4 voices",
+      "device_address": "0x815c7ae0",
+      "file_offset": "0xc7438",
+      "expected": "03 00 00 00",
+      "new": "04 00 00 00",
+      "evidence": "[code] eight words, a track each, read only by getVoiceEndIndex (0x8012d1c4); first records at 0x815c7b0c: 0 2 4 6 8 10 14 16, 22 a layer; lead's are 10-13, 13 was never used"
+    },
+    {
+      "what": "chord: 6 voices",
+      "device_address": "0x815c7ae8",
+      "file_offset": "0xc7440",
+      "expected": "04 00 00 00",
+      "new": "06 00 00 00",
+      "evidence": "[code] eight words, a track each, read only by getVoiceEndIndex (0x8012d1c4); first records at 0x815c7b0c: 0 2 4 6 8 10 14 16, 22 a layer; chord's are 16-21"
+    },
+    {
+      "what": "lead: 4 voices, with generous_chords",
+      "device_address": "0x815c7b00",
+      "file_offset": "0xc7458",
+      "expected": "03 00 00 00",
+      "new": "04 00 00 00",
+      "evidence": "[code] the second table, taken when 0x8110e52c (generous_chords) is set; chord is 6 there already"
+    }
+  ],
+  "revert": "Flash Galax-z v7.",
+  "risk": "More voices are more CPU: about 10,000 cycles a block for each piano voice. Above the line the OS cuts the quietest note that is fading; notes held by key or pedal are not cut, so a very full hand can take the audio longer than the line. The load meter shows it."
+}

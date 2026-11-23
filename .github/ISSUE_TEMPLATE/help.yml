@@ -1,0 +1,11 @@
+name: Help wanted, or offered
+description: Windows, Linux, a feature, testing. What you need or what you can take on.
+labels: [help wanted]
+body:
+  - type: textarea
+    id: what
+    attributes: { label: What it is about }
+    validations: { required: true }
+  - type: textarea
+    id: who
+    attributes: { label: What you bring, or who you are looking for }
