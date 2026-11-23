@@ -29,6 +29,8 @@ the only way on. To change keys, ship an app that trusts both first.
    swift run galaxz-release feed ../../Releases
    ```
 3. Check the printed image SHA-256 is the one that ran on the unit. Commit `Releases/` and push to `main`.
+4. Where the public repository is made from a private one, bring it across: `Tools/make-public.sh FOLDER OWNER "what changed"`,
+   look, push. A GitHub release with the `.galaxz` file attached is a nice extra; the apps read the feed on `main`.
 
 A build the app ships with is never replaced by a release of the same name: a version's records are frozen once it is out.
 
