@@ -22,7 +22,7 @@ public enum EngineCatalogue {
     /// Every op-free engine by plug id.
     public static let byPlug: [Int: EngineInfo] = {
         struct File: Decodable { let engines: [EngineInfo] }
-        guard let url = Bundle.module.url(forResource: "engines", withExtension: "json"),
+        guard let url = PackageFiles.url("engines", "json", bundle: { Bundle.module }),
               let data = try? Data(contentsOf: url),
               let file = try? JSONDecoder().decode(File.self, from: data) else { return [:] }
         return Dictionary(file.engines.map { ($0.plug, $0) }, uniquingKeysWith: { first, _ in first })

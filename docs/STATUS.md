@@ -50,6 +50,9 @@ and makes byte for byte the image on the unit; v9's is kept beside it. v10 to v1
 | Settings › Credits | Builds, and the notices are in the package; not looked at on a screen |
 | Frame rate | 119–120 fps on a 120 Hz Mac display, 13–22 % of a core (before PLAY, CHOPS and PERFORM) |
 | iPad, iPhone | Installed and run on the author's only; no App Store, no TestFlight |
+| Android: the screen, over Bluetooth and over USB | Unit, on the author's Pixel 2 XL (Android 15): the project read, the OP-Z answering on the first USB port |
+| Android: the OP-Z's sound through the phone | Unit, the author's: works |
+| Android: CHOPS, Settings, the key test, LEARN, backups | The emulator and the demo OP-Z; reported working on the phone, not point by point |
 
 ## Going back
 

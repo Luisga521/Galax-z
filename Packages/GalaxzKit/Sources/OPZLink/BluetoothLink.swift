@@ -1,3 +1,4 @@
+#if canImport(CoreBluetooth)
 import CoreBluetooth
 import CoreMIDI
 
@@ -121,3 +122,4 @@ extension BluetoothLink: @preconcurrency CBPeripheralDelegate {
         state = .linked(p.name ?? "OP-Z")
     }
 }
+#endif

@@ -3,7 +3,13 @@
 // Copyright (c) 2026 Lourens Smit and the op-z-engines contributors (OP-FREE)
 // Copyright (c) 2026 Luis Tosado (this version of it)
 
+#if canImport(Compression)
 import Compression
+#else
+import CZlib
+/// zlib's own (inside `Zlib`, `inflate` is ours).
+private func zlibInflate(_ z: inout z_stream, _ flush: Int32) -> Int32 { inflate(&z, flush) }
+#endif
 
 /// OP-Z SysEx framing and the packed-7 encoding. Port of op-free's `core/src/sysex.ts`.
 public enum SysEx {
@@ -71,16 +77,38 @@ public enum Zlib {
               data[1] & 0x20 == 0 else { return nil } // deflate, valid header check, no preset dictionary
         let raw = Array(data[2...])
         var out = [UInt8](repeating: 0, count: maxSize + 1) // one spare byte: a longer stream fills it and is refused
-        let n = out.withUnsafeMutableBufferPointer { dst in
-            raw.withUnsafeBufferPointer { src in
-                compression_decode_buffer(dst.baseAddress!, dst.count, src.baseAddress!, src.count, nil,
-                                          COMPRESSION_ZLIB)
-            }
-        }
+        let n = rawInflate(raw, into: &out)
         guard n <= maxSize else { return nil }
         out.removeLast(out.count - n)
         let tail = data.suffix(4).reduce(UInt32(0)) { $0 << 8 | UInt32($1) }
         return adler32(out) == tail ? out : nil
+    }
+
+    /// Raw deflate (no header, no checksum) into `out`; how many bytes came out (`out.count` or more: too long).
+    private static func rawInflate(_ raw: [UInt8], into out: inout [UInt8]) -> Int {
+        #if canImport(Compression)
+        out.withUnsafeMutableBufferPointer { dst in
+            raw.withUnsafeBufferPointer { src in
+                compression_decode_buffer(dst.baseAddress!, dst.count, src.baseAddress!, src.count, nil, COMPRESSION_ZLIB)
+            }
+        }
+        #else
+        // the system's zlib, told the stream has no header (window bits -15), as Apple's COMPRESSION_ZLIB reads it
+        var z = z_stream()
+        guard inflateInit2_(&z, -15, ZLIB_VERSION, Int32(MemoryLayout<z_stream>.size)) == Z_OK else { return Int.max }
+        defer { inflateEnd(&z) }
+        var input = raw
+        return input.withUnsafeMutableBufferPointer { src in
+            out.withUnsafeMutableBufferPointer { dst in
+                z.next_in = src.baseAddress
+                z.avail_in = uInt(src.count)
+                z.next_out = dst.baseAddress
+                z.avail_out = uInt(dst.count)
+                let r = zlibInflate(&z, Z_FINISH)
+                return r == Z_STREAM_END || r == Z_BUF_ERROR || r == Z_OK ? Int(z.total_out) : Int.max
+            }
+        }
+        #endif
     }
 
     public static func adler32(_ data: [UInt8]) -> UInt32 {

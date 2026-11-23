@@ -1,4 +1,6 @@
+#if canImport(CoreMIDI)
 import CoreMIDI
+#endif
 import Foundation
 
 /// Where frames come from and go: a real OP-Z over CoreMIDI, or the demo OP-Z.
@@ -21,6 +23,7 @@ public enum KeyEvent: Sendable, Equatable {
     case clock
 }
 
+#if canImport(CoreMIDI)
 /// The OP-Z over CoreMIDI (USB cable, or Bluetooth once linked), with SysEx carried as UMP 7-bit data packets.
 @MainActor
 public final class MIDITransport: OPZPort {
@@ -265,3 +268,4 @@ public final class UMPReader: @unchecked Sendable {
         }
     }
 }
+#endif

@@ -39,7 +39,7 @@ public final class DemoOPZCore {
     /// The bundled demo song.
     public static func bundled() -> DemoOPZCore {
         struct File: Decodable { let frames: [String]; let files: [String]? }
-        guard let url = Bundle.module.url(forResource: "demo-session", withExtension: "json"),
+        guard let url = PackageFiles.url("demo-session", "json", bundle: { Bundle.module }),
               let data = try? Data(contentsOf: url),
               let file = try? JSONDecoder().decode(File.self, from: data) else { return DemoOPZCore(frames: []) }
         return DemoOPZCore(frames: file.frames.map(Self.bytes), files: (file.files ?? []).map(Self.bytes))

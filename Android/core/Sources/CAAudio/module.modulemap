@@ -1,0 +1,5 @@
+module CAAudio [system] {
+    header "shim.h"
+    link "aaudio"
+    export *
+}

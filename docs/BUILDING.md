@@ -6,6 +6,7 @@
 |---|---|
 | The Mac app, the demo, the pictures | macOS 15 or newer, Xcode 16 or newer (built with 27.2), [`xcodegen`](https://github.com/yonaskolb/XcodeGen) |
 | iPad and iPhone (iOS 18 or newer) | the same, and an Apple developer team of your own ([FORKING.md](FORKING.md), 3) |
+| Android (8 or newer to build for, 11 or newer to run) | the [swift.org toolchain 6.4.3](https://www.swift.org/install/macos/) and its Swift SDK for Android, the Android NDK r30, the Android SDK (platform 36), a JDK 17 or newer, Gradle ([Android/README.md](../Android/README.md)) |
 | Flashing from the terminal | Python 3; `Firmware/flash` makes its own environment |
 | Changing OS code | Blackfin GCC 15.3 and binutils 2.47 in `~/opt/bfin-elf` ([how](https://github.com/mutlisensor/op-free/blob/main/research/toolchain-setup.md)). Records keep their bytes, so building and flashing need none of it |
 | Changing engines | [OP-FREE](https://github.com/mutlisensor/op-free) and its SDK; `OPFREE=/path/to/op-free` |
@@ -21,6 +22,14 @@ xcodegen                                   # Galaxz.xcodeproj again, after proje
 ```
 
 `-demo` as a launch argument starts with the demo OP-Z.
+
+```bash
+Android/build.sh                           # the Android app: Android/build/Galax-z.apk, signed with Android's debug key
+Android/build.sh install                   # and on the phone plugged in (adb)
+(cd Android/core && swift test)            # its session, the sampler and Settings, against the demo OP-Z on the Mac
+```
+
+On Android, `--ez demo true` to `adb shell am start -n org.galaxz.app/.MainActivity` starts with the demo OP-Z.
 
 ## Without an OP-Z
 

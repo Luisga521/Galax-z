@@ -30,5 +30,8 @@ it: that is how this gets good.
 | Settings stays a column in a very large Mac window | |
 | The Mac app is not notarized | macOS asks you to allow it. Building it yourself avoids that |
 | The update check finds nothing while the repository is private | |
+| Android: some USB-C to USB-C cables do not carry the OP-Z | The phone and the OP-Z can each take charge of the cable; with a poor one they fight and the phone never sees it (`error -71` in its log). Another cable did it; a USB-C OTG adapter and a USB-A to USB-C cable put the phone in charge every time |
+| Android: Galax-z cannot open the USB page in Android's settings | Android keeps it to itself: its USB notification gets there |
+| Android: the APK is signed with a debug key | A test build: a later one signed with another key has to replace it by hand |
 
 What has been confirmed and what has not, version by version: [STATUS.md](STATUS.md).

@@ -17,7 +17,9 @@ Counted on 2026-11-22. Most of the app is plain Swift that knows nothing of Appl
 | `OPZLink` SysEx, sessions | 1,315 | CoreMIDI, CoreBluetooth, Compression | split: `OPFree/` needs only zlib; MIDI and Bluetooth need each system's own |
 | `App` | | SwiftUI, Metal, AVFoundation | new: a window, a GPU pass, sound out |
 
-None of it has been built on Linux or Windows yet.
+None of it has been built on Linux or Windows yet. **It has been built for Android** ([Android/](../Android/README.md)), which is Linux underneath: the
+modules above as they are, `OPZLink` with the system's zlib where Apple's Compression is (`CZlib`), Float maths from the C library where it has only
+Double's (`ChopKit/FloatMath.swift`), the package's files from a folder (`PackageFiles`). The same should carry a Linux build most of the way.
 
 ## Where to begin
 

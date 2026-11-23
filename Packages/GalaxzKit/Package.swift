@@ -25,7 +25,10 @@ let package = Package(
         // Vocal chops: a source cut up, played and worked on. Pure: samples in, samples out.
         .target(name: "ChopKit"),
         // Talking to an OP-Z: SysEx framing, the StateSync replica, the file service, CoreMIDI, the demo OP-Z.
-        .target(name: "OPZLink", dependencies: ["OPZModel"], resources: [.copy("Resources/OPFree/demo-session.json")]),
+        .target(name: "OPZLink", dependencies: ["OPZModel", .target(name: "CZlib", condition: .when(platforms: [.android, .linux]))],
+                resources: [.copy("Resources/OPFree/demo-session.json")]),
+        // The system's zlib, where Apple's Compression is not (Android, Linux).
+        .systemLibrary(name: "CZlib"),
         // The OS side: LDR images, patch records, the strict update-mode writer (port of Firmware/tools/flash.py).
         .target(name: "OPZFirmware", resources: [.copy("Resources/firmware")]),
         .testTarget(name: "GalaxzKitTests", dependencies: ["OPZModel", "OPZLink", "OPZFirmware", "DotKit", "OPZStage", "OPZPlay", "ChopKit"], resources: [.copy("Fixtures")]),
