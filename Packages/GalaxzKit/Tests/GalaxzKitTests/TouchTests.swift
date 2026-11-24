@@ -265,5 +265,13 @@ import Testing
         d.sent = []
         d.s.keyDown(60, velocity: 90); d.s.keyUp(60)
         #expect(d.sent == [.noteOn(track: 5, note: 60, velocity: 90), .noteOff(track: 5, note: 60)])
+        // the encoders turn what the selected track's page shows: SOUND's P1 P2 FILTER RESO, then ENVELOPE's
+        d.sent = []
+        d.s.set(.encoder(2), to: 30)
+        #expect(d.sent == [.sound(track: 5, param: 8, value: 30)] && d.s.value(of: .encoder(2)) == 30 && Target.encoder(2).continuous)
+        d.s.input.panel.page = 1
+        d.sent = []
+        d.s.set(.encoder(0), to: 99)
+        #expect(d.sent == [.sound(track: 5, param: 2, value: 99)] && d.s.value(of: .encoder(0)) == 99)
     }
 }

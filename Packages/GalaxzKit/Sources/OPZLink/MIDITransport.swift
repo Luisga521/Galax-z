@@ -43,6 +43,8 @@ public final class MIDITransport: OPZPort {
     /// The OP-Z in use, nil when none is connected.
     public private(set) var connection: Connection?
     public var connectedName: String? { connection?.name }
+    /// Where messages to the OP-Z go (0: none), for what sends to it from another thread.
+    public var destinationEndpoint: MIDIEndpointRef { destination }
     /// Called on the main actor when MIDI devices come or go.
     public var onSetupChanged: (() -> Void)?
 

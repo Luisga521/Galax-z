@@ -41,14 +41,18 @@ and makes byte for byte the image on the unit; v9's is kept beside it. v10 to v1
 | Hub: read, install, go back | Unit, on a Mac; every failure path against a fake update port |
 | Backups | Unit, read only; checksums of two sets matched |
 | The OP-Z's sound through the device | Mac: with a silent virtual device. iPad and iPhone: never run with an OP-Z |
+| Mac: sound out of the headphone jack flipping back and forth | Reported; the cause read from the code (rebuilding on its own changes) and fixed; not tried on the jack yet |
 | Kick strikes on TRACK | Cause seen on the unit (its kick sends on channel 16), fixed in the app; not reported back yet |
 | Tight picture over USB | Against a simulated OP-Z, 25 → 8 ms; the feel on the unit not reported |
 | Touch: volume, mutes | The OP-Z takes both and says so (unit). Sends, pan, dials, patterns: virtual OP-Z only |
 | PLAY, PERFORM, LEARN, SCREEN + first dial | Virtual OP-Z only; no real controller tried |
+| LEARN: ENCODER 1-4 (what the OP-Z's encoders turn on the page shown) | Tests only |
+| BRIDGE (Mac): other controllers played straight into the OP-Z beside its own keys | Against a virtual MIDI port only; never with the OP-Z or a real controller |
+| PAIR on the Mac's start screen (Apple's Bluetooth MIDI list) | Builds; not opened, and the list not tried on a Mac |
 | CHOPS, MODULE as its lane, LIGHTS as PERFORM's | Virtual OP-Z only |
 | Recording into CHOPS, from a microphone or the cable | Not tried |
 | Settings › Credits | Builds, and the notices are in the package; not looked at on a screen |
-| Frame rate | 119–120 fps on a 120 Hz Mac display, 13–22 % of a core (before PLAY, CHOPS and PERFORM) |
+| Frame rate | 119–120 fps on a 120 Hz Mac display, 13–22 % of a core (before PLAY, CHOPS and PERFORM). Now asks for the screen's top rate all the time, iPhone over 60 Hz too: not measured since |
 | iPad, iPhone | Installed and run on the author's only; no App Store, no TestFlight |
 | Android: the screen, over Bluetooth and over USB | Unit, on the author's Pixel 2 XL (Android 15): the project read, the OP-Z answering on the first USB port |
 | Android: the OP-Z's sound through the phone | Unit, the author's: works |

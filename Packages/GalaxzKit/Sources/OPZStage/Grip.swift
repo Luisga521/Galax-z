@@ -37,6 +37,7 @@ extension Stage {
         switch t {
         case .sound(let n, let p): OPZ.params.indices.contains(p) ? Here(self).sound(n ?? track, p) : nil
         case .gain(let n): Here(self).gain(n ?? track)
+        case .encoder(let e): encoded(e).flatMap { value(of: .sound(track: nil, param: $0)) }
         case .chopDial(let d): chops.dials.indices.contains(d) ? Int((chops.dials[d] * 127).rounded()) : nil
         default: nil
         }
@@ -47,6 +48,7 @@ extension Stage {
         switch t {
         case .sound(let n, let p): setSound(n ?? track, p, Double(v) / 127)
         case .gain(let n): setGain(n ?? track, Double(v) / 127)
+        case .encoder(let e): if let p = encoded(e) { setSound(track, p, Double(v) / 127) }
         case .chopDial(let d): setChopDial(d, Double(v) / 127)
         default: break
         }
@@ -65,9 +67,17 @@ extension Stage {
         case .previousPattern: if down { say(.previousPattern) }
         case .play: if down { say(playhead.playing ? .stop : .start) }
         case .chop(let n): down ? strike(n, Double(velocity) / 127, id: 3000 + n) : ask(.stop(id: 3000 + n))
-        case .sound, .gain, .chopDial, .keys: return false
+        case .sound, .encoder, .gain, .chopDial, .keys: return false
         }
         return true
+    }
+
+    /// What encoder `e` turns: a sound value of the selected track, on its page as the dials show it (nil on a page of the OS's own).
+    func encoded(_ e: Int) -> Int? {
+        guard (0..<4).contains(e), machinePage == nil, redPage == nil else { return nil }
+        let pages = Palette.pages(track, samples: input.sounds[track]?.origin == .samples)
+        let on = min((input.machines.flatMap { $0.track == track ? $0.page : nil } ?? input.panel.page) & 3, pages.count - 1)
+        return pages[on].params[e]
     }
 
     /// A key of another keyboard.

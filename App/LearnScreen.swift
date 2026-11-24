@@ -11,7 +11,7 @@ struct LearnScreen: View {
     private let families = ["SOUND", "MIX", "PERFORM", "CHOPS", "PATTERNS", "KEYS"]
     private var targets: [Target] {
         switch family {
-        case 0: OPZ.params.indices.map { .sound(track: track, param: $0) }
+        case 0: (track == nil ? (0..<4).map { .encoder($0) } : []) + OPZ.params.indices.map { .sound(track: track, param: $0) }
         case 1: [.gain(track: track), .mute(track: track), .sound(track: track, param: 10), .sound(track: track, param: 6), .sound(track: track, param: 7)]
             + (track == nil ? (0..<8).map { .gain(track: $0) } + (0..<8).map { .mute(track: $0) } : [])
         case 2: (0..<PerformBay.pads).map { .move(pad: $0) }

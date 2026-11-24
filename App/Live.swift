@@ -357,6 +357,7 @@ final class Live {
         }
         deviceName = found?.name
         transport = found?.transport
+        controllers.bridge?.set(opz: midi.destinationEndpoint, channels: client.midi?.channels)
         audio.cable(found?.transport == .usb)
         #if targetEnvironment(macCatalyst)
         // On the Mac, cable only: the Mac is where the hub runs, and searching Bluetooth there would take the OP-Z
@@ -417,6 +418,8 @@ final class Live {
         stage.lights = d.bool(forKey: "lightsLane")
         controllers.stage = stage
         controllers.changed = { [weak self] in self?.stageChanged() }
+        stage.selected = { [weak self] t in self?.controllers.bridge?.set(track: t) }
+        controllers.bridge?.set(track: stage.track)
     }
 
     private func play(_ e: Player.Event) {
@@ -429,6 +432,8 @@ final class Live {
     let sampler = Sampler()
     /// Other keyboards, knobs and pads.
     let controllers = Controllers()
+    /// The OP-Z's MIDI in is on (hold TEMPO + SCREEN, key 2); nil until its settings are read.
+    private(set) var midiIn: Bool?
 
     private func send(_ frames: [[UInt8]]) {
         for f in frames {
@@ -500,7 +505,12 @@ final class Live {
         i.link = link
         i.linkName = linkName
         i.linkLine = linkLine
+        #if targetEnvironment(macCatalyst)
+        stage.showsPairing = deviceName == nil && source == .opz
+        i.linkHint = stage.showsPairing ? "OR PAIR IT OVER BLUETOOTH" : ""
+        #else
         i.linkHint = stage.showsPairing ? "SWITCH IT ON, CLOSE TE'S OP-Z APP, OR PLUG IN A CABLE" : ""
+        #endif
         i.bank = bank
         i.revision = client.bankRevision &* 1_000_003 &+ client.editRevision
         i.address = address
@@ -509,6 +519,8 @@ final class Live {
         i.panel = client.panel
         i.machines = client.machines
         i.midi = client.midi
+        controllers.bridge?.set(opz: source == .opz ? midi.destinationEndpoint : 0, channels: client.midi?.channels)
+        if client.midi?.incoming != midiIn { midiIn = client.midi?.incoming }
         i.red = client.red
         i.load = lastLoad
         i.notice = notice

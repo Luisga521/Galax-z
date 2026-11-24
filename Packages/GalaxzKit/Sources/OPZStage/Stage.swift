@@ -16,7 +16,9 @@ public final class Stage {
     public var input = StageInput() { didSet { changed(from: oldValue) } }
     public var page = Page.track { didSet { if page != oldValue { turned = 0 } } }
     /// Show the track selected on the OP-Z. Choosing one here lets go until one is chosen there.
-    public private(set) var track = 0
+    public private(set) var track = 0 { didSet { if track != oldValue { selected(track) } } }
+    /// The selected track changed.
+    public var selected: (Int) -> Void = { _ in }
     public var showsPairing = false
 
     // what moves

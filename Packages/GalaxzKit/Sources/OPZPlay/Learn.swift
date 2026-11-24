@@ -14,6 +14,8 @@ public struct Control: Hashable, Codable, Sendable {
 /// What a control does. A track of nil: the one that is selected.
 public enum Target: Hashable, Codable, Sendable {
     case sound(track: Int?, param: Int)
+    /// One of the OP-Z's four encoders (0-3): what it turns on the selected track's page.
+    case encoder(Int)
     case gain(track: Int?)
     case mute(track: Int?)
     case move(pad: Int)
@@ -31,6 +33,7 @@ public enum Target: Hashable, Codable, Sendable {
         func t(_ n: Int?) -> String { n.map { OPZ.trackNames[$0 & 15].uppercased() } ?? "TRACK" }
         switch self {
         case .sound(let n, let p): return t(n) + " · " + (OPZ.params.indices.contains(p) ? OPZ.params[p].uppercased() : "?")
+        case .encoder(let e): return "ENCODER \(e + 1)"
         case .gain(let n): return t(n) + " · VOLUME"
         case .mute(let n): return t(n) + " · MUTE"
         case .move(let p): return "PERFORM PAD \(p + 1)"
@@ -46,7 +49,7 @@ public enum Target: Hashable, Codable, Sendable {
         }
     }
     /// It takes a value; the others are pressed.
-    public var continuous: Bool { switch self { case .sound, .gain, .chopDial: true; default: false } }
+    public var continuous: Bool { switch self { case .sound, .encoder, .gain, .chopDial: true; default: false } }
 }
 
 /// What has been learned: any controller's controls to what they do.

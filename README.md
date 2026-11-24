@@ -49,7 +49,7 @@ Not made by, endorsed by or connected with teenage engineering. OP-Z and OP-1 ar
 Every picture is the app's own demo. The eleventh page, **LOAD**, shows [how hard the OP-Z works](docs/screens/load.jpg).
 
 **The app** follows the OP-Z over a USB-C cable, or over Bluetooth on iPad, iPhone and Android. Looking sends nothing that changes it; **touching a control
-changes the OP-Z by MIDI**, as a knob on it would. It learns any MIDI controller, backs up your projects (reading only), plays the OP-Z's sound through
+changes the OP-Z by MIDI**, as a knob on it would. It learns any MIDI controller (on a Mac, **Settings › BRIDGE** plays your keyboards and pads straight into the OP-Z, beside its own keys), backs up your projects (reading only), plays the OP-Z's sound through
 your device, and, on a Mac, installs Galax-z OS. No OP-Z? **Settings › DEMO OP-Z** plays a pretend one. **On a Mac, try the test build** from [Releases](https://github.com/Luisga521/Galax-z/releases) (not notarized: allow it once in
 System Settings › Privacy & Security), or build it with one command ([BUILDING.md](docs/BUILDING.md)). It is not in the App Store. **On Android**, the test
 APK is in the same [Releases](https://github.com/Luisga521/Galax-z/releases) (allow installing unknown apps); it is the same screens from the same code,

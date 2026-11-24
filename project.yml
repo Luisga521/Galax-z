@@ -48,7 +48,7 @@ targets:
         CFBundleDisplayName: Galax-z
         GalaxzByline: $(GALAXZ_BYLINE)
         NSBluetoothAlwaysUsageDescription: >-
-          Galax-z uses Bluetooth only to find your OP-Z and connect it as a MIDI device. Nothing leaves this iPad.
+          Galax-z uses Bluetooth only to find your OP-Z and connect it as a MIDI device. Nothing leaves this device.
         NSMicrophoneUsageDescription: >-
           Galax-z plays your OP-Z's sound, which comes over the USB cable, through this device, and records the sounds you make into chops when you touch RECORD. They stay on this device.
         UIBackgroundModes: [audio]               # the OP-Z through this device goes on behind another app
@@ -58,6 +58,7 @@ targets:
           UIApplicationSupportsMultipleScenes: false
         UIRequiresFullScreen: false
         UIStatusBarHidden: true
+        CADisableMinimumFrameDuration: true      # an iPhone's ProMotion over 60 Hz
         UIFileSharingEnabled: true               # Backups in the Files app (Galax-z › Backups)
         LSSupportsOpeningDocumentsInPlace: true
         ITSAppUsesNonExemptEncryption: false

@@ -59,16 +59,19 @@ struct Root: View {
         .onAppear {
             MacWindow.setUp()
             let args = ProcessInfo.processInfo.arguments
-            if args.contains("-hub") { over = .os } else if args.contains("-learn") { over = .learn } else if args.contains("-settings") { over = .general } }
+            if args.contains("-hub") { over = .os } else if args.contains("-learn") { over = .learn } else if args.contains("-bridge") { over = .bridge } else if args.contains("-settings") { over = .general } }
     }
 
     /// Dots to the very edge on the Mac and iPad; clear of the island and the home bar on a phone.
     private var ignored: Edge.Set { UIDevice.current.userInterfaceIdiom == .phone ? [] : .all }
 
     /// No OP-Z by itself (an advertising one is linked within a second or two): the pairing list opens, and can be had again from the start screen.
+    /// On the Mac, PAIR is on the start screen while there is no OP-Z, and nothing opens by itself: the Mac never searches Bluetooth unasked.
     private func offerPairing() async {
+        #if targetEnvironment(macCatalyst)
+        return              // PAIR follows whether an OP-Z is there (Live.feedStage)
+        #else
         live.offerPairing(false)
-        #if !targetEnvironment(macCatalyst)
         switch live.bluetooth {
         case .off, .unauthorized, .unsupported: return
         case .idle:

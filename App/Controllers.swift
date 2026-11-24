@@ -9,7 +9,29 @@ import OPZStage
 /// Every MIDI controller that is not the OP-Z: what its knobs, pads and keys do, as learned.
 @MainActor @Observable
 final class Controllers {
-    private(set) var learned: Learned { didSet { if learned.entries != oldValue.entries, let d = try? JSONEncoder().encode(learned) { UserDefaults.standard.set(d, forKey: "learned") } } }
+    private(set) var learned: Learned {
+        didSet {
+            bridge?.set(learned: learned)
+            if learned.entries != oldValue.entries, let d = try? JSONEncoder().encode(learned) { UserDefaults.standard.set(d, forKey: "learned") }
+        }
+    }
+    /// Where each controller's notes and knobs go when they are not learned: straight to the OP-Z (the Mac's bridge).
+    private(set) var routes: [String: Bridge.Route] {
+        didSet {
+            bridge?.set(routes: routes, fallback: Self.fallback)
+            UserDefaults.standard.set(try? JSONEncoder().encode(routes), forKey: "bridgeRoutes")
+        }
+    }
+    /// A controller nobody chose a route for: on the Mac it plays the selected track; elsewhere nothing yet.
+    #if targetEnvironment(macCatalyst)
+    static let fallback = Bridge.Route.selected
+    #else
+    static let fallback = Bridge.Route.off
+    #endif
+    func route(_ device: String) -> Bridge.Route { routes[device] ?? Self.fallback }
+    func set(_ r: Bridge.Route, for device: String) { routes[device] = r }
+    /// Sends to the OP-Z from CoreMIDI's thread.
+    @ObservationIgnored private(set) var bridge: Bridge?
     /// Their names, and what was moved last.
     private(set) var devices: [String] = []
     private(set) var last: String?
@@ -18,14 +40,20 @@ final class Controllers {
     @ObservationIgnored var changed: () -> Void = {}
     @ObservationIgnored private var client = MIDIClientRef()
     @ObservationIgnored private var ports: [MIDIEndpointRef: (port: MIDIPortRef, name: String)] = [:]
-    private struct Heard: Sendable { let device: String, status: UInt8, a: Int, b: Int }
+    /// `bridged`: the OP-Z track the bridge already sent it to.
+    private struct Heard: Sendable { let device: String, status: UInt8, a: Int, b: Int, bridged: Int? }
     @ObservationIgnored private let into: AsyncStream<Heard>.Continuation
 
     init() {
         learned = UserDefaults.standard.data(forKey: "learned").flatMap { try? JSONDecoder().decode(Learned.self, from: $0) } ?? Learned()
+        routes = UserDefaults.standard.data(forKey: "bridgeRoutes").flatMap { try? JSONDecoder().decode([String: Bridge.Route].self, from: $0) } ?? [:]
         let (heard, into) = AsyncStream.makeStream(of: Heard.self, bufferingPolicy: .bufferingNewest(1024))
         self.into = into
         MIDIClientCreateWithBlock("Galax-z controllers" as CFString, &client, Self.notify { [weak self] in self?.look() })
+        let b = Bridge(client: client)
+        b.set(learned: learned)
+        b.set(routes: routes, fallback: Self.fallback)
+        bridge = b
         look()
         Task { [weak self] in for await h in heard { self?.take(h) } }
     }
@@ -34,7 +62,7 @@ final class Controllers {
     nonisolated private static func notify(_ changed: @escaping @MainActor @Sendable () -> Void) -> MIDINotifyBlock {
         { n in guard n.pointee.messageID == .msgSetupChanged else { return }; Task { @MainActor in changed() } }
     }
-    nonisolated private static func receive(_ name: String, _ into: AsyncStream<Heard>.Continuation) -> MIDIReceiveBlock {
+    nonisolated private static func receive(_ name: String, _ bridge: Bridge?, _ into: AsyncStream<Heard>.Continuation) -> MIDIReceiveBlock {
         { list, _ in
             for p in list.unsafeSequence() {
                 let n = Int(p.pointee.wordCount)
@@ -43,7 +71,10 @@ final class Controllers {
                     var i = 0
                     while i < n, i < w.count {
                         let type = Int(w[i] >> 28)
-                        if type == 2 { into.yield(Heard(device: name, status: UInt8(w[i] >> 16 & 255), a: Int(w[i] >> 8 & 127), b: Int(w[i] & 127))) }
+                        if type == 2 {
+                            let status = UInt8(w[i] >> 16 & 255), a = Int(w[i] >> 8 & 127), b = Int(w[i] & 127)
+                            into.yield(Heard(device: name, status: status, a: a, b: b, bridged: bridge?.forward(name, status, a, b)))
+                        }
                         i += [1, 1, 1, 2, 2, 4, 1, 1, 2, 2, 2, 3, 3, 4, 4, 4][type]
                     }
                 }
@@ -65,7 +96,7 @@ final class Controllers {
         for (s, p) in ports where now[s] == nil { MIDIPortDispose(p.port); ports[s] = nil }
         for (s, name) in now where ports[s] == nil {
             var port = MIDIPortRef()
-            guard MIDIInputPortCreateWithProtocol(client, name as CFString, ._1_0, &port, Self.receive(name, into)) == noErr else { continue }
+            guard MIDIInputPortCreateWithProtocol(client, name as CFString, ._1_0, &port, Self.receive(name, bridge, into)) == noErr else { continue }
             MIDIPortConnectSource(port, s, nil)
             ports[s] = (port, name)
         }
@@ -80,9 +111,16 @@ final class Controllers {
         case 0x90: (c, v) = (Control(device: h.device, channel: channel, kind: .note, number: h.a), h.b)
         case 0x80: (c, v) = (Control(device: h.device, channel: channel, kind: .note, number: h.a), 0)
         case 0xB0 where h.a < 120: (c, v) = (Control(device: h.device, channel: channel, kind: .cc, number: h.a), h.b)
-        default: return
+        default:
+            if let t = h.bridged { last = "\(h.device) → \(OPZ.trackNames[t].uppercased())" }
+            return
         }
-        if learned.waiting != nil || v > 0 { last = "\(h.device): \(c.name) = \(v)" }
+        if learned.waiting != nil || v > 0 { last = "\(h.device): \(c.name) = \(v)" + (h.bridged.map { " → \(OPZ.trackNames[$0].uppercased())" } ?? "") }
+        // sent through already: the screen shows the note (unless the OP-Z echoes what comes in, and shows it itself)
+        if let t = h.bridged {
+            if c.kind == .note, (stage.input.midi?.flags ?? 0) & 64 == 0 { v > 0 ? stage.noteOn(channel: t, note: c.number, velocity: v) : stage.noteOff(channel: t, note: c.number) }
+            return changed()
+        }
         // keys: a whole keyboard, but for the pads that were given something of their own
         if c.kind == .note, learned.waiting == nil, learned.entry(c) == nil || learned.entry(c)?.target == .keys,
            learned.entries.contains(where: { $0.target == .keys && $0.control.device == h.device && $0.control.channel == channel }) {

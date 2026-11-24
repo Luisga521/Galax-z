@@ -87,7 +87,16 @@ struct SettingsScreen: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.horizontalSizeClass) private var width
 
-    enum Tab: String, CaseIterable, Identifiable { case general = "GENERAL", learn = "LEARN", os = "GALAX-Z OS"; var id: String { rawValue } }
+    enum Tab: String, CaseIterable, Identifiable {
+        case general = "GENERAL", learn = "LEARN", bridge = "BRIDGE", os = "GALAX-Z OS"
+        var id: String { rawValue }
+        /// The bridge is the Mac's for now.
+        #if targetEnvironment(macCatalyst)
+        static let shown = allCases
+        #else
+        static let shown = allCases.filter { $0 != .bridge }
+        #endif
+    }
 
     init(live: Live, hub: Hub, tab: Tab, keyTest: @escaping () -> Void) {
         (self.live, self.hub, self.keyTest) = (live, hub, keyTest)
@@ -98,7 +107,7 @@ struct SettingsScreen: View {
         VStack(spacing: 0) {
             HStack(spacing: 14) {
                 if width != .compact { DotText("SETTINGS", font: .big, dot: 1.8) }
-                Picker("Settings", selection: $tab) { ForEach(Tab.allCases) { Text($0.rawValue).tag($0) } }.pickerStyle(.segmented).disabled(hub.busy != nil)
+                Picker("Settings", selection: $tab) { ForEach(Tab.shown) { Text($0.rawValue).tag($0) } }.pickerStyle(.segmented).disabled(hub.busy != nil)
                 Button("DONE") { dismiss() }.buttonStyle(PillButton(fill: Face.yellow)).disabled(hub.busy != nil).keyboardShortcut(.cancelAction)
             }
             .padding(.horizontal, width == .compact ? 14 : 26).padding(.top, top).padding(.bottom, 10)
@@ -106,6 +115,7 @@ struct SettingsScreen: View {
             switch tab {
             case .general: GeneralSettings(live: live, keyTest: keyTest)
             case .learn: LearnScreen(controllers: live.controllers)
+            case .bridge: BridgeScreen(live: live)
             case .os: HubScreen(hub: hub, live: live)
             }
         }

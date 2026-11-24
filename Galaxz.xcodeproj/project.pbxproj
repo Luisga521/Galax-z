@@ -16,6 +16,7 @@
 		25ADFD11C85E483DFAFC10A7 /* Controllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DEA0C5D87FD3FDBBD968FC2 /* Controllers.swift */; };
 		282B49FF9EA83BC745F5CFC1 /* AnimationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1B0205A9B67BFAB2C644CE /* AnimationStore.swift */; };
 		2B65ED8ED02FD0CA9313D8D7 /* OPZPlay in Frameworks */ = {isa = PBXBuildFile; productRef = 710025AD6E617DA72FB9A859 /* OPZPlay */; };
+		323E5122F34838F35F43AD0F /* BridgeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924682707320D281BE96EE9A /* BridgeScreen.swift */; };
 		3945A1B703A1C9F46C091269 /* SelfTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77E10979BE84159EA3EA527 /* SelfTest.swift */; };
 		40A6CF9E226098F7C80311C6 /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC6A60977D615C586D0BADE3 /* SettingsScreen.swift */; };
 		454D3776B32AA5B590663181 /* OPZFirmware in Frameworks */ = {isa = PBXBuildFile; productRef = 04791E655DE6C18873934614 /* OPZFirmware */; };
@@ -28,6 +29,7 @@
 		643BF8F8F2B5466B1F0280C2 /* BluetoothPairing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684F4EE245A68E5061768E89 /* BluetoothPairing.swift */; };
 		6684FC66878BE55474269958 /* AudioOut.swift in Sources */ = {isa = PBXBuildFile; fileRef = DECEAEBC8992B9AE56B7F66E /* AudioOut.swift */; };
 		6DD792BCF2FB3665743A3B55 /* Face.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079C144758A04F669918BFDB /* Face.swift */; };
+		6F53114DEC8523BE7F2A7181 /* Bridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34586560433A1405A8D1AA7D /* Bridge.swift */; };
 		6F9C19793EFC47AB4DF8EC03 /* KeyTestScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09C0202457C1C0477F781E7E /* KeyTestScreen.swift */; };
 		7BF21EF9DEDC11F0B197A12E /* OPZLink in Frameworks */ = {isa = PBXBuildFile; productRef = A85115E34D9C3BD8A030709D /* OPZLink */; };
 		834EF479A5CE04E96D9CAF2B /* GalaxzApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB24E51A360076844953E6A5 /* GalaxzApp.swift */; };
@@ -47,6 +49,7 @@
 		09C0202457C1C0477F781E7E /* KeyTestScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyTestScreen.swift; sourceTree = "<group>"; };
 		13AE3B5B51FEFFF578A6BC30 /* Credits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Credits.swift; sourceTree = "<group>"; };
 		1EA1951EE955F65E19F9E5B5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		34586560433A1405A8D1AA7D /* Bridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bridge.swift; sourceTree = "<group>"; };
 		4C6EE6E56E049A3C7D019C9C /* Sampler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sampler.swift; sourceTree = "<group>"; };
 		645F5B10286738A7CFE4569D /* THIRD_PARTY.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = THIRD_PARTY.md; sourceTree = "<group>"; };
 		684F4EE245A68E5061768E89 /* BluetoothPairing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothPairing.swift; sourceTree = "<group>"; };
@@ -54,6 +57,7 @@
 		7A1B0205A9B67BFAB2C644CE /* AnimationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationStore.swift; sourceTree = "<group>"; };
 		8113F0849A6EABFE4ABF4C05 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8B23C8F9E1B956911EE083D1 /* AnimationLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationLibrary.swift; sourceTree = "<group>"; };
+		924682707320D281BE96EE9A /* BridgeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeScreen.swift; sourceTree = "<group>"; };
 		92BD3AA1907C4AEE53388196 /* DotShaders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DotShaders.swift; sourceTree = "<group>"; };
 		9DEA0C5D87FD3FDBBD968FC2 /* Controllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Controllers.swift; sourceTree = "<group>"; };
 		AA5E61E588BC8571C8A1C7E2 /* DeltaLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeltaLog.swift; sourceTree = "<group>"; };
@@ -126,6 +130,8 @@
 				DECEAEBC8992B9AE56B7F66E /* AudioOut.swift */,
 				AE8ACF2DFDFEF2AB7F9DEAEE /* Backups.swift */,
 				684F4EE245A68E5061768E89 /* BluetoothPairing.swift */,
+				34586560433A1405A8D1AA7D /* Bridge.swift */,
+				924682707320D281BE96EE9A /* BridgeScreen.swift */,
 				9DEA0C5D87FD3FDBBD968FC2 /* Controllers.swift */,
 				13AE3B5B51FEFFF578A6BC30 /* Credits.swift */,
 				AA5E61E588BC8571C8A1C7E2 /* DeltaLog.swift */,
@@ -237,6 +243,8 @@
 				6684FC66878BE55474269958 /* AudioOut.swift in Sources */,
 				5F39AD4695A43B41116CC199 /* Backups.swift in Sources */,
 				643BF8F8F2B5466B1F0280C2 /* BluetoothPairing.swift in Sources */,
+				6F53114DEC8523BE7F2A7181 /* Bridge.swift in Sources */,
+				323E5122F34838F35F43AD0F /* BridgeScreen.swift in Sources */,
 				25ADFD11C85E483DFAFC10A7 /* Controllers.swift in Sources */,
 				470F8BEBB29EEBB7E529630D /* Credits.swift in Sources */,
 				5980B1C603505E2950818FB7 /* DeltaLog.swift in Sources */,

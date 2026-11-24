@@ -102,29 +102,28 @@ final class DotView: UIView, UIGestureRecognizerDelegate {
         link = nil
     }
 
-    /// Something to show: full speed until it is still again.
+    /// Something to show: drawn again from the next frame.
     func changed() {
         movedAt = CACurrentMediaTime()
-        rate(120)
+        uncap()
     }
 
-    private func rate(_ fps: Float) {
-        guard let link, link.preferredFrameRateRange.preferred != fps else { return }
-        link.preferredFrameRateRange = fps > 60 ? CAFrameRateRange(minimum: 60, maximum: 120, preferred: 120)
-            : CAFrameRateRange(minimum: fps / 2, maximum: max(fps, 10), preferred: fps)
+    /// As fast as this screen goes (120 on ProMotion, more on a fast Mac display), all the time: no cap, and no slower rate when idle.
+    private func uncap() {
+        guard let link else { return }
+        let top = Float(max(60, window?.screen.maximumFramesPerSecond ?? 120))
+        guard link.preferredFrameRateRange.maximum != top else { return }
+        link.preferredFrameRateRange = CAFrameRateRange(minimum: top, maximum: top, preferred: top)
     }
 
     @objc private func tick(_ l: CADisplayLink) {
         let now = l.targetTimestamp
-        // after the last change: long enough for the afterglow to go out, then rest
+        // after the last change, long enough for the afterglow to go out: the same frame again is not drawn (the link keeps its rate)
         if stage.still, CACurrentMediaTime() - movedAt > 1.2 {
-            rate(8)
             lastTime = 0
             return
         }
-        // nothing played or touched for a while: what still drifts can drift at 30
-        if !stage.playhead.playing, CACurrentMediaTime() - movedAt > 6 { rate(30) }
-        draw(now, dt: lastTime == 0 ? 1.0 / 120 : min(0.1, max(0.001, now - lastTime)))
+        draw(now, dt: lastTime == 0 ? l.targetTimestamp - l.timestamp : min(0.1, max(0.001, now - lastTime)))
         lastTime = now
     }
 

@@ -31,6 +31,8 @@ final class AudioOut {
     @ObservationIgnored private var cable = false
     @ObservationIgnored private var again: Task<Void, Never>?
     @ObservationIgnored private var run = 0
+    /// When the path was last built again by itself: a jack that flickers, or a device that resets, waits longer each time.
+    @ObservationIgnored private var rebuilt: [Date] = []
 
     /// What the screen says: nil when there is no choice (no cable).
     var line: String? {
@@ -61,10 +63,11 @@ final class AudioOut {
         changed()
     }
 
-    private func apply() {
+    /// `restoring`: the output's own sample rate back too (not when building again onto the same output: that resets it, and round it goes).
+    private func apply(restoring: Bool = true) {
         again?.cancel()
         run += 1
-        path?.stop()
+        path?.stop(restoring: restoring)
         path = nil
         guard out == .here, cable else { state = .off; return }
         state = .waiting
@@ -95,12 +98,16 @@ final class AudioOut {
         }
     }
 
-    /// Devices came or went: once it is quiet, from the start.
+    /// Devices came or went: once it is quiet, and only if the way is broken or the output is another one, from the start.
     private func restart() {
         again?.cancel()
         again = Task {
-            try? await Task.sleep(for: .milliseconds(400))
-            if !Task.isCancelled { apply() }
+            rebuilt.removeAll { -$0.timeIntervalSinceNow > 10 }
+            try? await Task.sleep(for: .milliseconds(rebuilt.count >= 2 ? 2500 : 600))
+            guard !Task.isCancelled else { return }
+            if path?.stillGood == true { return }
+            rebuilt.append(Date())
+            apply(restoring: false)
         }
     }
 }
@@ -168,7 +175,10 @@ final class AudioOut {
         })
     }
 
-    func stop() {
+    /// The route's news is told only when it matters (see the observers): build again.
+    var stillGood: Bool { false }
+
+    func stop(restoring: Bool = true) {
         for w in watching { NotificationCenter.default.removeObserver(w) }
         watching = []
         engine.stop()
@@ -199,6 +209,9 @@ import CoreAudio
     private var device = AudioObjectID(0)
     private var proc: AudioDeviceIOProcID?
     private var rate: (AudioObjectID, Double)?
+    /// Each output's own rate from before it was first used, kept across builds that leave it as it is.
+    private static var original: [String: Double] = [:]
+    private let opzID: String, outID: String
     private var listening: [(AudioObjectPropertyAddress, AudioObjectPropertyListenerBlock)] = []
 
     init(volume: Float, changed: @escaping @MainActor () -> Void) throws {
@@ -215,6 +228,7 @@ import CoreAudio
             throw Refused(why: "There is nothing to play it on: choose the Mac's speakers or headphones as its sound output.")
         }
         to = HAL.name(out)
+        (self.opzID, self.outID) = (opzID, outID)
         shared = .allocate(capacity: 1)
         shared.initialize(to: Shared())
         shared.pointee.wanted = volume
@@ -224,7 +238,8 @@ import CoreAudio
                                                                            [kAudioSubDeviceUIDKey: outID, kAudioSubDeviceDriftCompensationKey: 0]]]
         // the OP-Z comes first: its streams are the first ones, in and out
         let skip = HAL.streams(opz, kAudioObjectPropertyScopeOutput)
-        rate = HAL.rate(out).map { (out, $0) }
+        if Self.original[outID] == nil { Self.original[outID] = HAL.rate(out) }
+        rate = Self.original[outID].map { (out, $0) }
         do {
             try Self.ok(AudioHardwareCreateAggregateDevice(what as CFDictionary, &device), "putting the OP-Z and \(to) together")
             HAL.setFrames(device, 256)
@@ -234,22 +249,26 @@ import CoreAudio
             close()
             throw error
         }
-        // the OP-Z gone, or another output chosen (our own device coming and going is no news)
-        let had = Self.around()
+        // devices came or went, or another output was chosen: AudioOut waits for quiet, then asks stillGood
         for selector in [kAudioHardwarePropertyDevices, kAudioHardwarePropertyDefaultOutputDevice] {
             var a = HAL.address(selector)
-            let block: AudioObjectPropertyListenerBlock = { _, _ in Task { @MainActor in if Self.around() != had { changed() } } }
+            let block: AudioObjectPropertyListenerBlock = { _, _ in Task { @MainActor in changed() } }
             if AudioObjectAddPropertyListenerBlock(AudioObjectID(kAudioObjectSystemObject), &a, .main, block) == noErr { listening.append((a, block)) }
         }
     }
 
-    private static func around() -> [String] {
-        HAL.devices().filter { SoundCopy.isOPZ(HAL.name($0)) }.compactMap(HAL.uid).sorted() + [HAL.defaultOutput().flatMap(HAL.uid) ?? ""]
+    /// The OP-Z and the output are both still there, the sound still runs, and the output is still the one the Mac plays on.
+    /// (Making our own device changes the list, and an output whose rate is changed can reset for a moment: neither is news.)
+    var stillGood: Bool {
+        let here = Set(HAL.devices().compactMap(HAL.uid))
+        guard here.contains(opzID), here.contains(outID), HAL.flag(device, kAudioDevicePropertyDeviceIsAlive), HAL.flag(device, kAudioDevicePropertyDeviceIsRunning) else { return false }
+        guard let d = HAL.defaultOutput(), let u = HAL.uid(d) else { return true }
+        return u == outID || SoundCopy.isOPZ(HAL.name(d)) || HAL.transport(d) == kAudioDeviceTransportTypeAggregate
     }
 
-    func stop() { close() }
+    func stop(restoring: Bool = true) { close(restoring: restoring || HAL.defaultOutput().flatMap(HAL.uid) != outID) }
 
-    private func close() {
+    private func close(restoring: Bool = true) {
         for (a, block) in listening {
             var a = a
             AudioObjectRemovePropertyListenerBlock(AudioObjectID(kAudioObjectSystemObject), &a, .main, block)
@@ -260,7 +279,10 @@ import CoreAudio
         if device != 0 { AudioHardwareDestroyAggregateDevice(device) }
         device = 0
         // the output's own rate again, if it was changed for this
-        if let (d, r) = rate, HAL.rate(d) != r { HAL.setRate(d, r) }
+        if restoring, let (d, r) = rate {
+            if HAL.rate(d) != r { HAL.setRate(d, r) }
+            Self.original[outID] = nil
+        }
         rate = nil
         // what the audio thread read lives until it has surely gone
         let p = shared
@@ -328,6 +350,7 @@ enum HAL {
         guard AudioObjectGetPropertyData(d, &a, 0, nil, &m, raw) == noErr else { return 0 }
         return UnsafeMutableAudioBufferListPointer(raw.assumingMemoryBound(to: AudioBufferList.self)).reduce(0) { $0 + Int($1.mNumberChannels) }
     }
+    static func flag(_ d: AudioObjectID, _ s: AudioObjectPropertySelector) -> Bool { d != 0 && (value(d, address(s), UInt32(0)) ?? 0) != 0 }
     static func rate(_ d: AudioObjectID) -> Double? { value(d, address(kAudioDevicePropertyNominalSampleRate), 0.0) }
     static func setRate(_ d: AudioObjectID, _ r: Double) { var a = address(kAudioDevicePropertyNominalSampleRate), r = r; AudioObjectSetPropertyData(d, &a, 0, nil, 8, &r) }
     static func setFrames(_ d: AudioObjectID, _ n: UInt32) { var a = address(kAudioDevicePropertyBufferFrameSize), n = n; AudioObjectSetPropertyData(d, &a, 0, nil, 4, &n) }

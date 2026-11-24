@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CADisableMinimumFrameDuration</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -42,7 +44,7 @@
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Galax-z uses Bluetooth only to find your OP-Z and connect it as a MIDI device. Nothing leaves this iPad.</string>
+	<string>Galax-z uses Bluetooth only to find your OP-Z and connect it as a MIDI device. Nothing leaves this device.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Galax-z plays your OP-Z's sound, which comes over the USB cable, through this device, and records the sounds you make into chops when you touch RECORD. They stay on this device.</string>
 	<key>UIApplicationSceneManifest</key>
