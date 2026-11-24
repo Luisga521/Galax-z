@@ -14,7 +14,7 @@ import asm  # noqa: E402
 import bfin_mini  # noqa: E402
 import pages_build  # noqa: E402
 
-RECORD = json.load(open(os.path.join(HERE, "..", "patches", "pages8.json")))
+RECORD = json.load(open(os.path.join(HERE, "..", "patches", "pages9.json")))
 BLOCK = RECORD["blocks"][0]
 BASE, CODE = int(BLOCK["target"], 16), bytes.fromhex(BLOCK["data"])
 
@@ -60,7 +60,7 @@ class Pages(unittest.TestCase):
             exe = os.path.join(d, "sim.elf")
             subprocess.run([pages_build.GCC, "-O1", "-mcpu=bf592-none", "-ffreestanding", "-nostdlib", "-I", d, "-T", os.path.join(sim, "sim.ld"),
                             os.path.join(sim, "sim.S"), os.path.join(sim, "sim.c"), "-o", exe, "-lgcc"], check=True, capture_output=True)
-            regions = ["0x90000000,0x100000", "0x80c30000,0x10000", "0x80028000,0x1000", "0x8003a000,0x4000", "0x8010a000,0x4000", "0x8011c000,0x4000", "0x81113000,0x1000",
+            regions = ["0x90000000,0x100000", "0x80c30000,0x10000", "0x80028000,0x1000", "0x8003a000,0x4000", "0x8010a000,0x4000", "0x8011c000,0x4000", "0x81112000,0x2000", "0x81015000,0x1000",
                        "0x81059000,0x1000", "0x0802d000,0x1000", "0x81200000,0x400000", "0x80c40000,0x40000"]
             r = subprocess.run([RUN] + [a for x in regions for a in ("--memory-region", x)] + [exe], capture_output=True, text=True, timeout=300)
             self.assertTrue(r.returncode == 0 and r.stdout.endswith("ok\n"), r.stdout + r.stderr)

@@ -53,6 +53,9 @@ void os_where(u8 *seq, i32 track, i32 *step, i32 *micro);
 void os_record(u8 *seq, i32 track, i32 step, i32 micro, i32 note, i32 vel, i32 len);
 u8 *os_pattern(u8 *seq);
 i32 os_slot(i32 track);
+i32 os_pages(i32 track);
+i32 os_page_colour(i32 track, i32 page);
+void os_flash(i32 page, i32 colour);
 #else                               /* the OP-Z, OS 1.2.45 (notes/device-guide.md 11) */
 static inline i32 mul(i32 a, i32 b) { return __builtin_bfin_mult_fr1x32x32(a, b); }
 static inline u8 *os_seq(void) { return *(u8 *volatile *)0x81059d1c; }
@@ -79,6 +82,17 @@ static inline void os_record(u8 *seq, i32 track, i32 step, i32 micro, i32 note, 
 }
 static inline u8 *os_pattern(u8 *seq) { return *(u8 **)(seq + 0x690 + (*(u32 *)(seq + 0x44) << 3)); }
 static inline i32 os_slot(i32 track) { return ((const i32 *)0x811130e8)[track]; }     /* a track's first note of a step's 55 */
+static inline i32 os_pages(i32 track) { return ((const i32 *)0x81112f5c)[track]; }    /* a track's parameter pages (SHIFT: 0x8011ebe4) */
+static inline i32 os_page_colour(i32 track, i32 page)                                  /* the colour SHIFT flashes for a page (0x8011ec14) */
+{
+    signed char kind = ((const signed char *)0x811131cc)[track * 6 + page];
+    return kind < 0 ? -1 : ((const u8 *)0x811130cc)[kind];
+}
+static inline void os_flash(i32 page, i32 colour)
+{
+    /* the dial LEDs' flash of a page turn, as SHIFT starts it (0x8011ec40): overlay 2, 500 ms, the page, its colour */
+    ((void (*)(u32, i32, i32, i32, i32, i32, i32))0x8003c60c)(*(volatile u32 *)0x81015e9c, 2, 500, page, colour, 0, 0);
+}
 #endif
 
 static inline i32 word(const u8 *seq, u32 at) { return *(const i32 *)(seq + at); }
@@ -100,6 +114,8 @@ static inline i32 word(const u8 *seq, u32 at) { return *(const i32 *)(seq + at);
 #define SEQ_ERASING 0x346270        /* the step screen's: REC with -, notes are taken out */
 #define SEQ_SCREEN 0x3463bc         /* the screen on now */
 #define SEQ_CLEAN 0x39c123          /* byte: SHIFT was the last control pressed (its release then turns the page) */
+#define SEQ_SCREEN_KEY 0x27         /* byte: SCREEN is down (what the OS's $06 tells an app, 0x801088ac) */
+#define JOG 4                       /* the blue dial's clicks a page, SCREEN held */
 
 typedef struct { i32 x, y, vx, vy; u8 note, flash, rest, pad; } Ball;
 typedef struct { Ball ball[BALLS]; i32 n; u32 rot; } Tumbler;
@@ -143,6 +159,8 @@ static u32 STATE hand_ms[KNOBS] = { 0 };
 static i32 STATE hands = 0, STATE hand_track = 0;
 static u8 STATE waiting = 0, STATE was_playing = 0, STATE shift_held = 0, STATE flashes = 0;
 u8 STATE touched = 0;               /* a key was pressed while SHIFT was down (pages.S sets it) */
+static i32 STATE jog_slack = 0;     /* SCREEN + blue: clicks not yet a page */
+static u8 STATE jogged = 0;         /* SCREEN + blue turned the page: flash it when SCREEN is let go */
 
 /* recorded dials: a value (0-254) or 255 = none, for each pattern, track, dial and step. They live past our block in memory
  * nothing in the OS refers to; a dial's 16 are filled when its bit in `locked` is first set, so nothing there is read before. */
@@ -669,9 +687,43 @@ static void shift_tick(u8 *seq)     /* SHIFT alone for 2 s on the teal or the re
     flash_ms = ms;
 }
 
+/* SCREEN held (v14). The OS then puts its SCREEN screen on (0x8010a360), and the dials go to that screen's onCC (0x8011e516) and not to
+ * DefaultContext's: each click goes out as CC 105-108 on channel 16, 1 one way and 127 the other (what TE's app turned its pages
+ * by, and the Galax-z app does). The blue dial is taken here instead: it turns the OP-Z's parameter pages, both ways. The page
+ * flashes on the dial LEDs when SCREEN is let go: while it is down the SCREEN screen has the LEDs. */
+static void screen_up(u8 *seq)
+{
+    jog_slack = 0;
+    if (!jogged) return;
+    jogged = 0;
+    i32 track = word(seq, SEQ_TRACK), page = word(seq, SEQ_PAGE);
+    if ((u32)track >= 16 || (u32)page >= 8) return;
+    i32 c = os_page_colour(track, page);
+    if (c >= 0) os_flash(page, c);
+}
+
+i32 pages_screen(i32 control, i32 delta)        /* a dial turned on the SCREEN screen. 1: it was ours */
+{
+    u8 *seq = os_seq();
+    if (!seq || control != 2 || !delta) return 0;
+    i32 track = word(seq, SEQ_TRACK), d = 0;
+    if ((u32)track >= 16) return 0;
+    jog_slack += delta;
+    while (jog_slack >= JOG) { jog_slack -= JOG; d++; }
+    while (jog_slack <= -JOG) { jog_slack += JOG; d--; }
+    if (!d) return 1;
+    i32 n = os_pages(track), page = word(seq, SEQ_PAGE) + (d > 0 ? 1 : -1);    /* a page at a time, however fast */
+    if (n < 2 || n > 8) return 1;
+    page = page < 0 ? n - 1 : page >= n ? 0 : page;
+    *(i32 *)(seq + SEQ_PAGE) = page;                                            /* as the OS's own CC 102 sets it (0x801101cc) */
+    jogged = 1;
+    return 1;
+}
+
 void pages_tick(u8 *seq)            /* before every UI frame, which is once a sequencer tick */
 {
     if (!seq) return;
+    if (!seq[SEQ_SCREEN_KEY]) screen_up(seq);
     set_now(seq);
     if (ntakes) write_waiting(seq);
     euclid_tick(seq);

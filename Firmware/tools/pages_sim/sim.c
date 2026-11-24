@@ -2,7 +2,7 @@
  * every register checked, and the physics over the knobs' range. Prints FAILED lines, then "ok" or a count. */
 #include "block.h"
 typedef unsigned int u32; typedef int i32; typedef unsigned char u8;
-u32 in[16], out[16], args[16], saved_sp, seen[9], play_args[13], now, hook_knob_at, at[2], rec_args[10];
+u32 flash_args[8], in[16], out[16], args[16], saved_sp, seen[9], play_args[13], now, hook_knob_at, at[2], rec_args[10];
 static int fails, plays, vmin = 999, vmax;
 extern void call_hook(void), knob_entry(void);
 #define SEQ ((u8 *)0x81200000)
@@ -168,6 +168,25 @@ int main(void)
         for (int i = 0; i < 96; i++) { now += 5; set((u32)SEQ, 0, 0); hook(HOOK_TICK); CHECK((i32)play_args[2] >= 0 && (i32)play_args[2] < 128); } set(0x77, 0, 0); hook(HOOK_PAINT); set(0x1234, 0, 0); hook(HOOK_DIALS); }
     set((u32)SEQ, 0, 0); hook(HOOK_STOP); CHECK(seen[3] == 0 && G_N(7) == 0);
     set((u32)SEQ, 0, 0); hook(HOOK_STOP); CHECK(seen[3] != 0);
+
+    /* SCREEN held (v14), as compiled: the SCREEN screen's onCC. The blue dial turns the parameter pages, both ways; the others go on to
+     * TE's (CC 105-108 out); the page flashes, with TE's own flash, when SCREEN is let go */
+    for (int t = 0; t < 16; t++) W(0x81112f5c + t * 4) = t < 8 ? 7 : 4;
+    ((u8 *)0x811131cc)[7 * 6 + 1] = 1; ((u8 *)0x811130cc)[1] = 0x3c; W(0x81015e9c) = 0xfeed;
+    W(SEQ + 0x30) = 7; W(SEQ + 0x345e2c) = 0; SEQ[0x27] = 1; flash_args[7] = 0;
+#define SCREEN_TURN(c, d) (set(0x5c5c, 0x1111, (c)), args[0] = (u32)(d), hook(HOOK_SCREEN))
+    SCREEN_TURN(1, 1); CHECK(seen[3] == 8 && seen[0] == 0 && seen[1] == 0x1111 && seen[2] == 1);      /* R0 = R2 - 1, as replaced */
+    SCREEN_TURN(4, -1); CHECK(seen[3] == 8 && seen[0] == 3 && seen[2] == 4);
+    SCREEN_TURN(2, 3); CHECK(seen[3] == 0 && out[0] == 0 && W(SEQ + 0x345e2c) == 0);
+    SCREEN_TURN(2, 1); CHECK(seen[3] == 0 && out[0] == 0 && W(SEQ + 0x345e2c) == 1 && flash_args[7] == 0);
+    set((u32)SEQ, 0, 0); hook(HOOK_TICK); CHECK(flash_args[7] == 0);
+    SEQ[0x27] = 0; set((u32)SEQ, 0, 0); hook(HOOK_TICK);
+    CHECK(flash_args[7] == 1 && flash_args[0] == 0xfeed && flash_args[1] == 2 && flash_args[2] == 500 && flash_args[3] == 1 && flash_args[4] == 0x3c && !flash_args[5] && !flash_args[6]);
+    set((u32)SEQ, 0, 0); hook(HOOK_TICK); CHECK(flash_args[7] == 1);
+    SEQ[0x27] = 1; SCREEN_TURN(2, -40); CHECK(W(SEQ + 0x345e2c) == 0); SCREEN_TURN(2, -4); CHECK(W(SEQ + 0x345e2c) == 6);
+    W(SEQ + 0x30) = 9; W(SEQ + 0x345e2c) = 3; SCREEN_TURN(2, 4); CHECK(W(SEQ + 0x345e2c) == 0);
+    SCREEN_TURN(2, 0); CHECK(seen[3] == 8);
+    W(SEQ + 0x30) = 7; SEQ[0x27] = 0; set((u32)SEQ, 0, 0); hook(HOOK_TICK); W(SEQ + 0x345e2c) = 0;
 
     put(fails ? "FAILED\n" : "ok\n");
     return 0;

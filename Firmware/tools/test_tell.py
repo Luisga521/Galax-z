@@ -17,9 +17,9 @@ import pages_build  # noqa: E402
 import tell_build  # noqa: E402
 from test_pages import RUN, branch  # noqa: E402
 
-with open(os.path.join(HERE, "..", "patches", "tell8.json")) as f:
+with open(os.path.join(HERE, "..", "patches", "tell9.json")) as f:
     RECORD = json.load(f)
-with open(os.path.join(HERE, "..", "patches", "pages8.json")) as f:
+with open(os.path.join(HERE, "..", "patches", "pages9.json")) as f:
     PAGES = json.load(f)["blocks"][0]
 BLOCK = RECORD["blocks"][0]
 BASE, CODE = int(BLOCK["target"], 16), bytes.fromhex(BLOCK["data"])

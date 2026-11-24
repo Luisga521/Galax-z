@@ -1,0 +1,22 @@
+{
+  "title": "Galax-z v14",
+  "description": "Galax-z v13 with SCREEN + the blue dial turning the OP-Z's parameter pages both ways.",
+  "notes": [
+    "Hold SCREEN and turn the blue dial: the OP-Z's parameter pages, forwards and back. The page flashes on the dial LEDs when SCREEN is let go. SHIFT still goes forwards.",
+    "SCREEN + the green dial turns the Galax-z app's pages, as before: the OP-Z sends it as CC 105 on channel 16.",
+    "Everything of v13: GROOVE light green, the tumbler, EUCLID, the Quindar tones, older USB keyboards, pedal and wheel, presets that stay, the load meter, more live voices, A/B bars, boot animations, the debounce."
+  ],
+  "patches": [
+    "debounce.json",
+    "galaxy-boot.json",
+    "ab-bars.json",
+    "pages9.json",
+    "usbhost.json",
+    "keys.json",
+    "keep-presets.json",
+    "voices.json",
+    "meter.json",
+    "tell9.json",
+    "chime2.json"
+  ]
+}

@@ -22,7 +22,8 @@ When you confirm something on yours, open a unit report.
 | v11 | GROOVE, two tones at power-on | Yes: "it works", the tones heard after TE's start sound | Each dial, groove and progression |
 | v12 | The tones in place of TE's start sound | Written, read back identical, starts | What is heard |
 | v13 | GROOVE in light green; the signed release | Written, read back identical | How it starts, the colour |
-| quiet builds | v11 to v13 without the tones | Never installed | All of it |
+| v14 | SCREEN + the blue dial turns the OP-Z's parameter pages both ways | Yes (2026-11-24): written, read back identical, starts; the blue dial turns the pages and the green one the app's (CC 105, seen on the Mac). Its first build hooked the wrong screen and did nothing | The flash when SCREEN is let go, on each page; v13's pages after it |
+| quiet builds | v11 to v14 without the tones | Never installed | All of it |
 
 A patch record's own status line may say less than this table: records are not touched once a version is out. **v13** is the signed release (2026-11-22),
 and makes byte for byte the image on the unit; v9's is kept beside it. v10 to v12 and the quiet builds are in the app and in `Firmware/builds/`.

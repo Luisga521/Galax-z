@@ -153,6 +153,35 @@ _hook_on:
     P1.L = 0xdd10; P1.H = 0x8010;
     JUMP (P1);
 
+/* 0x8011e516, the start of the SCREEN screen's onCC (where the dials go while SCREEN is down; its vtable 0x81113074, + 8): R0 = the
+ * screen, R2 = the control (dials 1-4), [SP + 12] = the turn. The blue dial is ours; the others go on as TE has them (CC 105-108 out).
+ * Reached by a JUMP.L, so RETS is still its caller's. */
+    .align 4
+    .global _hook_screen
+_hook_screen:
+    [--SP] = RETS;
+    [--SP] = R0;
+    [--SP] = R1;
+    [--SP] = R2;
+    R0 = R2;
+    R1 = [SP + 28];
+    SP += -12;
+    CALL _pages_screen;
+    SP += 12;
+    CC = R0 == 0;
+    R2 = [SP++];
+    R1 = [SP++];
+    R0 = [SP++];
+    RETS = [SP++];
+    IF CC JUMP .Lscreen;
+    R0 = 0;                         /* as the screen's own returns */
+    RTS;
+.Lscreen:
+    R0 = R2;                        /* the replaced instructions */
+    R0 += -1;
+    P1.L = 0xe51a; P1.H = 0x8011;
+    JUMP (P1);
+
     .align 4
     .ascii "GALAXZ-PAGES-001"
     .include "pages.gen.S"

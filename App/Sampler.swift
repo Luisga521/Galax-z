@@ -235,7 +235,7 @@ final class Sampler {
 
     private func record(_ from: ChopDesk.Source) async {
         guard recorder == nil, from != .file else { return }
-        guard await AVAudioApplication.requestRecordPermission() else { return tell("ALLOW GALAX-Z THE MICROPHONE IN THE SYSTEM'S SETTINGS") }
+        guard await Microphone.allowed() else { return tell("ALLOW GALAX-Z THE MICROPHONE IN THE SYSTEM'S SETTINGS") }
         do {
             recorder = try Recorder(opz: from == .opz)
         } catch let e as Failed { return tell(e.why) } catch { return tell(error.localizedDescription.uppercased()) }

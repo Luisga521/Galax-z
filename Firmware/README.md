@@ -17,12 +17,12 @@ memory, writing Blackfin code, flashing, the app's link) and what makes things r
 | `builds/` | Which records make a version. A version's records are frozen once it is out | |
 | `galaxy/` | The boot animation player and its frames | v2 |
 | `ab/` | A/B bars | v3 |
-| `pages/` | The tumbler, EUCLID and GROOVE (v4's tumbler alone: git `dda0da9`) | v4, v5, v11, v13 |
+| `pages/` | The tumbler, EUCLID and GROOVE (v4's tumbler alone: git `dda0da9`) | v4, v5, v11, v13, v14 |
 | `usbhost/` | Older USB keyboards, HOST / INSTRUMENT | v6 |
 | `keys/` | Sustain pedal, modulation wheel | v7 |
 | `meter/` | Load meter | v8 |
 | `voices/` | More live voices | v9 |
-| `tell/` | Tells the app about the pages | v10, v11, v13 |
+| `tell/` | Tells the app about the pages | v10, v11, v13, v14 |
 | `chime/` | The Quindar tones at power-on | v11, v12 |
 | `walker/` | The LED walker, our first code on the unit; a test build | |
 | `engines/` | The piano and OTT: plugs, installed without flashing | |
@@ -93,3 +93,4 @@ Whether these work from an OS that does not start has never been tried: [STATUS.
 | 6 | Boot animations (v2), A/B bars (v3), tumbler (v4), EUCLID (v5), USB keyboards (v6), pedal and presets (v7), load meter (v8), live voices (v9); the piano and OTT | 2026-11-21 and 22 |
 | 7 | v10 tells the app | 2026-11-22 |
 | 8 | The red page, GROOVE, and the tones (v11); the tones in place of TE's start sound (v12); GROOVE in light green (v13); each with a *quiet* twin | 2026-11-22 |
+| 9 | SCREEN + the blue dial turns the OP-Z's parameter pages (v14, works on the unit). Its first build hooked the wrong screen: the dials go to the SCREEN screen while SCREEN is down | 2026-11-24 |

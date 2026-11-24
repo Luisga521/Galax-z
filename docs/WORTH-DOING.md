@@ -32,6 +32,10 @@ Cheap and useful. Mind the risk column.
 | What | What we know |
 |---|---|
 | **32 steps, as a view** | Two patterns in a chain already play as one. Show them as 32 steps in the app, then a button that makes the chain. Keeping the sounds of both alike needs writes |
+| **Step pages: 32 or 64 steps on one track** | Without touching the 16-step format: a track set to 2 or 4 pages plays its steps from the next 1 or 3 patterns' same track, in turn, while the other tracks stay at 16. Nothing new is saved (the steps are in patterns the OS already keeps), the position stays 4 bits, TE's app sees plain patterns. Needs: where the sequencer takes a track's step data from the pattern (`os_pattern`, `seq + 0x690`), a hook there and at the wrap of the track's step, and SCREEN + the yellow dial to choose the page shown on the keys (green and blue are taken). The app shows them as one long row. Research first, then a build |
+| **The SHOW page on a second screen** | AirPlay or a cable to a projector: the visualizer full screen while the iPad keeps playing. A second window scene, nothing on the OP-Z |
+| **DMX from the app** | The lights track's notes as Art-Net or sACN over Wi-Fi: real fixtures without TE's dongle. The app already hears every note of track 15 |
+| **Recorded dials that survive power-off** | They live in RAM (0x80c40000) and go at power-off. A file in content mode, or the app keeping them and putting them back |
 | **More moves for PERFORM** | Plain MIDI, in `OPZPlay/Perform.swift`. The OS smooths sound values by some 93 ms [code], so fast moves belong on gain |
 | **Chops on the OP-Z itself** | A pack of 24 slices (12 s), read by an engine as the piano's is; some ten voices should fit [guess]. The app's sampler on MODULE is the model |
 | **An effects library** | Load, take off, upload, remove, read back: one plug a FX track. Asked for in [PLAN-2.md](PLAN-2.md), not built |
@@ -47,7 +51,7 @@ Cheap and useful. Mind the risk column.
 
 | What | Why not | Instead |
 |---|---|---|
-| **True 32-step patterns** | The step is 4 bits, 16 slots a track; 23 places use the position and 33 the size [code] | Chain two patterns |
+| **True 32-step patterns** | The step is 4 bits, 16 slots a track; 23 places use the position and 33 the size [code] | Chain two patterns; or step pages, above |
 | **An effect on MASTER** | It is called with no output buffer and would restart the unit [code] | FX1 or FX2; or an engine with an in-place mode, tested offline first |
 | **Per-track inserts** | The OS has none; it has one plug a FX track [code] | An FX track with its dry level at 0 |
 | **An engine that hears the microphone** | It reaches FX, not instruments [code]. It needs a tap in the mix | Record in the app |

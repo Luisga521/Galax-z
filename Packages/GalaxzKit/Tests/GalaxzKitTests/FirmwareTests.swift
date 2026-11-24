@@ -363,11 +363,13 @@ struct AnimationTests {
         let v11 = try #require(images.first { $0.label == "galaxz-v11" }?.ldr), still = try #require(images.first { $0.label == "galaxz-v11-quiet" }?.ldr)   // the red page, and its chime
         let v12 = try #require(images.first { $0.label == "galaxz-v12" }?.ldr), silent = try #require(images.first { $0.label == "galaxz-v12-quiet" }?.ldr)     // in place of TE's start sound; no start sound
         let v13 = try #require(images.first { $0.label == "galaxz-v13" }?.ldr)    // GROOVE light green
+        let v14 = try #require(images.first { $0.label == "galaxz-v14" }?.ldr), hush = try #require(images.first { $0.label == "galaxz-v14-quiet" }?.ldr)     // SCREEN + the blue dial
+        #expect(Hash.sha256(v14).hasPrefix("77e8e2cbed6bc305") && Hash.sha256(hush).hasPrefix("071fa295cf3efc11"))      // as Firmware/tools/patch.py builds them
         #expect(Hash.sha256(v12).hasPrefix("f32249ea0f706d56"))                   // v12 as it is on the unit
         #expect(Hash.sha256(v11).hasPrefix("b72c870828449255") && v12.count - silent.count == 16 + 604)       // v11 as it is on the unit
         #expect(v11.count - still.count == 16 + 576 && Hash.sha256(v10).hasPrefix("84cfd798a2fd2dce"))
         #expect(Hash.sha256(v9).hasPrefix("3dc41875e5d60f33") && v10.count - v9.count == 16 + 1448)
-        for (base, built) in [("galaxz-v2", v2), ("galaxz-v3", v3), ("galaxz-v4", v4), ("galaxz-v5", v5), ("galaxz-v6", v6), ("galaxz-v7", v7), ("galaxz-v8", v8), ("galaxz-v9", v9), ("galaxz-v10", v10), ("galaxz-v11", v11), ("galaxz-v11-quiet", still), ("galaxz-v12", v12), ("galaxz-v12-quiet", silent), ("galaxz-v13", v13)] {
+        for (base, built) in [("galaxz-v2", v2), ("galaxz-v3", v3), ("galaxz-v4", v4), ("galaxz-v5", v5), ("galaxz-v6", v6), ("galaxz-v7", v7), ("galaxz-v8", v8), ("galaxz-v9", v9), ("galaxz-v10", v10), ("galaxz-v11", v11), ("galaxz-v11-quiet", still), ("galaxz-v12", v12), ("galaxz-v12-quiet", silent), ("galaxz-v13", v13), ("galaxz-v14", v14), ("galaxz-v14-quiet", hush)] {
             #expect(try catalog.bootImage(original: original, .galaxy, layout: layout, on: base).ldr == built)
             let im = try catalog.bootImage(original: original, pulse, layout: layout, on: base)
             #expect(im.label == "\(base.dropFirst(7))-pulse" && catalog.underPlayer(im.ldr!)?.label == base)

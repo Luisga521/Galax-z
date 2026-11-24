@@ -98,6 +98,7 @@ extension Stage {
         let sound = input.sounds[t], pages = Palette.pages(t, samples: sound?.origin == .samples)
         if let what = machinePage, let m = input.machines {                // the pink page or the teal one
             c.text(what == .tumbler ? "TUMBLER" : m.more ? "EUCLID MORE" : "EUCLID", r.x + 2, r.y, what == .tumbler ? Palette.pink : Palette.teal, 0.9, font: .tiny)
+            if !wide { pageDots(c, r, t, pages, on: what == .tumbler ? 4 : 5) }
             for i in 0..<4 {
                 machineDial(c, wide ? DotRect(r.x + r.w * i / 4, r.y, r.w / 4, r.h)
                             : DotRect(r.x + (i & 1) * r.w / 2, r.y + 8 + (i >> 1) * (r.h - 8) / 2, r.w / 2, (r.h - 8) / 2), what, i, m)
@@ -106,6 +107,7 @@ extension Stage {
         }
         if let red = redPage {
             c.text(red.more ? "GROOVE MORE" : "GROOVE", r.x + 2, r.y, Palette.lime, 0.9, font: .tiny)
+            if !wide { pageDots(c, r, t, pages, on: 6) }
             for i in 0..<4 {
                 let k = (red.more ? 4 : 0) + i, box = wide ? DotRect(r.x + r.w * i / 4, r.y, r.w / 4, r.h) : DotRect(r.x + (i & 1) * r.w / 2, r.y + 8 + (i >> 1) * (r.h - 8) / 2, r.w / 2, (r.h - 8) / 2)
                 gauge(c, box, Double(red.dials[k]) / 255, "", RedPage.dialNames[k], Palette.lime)
@@ -119,7 +121,7 @@ extension Stage {
             return
         }
         c.text(page.name, r.x + 2, r.y, page.colour, 0.9, font: .tiny)
-        for k in 0..<pages.count { c.disc(Double(r.maxX - 4 - (pages.count - 1 - k) * 7), Double(r.y) + 2, k == on ? 2 : 1.1, pages[k].colour, k == on ? 1 : 0.4) }
+        pageDots(c, r, t, pages, on: on)
         let inner = DotRect(r.x, r.y + 8, r.w, r.h - 8)
         // two by two, then the rest of the sound as meters if there is room
         let meters = inner.h > 110
@@ -132,6 +134,16 @@ extension Stage {
             c.column(x + 1, y, 28, p.colour, 0.14, step: 2)
             let h = Int((v * 28).rounded())
             c.fill(DotRect(x, y + 28 - h, 3, h), p.colour, k / 4 == on ? 0.95 : 0.4)
+        }
+    }
+
+    /// A dot a page at the top right, the one on bigger: TE's pages, then on tracks 1-8 Galax-z OS's TUMBLER, EUCLID and GROOVE when the
+    /// OP-Z tells of them.
+    private func pageDots(_ c: DotCanvas, _ r: DotRect, _ t: Int, _ pages: [Palette.ParamPage], on: Int) {
+        var colours = pages.map(\.colour)
+        if t < 8, input.machines != nil || input.red != nil { colours += [Palette.pink, Palette.teal, Palette.lime] }
+        for (k, colour) in colours.enumerated() {
+            c.disc(Double(r.maxX - 4 - (colours.count - 1 - k) * 7), Double(r.y) + 2, k == on ? 2 : 1.1, colour, k == on ? 1 : 0.4)
         }
     }
 

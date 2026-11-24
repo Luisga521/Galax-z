@@ -130,6 +130,55 @@ import Testing
         }
     }
 
+    /// SHOW: every scene, playing and stopped, the lights and motion tracks struck, at the smallest size and the usual one; its scene name and
+    /// AUTO answer a touch; it is never still, so it drifts when nothing plays.
+    @Test func everySceneOfTheShowDraws() {
+        for (w, h) in [(180, 140), (360, 240), (235, 460)] {
+            for playing in [true, false] {
+                let s = stage(playing: playing), c = DotCanvas(width: w, height: h)
+                s.linkFade.jump(1)
+                s.page = .show
+                s.showAuto = false
+                var t = 700.0
+                for scene in 0..<Stage.showScenes.count {
+                    s.showScene = scene
+                    #expect(s.showScene == scene)
+                    for k in 0..<24 {
+                        if k % 6 == 0 { for ch in [0, 1, 4, 7, 14, 15] { s.noteOn(channel: ch, note: [0, 60, 77, 127][k / 6], velocity: 20 + k * 4) } }
+                        t += 1 / 60
+                        s.frame(c, time: t, dt: 1 / 60)
+                    }
+                    #expect((0..<c.count).filter { c.dots[$0] & 0xFFFFFF != 0 }.count > 300, "\(Stage.showScenes[scene]) \(w)x\(h)")
+                }
+                #expect(!s.still)
+                // the name: its right half the next scene; AUTO turns them going by itself on
+                let name = s.touches.first { if case .grip(.choose(.scene)) = $0.1 { true } else { false } }!.0
+                let id = 1
+                #expect(s.grab(id, name.maxX - 2, name.midY)); s.release(id, name.maxX - 2, name.midY)
+                #expect(s.showScene == 0)
+                s.frame(c, time: t + 1, dt: 1 / 60)
+                let auto = s.touches.first { if case .grip(.choose(.showAuto)) = $0.1 { true } else { false } }!.0
+                #expect(auto.maxX <= w && s.grab(id, auto.midX, auto.midY)); s.release(id, auto.midX, auto.midY)
+                #expect(s.showAuto)
+                for k in 0..<(8 * 60) { s.frame(c, time: t + 2 + Double(k) / 15, dt: 1 / 15) }       // 32 s: on by itself
+                #expect(s.showScene != 0)
+            }
+        }
+    }
+
+    /// The tabs fit, however small: every page's name ends before the next begins, and before SETTINGS.
+    @Test func theTabsFit() {
+        for (w, h) in [(180, 140), (235, 460), (300, 215), (360, 240)] {
+            let s = stage(), c = DotCanvas(width: w, height: h)
+            s.linkFade.jump(1)
+            s.frame(c, time: 1, dt: 1 / 60)
+            let tabs = s.touches.compactMap { r, t -> DotRect? in if case .page = t { r } else { nil } }
+            let set = s.touches.first { if case .action(.settings) = $0.1 { true } else { false } }!.0
+            #expect(tabs.count == Stage.Page.allCases.count)
+            #expect(zip(tabs, tabs.dropFirst()).allSatisfy { $0.maxX <= $1.x + 1 } && tabs.last!.maxX <= set.x + 1, "\(w)x\(h)")
+        }
+    }
+
     @Test func everyKindOfEngineHasItsLook() {
         let c = DotCanvas(width: 200, height: 120), s = stage()
         for kind in [VisualKind.wave, .fm, .string, .bars, .vowel, .chip, .piano, .drum, .hats, .snap, .sample, .space, .echo, .grain, .swirl, .filter, .dist,
@@ -208,7 +257,7 @@ import Testing
         #expect(s.tap(settings.0.midX, settings.0.midY) == .settings)
         #expect(s.tap(-5, -5) == .none)
         s.turn(-3)
-        #expect(s.page == .sky)
+        #expect(s.page == .show)
         s.turn(1)
         #expect(s.page == .track)
     }

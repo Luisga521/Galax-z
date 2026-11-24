@@ -60,6 +60,13 @@ projects [data].
 12 bytes + 1 a note: track · notes kept · bit 0 MORE, bit 1 waiting · the groove's step (255 none) · its eight dials (GROOVE RATE GATE ORDER PROGRESSION KEY LENGTH SWING) ·
 the notes. While the red page is on or the selected track's groove has notes: when it changed (13 a second at most), at each step (25), and every second.
 
+## SCREEN and a dial: CC 105-108 on channel 16 [code; 1.2.45]
+
+While SCREEN is down the OS puts its SCREEN screen on (0x8010a360), and the four dials go to that screen's onCC (0x8011e516), not to the
+sound: each click goes out as CC 105 (green), 106, 107, 108 on channel 16, value 1 one way and 127 the other (0x800422d0, through the OS's
+MIDI out). That is what TE's app turned its pages by; Galax-z turns a page every four clicks of the green one. From Galax-z OS v14 the blue
+one stays on the OP-Z and turns its parameter pages instead.
+
 ## MIDI settings: `$0F` asks, `$10` answers [unit, 2026-11-22]
 
 292 bytes, zlib: 16 track switches, 16 track channels (0-15), 16 x 16 parameter CCs (1-16 as made), flags (1 channel 1 to the selected track, 2 in, 4 out, 8 clock in,

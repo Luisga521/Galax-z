@@ -180,6 +180,7 @@ final class Live {
             if let report { lastLoad = report; feedStage() }
             if !taken { check.late(CACurrentMediaTime() - t); stage.noteOn(channel: ch, note: n, velocity: v, at: t); stageChanged() }
         case .cc(let n, let v, let channel):
+            if channel == 15, (105...108).contains(n), stage.screenDial(n - 105, value: v) { stageChanged(); return }     // SCREEN + a dial
             guard let ch = track(channel) else { return }
             if ch == 13 { stage.module(cc: n, value: v); stageChanged() }
         case .noteOff(let n, let channel, let t):

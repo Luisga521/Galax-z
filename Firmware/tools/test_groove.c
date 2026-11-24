@@ -17,6 +17,9 @@ void os_where(u8 *s, i32 t, i32 *st, i32 *m) { (void)s; (void)t; *st = 3; *m = 0
 void os_record(u8 *s, i32 t, i32 st, i32 m, i32 n, i32 v, i32 l) { (void)s; (void)t; (void)st; (void)m; (void)n; (void)v; (void)l; recs++; }
 u8 *os_pattern(u8 *s) { (void)s; return pat; }
 i32 os_slot(i32 t) { static const i32 k[] = { 0, 2, 4, 6, 8, 12, 16, 24, 28, 29 }; return k[t]; }
+i32 os_pages(i32 t) { return t < 8 ? 7 : 4; }
+i32 os_page_colour(i32 t, i32 p) { (void)t; return 0x10 + p; }
+void os_flash(i32 p, i32 c) { (void)p; (void)c; }
 static void put(u32 at, i32 v) { memcpy(mem + at, &v, 4); }
 #define CHECK(x) do { if (!(x)) { printf("FAILED line %d: %s\n", __LINE__, #x); fails++; } } while (0)
 static int fails;

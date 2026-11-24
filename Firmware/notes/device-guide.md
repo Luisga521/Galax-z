@@ -281,3 +281,16 @@ FINAL block, the stream header's length raised to match. Give each feature its o
   started, if general.json's `disable_start_sound` (the byte `0x8110e524`, first of the general settings) is off. From v12 that call starts ours; the setting turns it off too.
 - **Not settable from the app**: the OP-Z keeps that setting in `config/general.json` (content mode); no message that sets it was found. The app's switch is which build is
   installed.
+
+## 18. SCREEN and a dial (`pages/`, build `galaxz-v14`)
+
+- **SCREEN held** is `seq + 0x27` (set and cleared in `0x8010b770` on CC 48; the bit the OS's `$06` gives an app, `0x801088ac`).
+- **It changes the screen**: `0x8010a29a`, called after every key, picks the screen on now (`seq + 0x3463bc`). SCREEN down, TEMPO up: the SCREEN screen,
+  `seq + 0x3463b4` (or `+ 0x346258` when the byte `0x81113a60` is set); SCREEN + TEMPO (or the key's latched state `[0x0802ec0c]` = 3): the MIDI settings,
+  `+ 0x3463b8`. The step screen is `+ 0x346260` (DefaultContext). Controls go to the screen's vtable + 8 (`0x80110030`) [code].
+- **The SCREEN screen's onCC** (`0x8011e516`, vtable `0x81113074`) sends dials 1-4 out as CC 105-108 on channel 16, 1 a click one way, 127 the other
+  (`0x800422d0`); nothing reaches the sound or DefaultContext. The green bar on the track keys while SCREEN is down is that screen's [unit, 2026-11-24].
+- **v14's first build** hooked DefaultContext's dial cases for this and so never ran [unit]. **Its second** takes the blue dial at `0x8011e516`
+  (`_hook_screen`, a JUMP.L over `R0 = R2; R0 += -1`): 4 clicks a page, a page at a time within the track's count (`0x81112f5c`), round at both ends,
+  written to `+0x345e2c` as the OS's own CC 102 does (`0x801101cc`). When SCREEN is let go the page flashes: overlay 2 (`0x8003c60c`: `[0x81015e9c]`, 2,
+  500 ms, the page, the kind's colour from `0x811130cc` by `0x811131cc`), as SHIFT starts it (`0x8011ec40`). The other dials go on as TE has them.

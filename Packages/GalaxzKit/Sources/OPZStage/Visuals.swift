@@ -303,21 +303,11 @@ extension Stage {
                 }
                 c.arc(x0, Double(r.y) + h * 0.22, 4, Palette.ink, 0.9); c.arc(x1, Double(r.y) + h * 0.72, 4, Palette.ink, 0.9)
             }
-        case .lights:   // fixtures
-            for i in 0..<8 {
-                let x = Double(r.x) + w * (Double(i) + 0.5) / 8, a = max(0.12, levels[i].level), colour = Palette.track(i)
-                c.disc(x, Double(r.y) + 8, 4, colour, a)
-                for y in 0..<Int(h * 0.75) {
-                    let f = Double(y) / (h * 0.75), spread = f * w * 0.07
-                    for s in stride(from: -spread, through: spread, by: 2) { c.glow(x + s, Double(r.y) + 14 + Double(y), colour, a * (1 - f) * 0.35) }
-                }
-            }
-        case .motion:   // a figure of dots turning
-            for i in 0..<160 {
-                let f = Double(i) / 160, a = Turn.of(f * 5 + t * 0.05), b = Turn.of(f * 3 + t * 0.08)
-                let depth = 0.6 + 0.4 * b.y
-                c.glow(cx + a.x * w * 0.3 * depth, cy + b.x * h * 0.36, k, 0.25 + 0.75 * depth)
-            }
+        case .lights:   // a DMX rig: the note's name its gel, its octave how the heads move, P1 how fast, P2 how wide
+            rig(c, r, rigNow(v.values))
+        case .motion:   // a reel: each note the next picture, the note's name its lens, P1 the camera, P2 the tint
+            reelOn()
+            reel(c, r, p1: v.p1, p2: v.p2, caption: true)
         }
     }
 }

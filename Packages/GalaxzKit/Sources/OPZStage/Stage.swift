@@ -6,8 +6,10 @@ import OPZPlay
 /// canvas when a picture is due. All on one thread.
 public final class Stage {
     public enum Page: Int, CaseIterable, Sendable {
-        case track, grid, mix, play, chops, perform, fx, song, notes, load, sky
-        public var name: String { ["TRACK", "GRID", "MIX", "PLAY", "CHOPS", "PERFORM", "FX", "SONG", "NOTES", "LOAD", "SKY"][rawValue] }
+        case track, grid, mix, play, chops, perform, fx, song, notes, load, sky, show
+        public var name: String { ["TRACK", "GRID", "MIX", "PLAY", "CHOPS", "PERFORM", "FX", "SONG", "NOTES", "LOAD", "SKY", "SHOW"][rawValue] }
+        /// Two letters, for the smallest screens.
+        public var short: String { ["TR", "GR", "MX", "PL", "CH", "PF", "FX", "SG", "NT", "LD", "SK", "SH"][rawValue] }
     }
 
     /// What a touch asks the app for.
@@ -36,6 +38,7 @@ public final class Stage {
     var linkFade = Spring(0, stiffness: 60, damping: 16)
     var trail = Trail()
     var sky = Sky()
+    var show = Show()
     var field = Field()
     var loads: [Double] = []                       // the meter's means, for a history
     var tombola = Tombola()
@@ -73,6 +76,8 @@ public final class Stage {
     /// LIGHTS' notes begin the moves of PERFORM.
     public var lights = false
     var grips: [Int: Held] = [:]
+    /// A choice's values, open over the page.
+    var picking: Picking?
     var gains = [Double?](repeating: nil, count: 16)
     var octave = 0, pad = 0, gallery = false, latch = false, shelf = 0
     private var grooved = -1, jog = 0.0
@@ -96,10 +101,8 @@ public final class Stage {
     private func changed(from old: StageInput) {
         wake()
         if input.revision != gridRevision || input.address != gridAddress {
-            let same = input.address == gridAddress, was = grid.sound[track]
             gridRevision = input.revision
             gridAddress = input.address
-            defer { if same, input.panel.screen { jogged(was) } }
             grid = input.bank.map { PatternGrid($0, input.address?.pattern ?? 0) } ?? PatternGrid()
             for t in 0..<16 { for k in 0..<18 { knobs[t][k].target = grid.sound[t][k] } }
         }
@@ -266,12 +269,17 @@ public final class Stage {
         for e in player.select(track: track, at: moment) { out(e) }
     }
 
-    /// SCREEN held and the first dial turned: the pages go by, as in TE's app.
-    private func jogged(_ was: [Double]) {
-        let pages = Palette.pages(track, samples: input.sounds[track]?.origin == .samples), k = pages[min(input.panel.page & 3, pages.count - 1)].params[0]
-        jog += (grid.sound[track][k] - was[k]) * 255
-        while abs(jog) >= 8 { turn(jog > 0 ? 1 : -1); jog += jog > 0 ? -8 : 8 }
+    /// SCREEN held and a dial turned: the OP-Z sends CC 105-108 on channel 16 (0x68 + the dial, 1-4), 1 a click one way, 127 the other
+    /// (its SCREEN screen's onCC, 0x8011e516; seen on the unit 2026-11-24). The first dial turns the pages, as in TE's app. True if it was one of those.
+    public func screenDial(_ dial: Int, value: Int) -> Bool {
+        guard (0..<4).contains(dial) else { return false }
+        guard dial == 0, value != 0, value != 64 else { return true }
+        jog += value < 64 ? 1 : -1
+        while abs(jog) >= Self.jogClicks { turn(jog > 0 ? 1 : -1); jog += jog > 0 ? -Self.jogClicks : Self.jogClicks }
+        return true
     }
+    /// Clicks of the green dial a page (as the blue one turns the OP-Z's pages in Galax-z OS v14).
+    static let jogClicks = 4.0
 
     /// The beat the moves go by: the pattern's, or a free one at its tempo.
     var beat: Double { (playhead.place(time) ?? time * Double(max(40, input.tempo ?? 120)) / 15) / 4 }
@@ -314,7 +322,7 @@ public final class Stage {
 
     /// Nothing on screen moves: the picture can wait for the next change.
     public var still: Bool {
-        guard input.link == .live, !playhead.playing, page != .sky, page != .fx, page != .chops, grips.isEmpty, performer.isEmpty, player.isEmpty, machinePage == nil, turned > 1, linkFade.settled, tabX.settled else { return false }
+        guard input.link == .live, !playhead.playing, page != .sky, page != .fx, page != .chops, page != .show, grips.isEmpty, performer.isEmpty, player.isEmpty, machinePage == nil, turned > 1, linkFade.settled, tabX.settled else { return false }
         guard hitFlashes.allSatisfy({ $0.level == 0 }), levels.allSatisfy({ $0.level == 0 }), trail.isEmpty(at: time) else { return false }
         return page != .track && knobs[track].allSatisfy(\.settled)
     }
@@ -358,7 +366,9 @@ public final class Stage {
         case .notes: notesPage(c, body, dt)
         case .load: loadPage(c, body, dt)
         case .sky: skyPage(c, body, dt)
+        case .show: showPage(c, body, dt)
         }
+        if picking != nil { picker(c, body) }
         tabs(c, DotRect(4, c.height - foot, c.width - 8, foot - 2), dt)
         // a page comes in row by row, like a screen being written
         if turned < 0.22 {
@@ -453,9 +463,9 @@ public final class Stage {
         c.rule(r.x, r.y - 1, r.w, Palette.ink, 0.28, step: 3)
         let tight = r.w < 290, reach = tight ? 8 : 3          // a finger on a phone
         let others: [(String, Action)] = [(tight ? "SET" : "SETTINGS", input.notice == nil ? .settings : .hub)]
-        func names(_ short: Bool) -> [String] { Page.allCases.map { short ? String($0.name.prefix(3)) : $0.name } }
+        func names(_ letters: Int) -> [String] { Page.allCases.map { letters == 2 ? $0.short : letters == 3 ? String($0.name.prefix(3)) : $0.name } }
         func needs(_ n: [String]) -> Int { n.reduce(0) { $0 + DotFont.tiny.width($1) } + others.reduce(0) { $0 + DotFont.tiny.width($1.0) } }
-        let count = Page.allCases.count + others.count, labels = needs(names(false)) + 3 * count > r.w ? names(true) : names(false)
+        let count = Page.allCases.count + others.count, labels = [99, 3, 2].lazy.map(names).first { needs($0) + 3 * count <= r.w } ?? names(2)
         let gap = max(3, min(12, (r.w - needs(labels)) / count))
         var x = r.x
         for p in Page.allCases {

@@ -6,5 +6,5 @@
         <item name="android:navigationBarColor">@android:color/black</item>
         <item name="android:windowLayoutInDisplayCutoutMode">always</item>
     </style>
-    <color name="paper">#E5E2DB</color>
+    <color name="paper">#0C0C0D</color>
 </resources>

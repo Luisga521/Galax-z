@@ -163,9 +163,50 @@ for p in Stage.Page.allCases where only.isEmpty || only.contains(p.name.lowercas
     t += Double(n) / 120
     print(String(format: "%-6@ %.2f ms a frame, %dx%d", p.name as NSString, ms, canvas.width, canvas.height))
 }
+if only.isEmpty || only.contains("play") {
+    // the chords, and lists of what can be chosen open over them
+    let was = stage.player.settings
+    stage.page = .play; stage.select(track: 7); stage.player.settings.tool = .progression; stage.player.settings.groove = "BOUNCE"
+    t = run(1, from: t); write(canvas, "play-chords")
+    for name in ["PROGRESSION", "GROOVE", "SCALE", "KEY"] { stage.openList(name); t = run(0.5, from: t); write(canvas, "play-list-\(name.lowercased())") }
+    stage.player.settings = was
+}
 if only.isEmpty || only.contains("track") {
     stage.page = .track
     for k in 0..<16 { stage.select(track: k); t = run(0.7, from: t); write(canvas, "track-\(k + 1 < 10 ? "0" : "")\(k + 1)") }
+}
+if only.isEmpty || only.contains("track") || only.contains("show") {
+    // the lights and the motion track: first as the song alone sets them, then played (the demo song has no notes on them)
+    stage.page = .track
+    for (k, name) in [(14, "lights"), (15, "motion")] {
+        stage.select(track: k); t = run(1.2, from: t); write(canvas, "track-\(name)-auto")
+        let notes = k == 14 ? [62, 69, 77, 52] : [60, 61, 62, 63, 64, 65, 66, 67]
+        for (i, n) in notes.enumerated() {
+            stage.noteOn(channel: k, note: n, velocity: 110)
+            t = run(k == 14 ? 0.06 : 0.5, from: t)
+            write(canvas, "track-\(name)-\(i + 1)")
+            if k == 14 { t = run(0.5, from: t); write(canvas, "track-\(name)-\(i + 1)b") }
+            stage.noteOff(channel: k, note: n)
+        }
+        let start = DispatchTime.now().uptimeNanoseconds, frames = 240
+        for f in 0..<frames { stage.frame(canvas, time: t + Double(f) / 120, dt: 1 / 120) }
+        t += Double(frames) / 120
+        print(String(format: "TRACK %-7@ %.2f ms a frame, %dx%d", name.uppercased() as NSString, Double(DispatchTime.now().uptimeNanoseconds - start) / 1e6 / Double(frames), canvas.width, canvas.height))
+    }
+    // each scene of SHOW, with the lights track playing, and what each costs
+    stage.page = .show; stage.showAuto = false
+    for (i, name) in Stage.showScenes.enumerated() {
+        stage.showScene = i
+        stage.noteOn(channel: 14, note: 64 + i, velocity: 100); stage.noteOn(channel: 15, note: 60 + i, velocity: 100)
+        t = run(0.9, from: t)
+        write(canvas, "show-\(i + 1)-\(name.lowercased())")
+        stage.noteOff(channel: 14, note: 64 + i); stage.noteOff(channel: 15, note: 60 + i)
+        let start = DispatchTime.now().uptimeNanoseconds, n = 240
+        for f in 0..<n { stage.frame(canvas, time: t + Double(f) / 120, dt: 1 / 120) }
+        t += Double(n) / 120
+        print(String(format: "SHOW %-8@ %.2f ms a frame, %dx%d", name as NSString, Double(DispatchTime.now().uptimeNanoseconds - start) / 1e6 / Double(n), canvas.width, canvas.height))
+    }
+    stage.showAuto = true
 }
 if only.isEmpty || only.contains("machines"), machinesOn {
     for (p, name) in [(4, "tumbler"), (5, "euclid")] {

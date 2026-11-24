@@ -58,7 +58,7 @@ installer checks first. The details are in [DISCLAIMER.md](DISCLAIMER.md#what-th
 | ![PERFORM](docs/screens/perform.jpg) **PERFORM**: gates, sweeps, throws, stops, held on a pad | ![PLAY](docs/screens/play.jpg) **PLAY**: pads for every track, with scales, chords, grooves |
 | ![MIX](docs/screens/mix.jpg) **MIX**: faders, sends, pan, mutes, by touch | ![SONG](docs/screens/song.jpg) **SONG**: the sixteen patterns, tempo, where you are |
 
-Every picture is the app's own demo. The eleventh page, **LOAD**, shows [how hard the OP-Z works](docs/screens/load.jpg).
+Every picture is the app's own demo. The eleventh page, **LOAD**, shows [how hard the OP-Z works](docs/screens/load.jpg); the twelfth, **SHOW**, is a visualizer for the whole song (five scenes), and the LIGHTS and MOTION tracks get a DMX rig and a Photomatic-style reel on TRACK.
 
 **The app** follows the OP-Z over a USB-C cable, or over Bluetooth on iPad, iPhone and Android. Looking sends nothing that changes it; **touching a control
 changes the OP-Z by MIDI**, as a knob on it would. It learns any MIDI controller (on a Mac, **Settings › BRIDGE** plays your keyboards and pads straight into the OP-Z, beside its own keys), backs up your projects (reading only), plays the OP-Z's sound through
@@ -91,8 +91,9 @@ OP-Z's lights are; each takes your own colours:
 | v11 | **GROOVE**: a seventh page. Kept keys played by one of 69 grooves, through one of 133 progressions. Two Quindar tones at power-on |
 | v12 | The tones take the place of TE's start sound |
 | v13 | The GROOVE page in light green (it was red) |
+| v14 | Hold SCREEN and turn the blue dial: the OP-Z's parameter pages, both ways (the green one turns the app's pages with any OS) |
 
-v11 to v13 also come *quiet*, without the tones. **Where everything is on the OP-Z: [the shortcuts](docs/SHORTCUTS.md).**
+v11 to v14 also come *quiet*, without the tones. **Where everything is on the OP-Z: [the shortcuts](docs/SHORTCUTS.md).**
 
 <p align="center"><a href="docs/SHORTCUTS.md"><img src="docs/screens/shortcuts.png" alt="OP-Z shortcuts with Galax-z OS" width="820"></a></p>
 

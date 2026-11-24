@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """pages_build — compile pages/pages.c into pages/pages.gen.S (checked in, so nobody needs the compiler), and write
-patches/pages8.json: the assembled block and the edits that lead the OS into it.
+patches/pages9.json: the assembled block and the edits that lead the OS into it.
 
     pages_build.py OS.ldr     compile, assemble, write the record (TE's own os.ldr, for the bytes the edits replace)
     pages_build.py            compile only, write pages.gen.S
@@ -56,6 +56,9 @@ HOOKS = [  # address, hook, bytes replaced, what, evidence
     (0x8011f5d0, "_hook_stop", 4, "STOP pressed on the normal screen is offered to our pages",
      "'CALL 0x8010c344' in DefaultContext::onCC, case 17, value -1 (press), no step held"),
     (0x8010dd0c, "_hook_on", 4, "a key pressed is noted (with SHIFT down, it is not SHIFT alone)", "'LINK 0x4', the start of Sequencer::noteOn"),
+    (0x8011e516, "_hook_screen", 4, "a dial turned while SCREEN is down (the SCREEN screen's onCC) is offered to our pages: the blue one turns the parameter pages",
+     "'R0 = R2; R0 += -1', the start of the SCREEN screen's onCC (vtable 0x81113074 + 8; the screen put on at 0x8010a360 while SCREEN is down), "
+     "which sends dials 1-4 out as CC 105-108 on channel 16"),
 ]
 
 
@@ -116,19 +119,20 @@ def record(ldr: str) -> dict:
               "page kinds, 6 bytes a track, -1 = none; read at 0x8011d4ac and 0x8011eff2 (both after our hooks), 0x8011ebcc (SHIFT) and, for the arp only, 0x8011daa4. The "
               "seventh page reads the next track's first: 5 5 5 0 0 0 0 0, valid kinds, and 0 for the arp (not its 4)")
     return {
-        "name": "galaxz-pages8", "status": "Tested off the OP-Z, not yet on the unit",
+        "name": "galaxz-pages9", "status": "WORKS on the unit (2026-11-24)",
         "description": "Three more parameter pages on tracks 1-8: the tumbler (pink, TO-2's tombola), EUCLID (teal, TO-2's) and GROOVE (light green: TO-2's grooves and "
-                       "progressions), both with MORE on SHIFT held 2 s. REC records their notes, and the first two's dials. See pages/pages.c.",
+                       "progressions), both with MORE on SHIFT held 2 s. REC records their notes, and the first two's dials. With SCREEN held the blue dial turns the OP-Z's "
+                       "parameter pages, both ways (the green one still goes out as CC 105, which the Galax-z app turns its pages by). See pages/pages.c.",
         "source": {"file": "os.ldr", "firmware": "1.2.45", "size": 828136,
                    "sha256": "5be99760c8797bdd4797ed20cfb9a92b6588889d3a81109bae5a45646a9bde07", "crc32": 2403806141},
         "edits": edits,
         "blocks": [{"what": "the pages: hooks, tumbler, EUCLID, GROOVE, state", "target": f"0x{TARGET:08x}", "source": "pages/pages.S",
                     "entries": {h: f"0x{a:08x}" for h, a in sorted(at.items())}, "state": state, "data": data.hex(),
                     "sha256": hashlib.sha256(data).hexdigest()}],
-        "revert": "Flash Galax-z v12 (the hub, or Firmware/flash).",
+        "revert": "Flash Galax-z v13 (the hub, or Firmware/flash).",
         "risk": "Our code runs before every UI frame and in the key, dial and STOP paths, and plays notes through the OS's own "
                 "playNote. If it fails, the OS fails right after start-up or on the new pages: switch off, update mode (SCREEN), "
-                "flash Galax-z v12 or the original.",
+                "flash Galax-z v13 or the original.",
     }
 
 
@@ -138,11 +142,11 @@ if __name__ == "__main__":
     print(f"{path}: {len(text.splitlines())} lines")
     if len(sys.argv) > 1:
         import json
-        rec, where = record(sys.argv[1]), os.path.join(os.path.dirname(HERE), "patches", "pages8.json")
+        rec, where = record(sys.argv[1]), os.path.join(os.path.dirname(HERE), "patches", "pages9.json")
         if os.path.exists(where):       # versions that have been on the OP-Z: kept, only recognised there
             with open(where) as f:
                 rec["earlier"] = json.load(f).get("earlier", [])
         with open(where, "w") as f:
             json.dump(rec, f, indent=2)
             f.write("\n")
-        print(f"pages8.json: {len(rec['edits'])} edits, {len(rec['blocks'][0]['data']) // 2} bytes at 0x{TARGET:08x}")
+        print(f"pages9.json: {len(rec['edits'])} edits, {len(rec['blocks'][0]['data']) // 2} bytes at 0x{TARGET:08x}")

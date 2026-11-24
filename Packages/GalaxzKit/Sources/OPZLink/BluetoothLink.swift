@@ -25,11 +25,13 @@ public final class BluetoothLink: NSObject {
     private var peripheral: CBPeripheral?
     private var wanted = false
 
-    /// Look for an OP-Z (iOS asks for Bluetooth permission the first time).
+    /// Look for an OP-Z. The system asks for Bluetooth once, the first time; after a no nothing is asked again (only its settings can),
+    /// and Bluetooth switched off is said on the screen, not by the system's own "Turn on Bluetooth" every time this starts.
     public func start() {
         wanted = true
         if central == nil {
-            central = CBCentralManager(delegate: self, queue: nil) // delegate calls on the main queue
+            if CBManager.authorization == .denied || CBManager.authorization == .restricted { state = .unauthorized; return }
+            central = CBCentralManager(delegate: self, queue: nil, options: [CBCentralManagerOptionShowPowerAlertKey: false])   // delegate calls on the main queue
         } else {
             scan()
         }

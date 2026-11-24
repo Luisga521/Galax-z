@@ -22,7 +22,11 @@ import Testing
         func draw(_ n: Int = 1) { for _ in 0..<n { t += 1 / 60; s.frame(c, time: t, dt: 1 / 60) } }
         func box(_ want: (Grip) -> Bool) -> DotRect? { for (r, w) in s.touches { if case .grip(let g) = w, want(g) { return r } }; return nil }
         func tap(_ r: DotRect, left: Bool = false) { let x = left ? r.x + 2 : r.midX + 2; #expect(s.grab(1, x, r.midY)); s.release(1, x, r.midY); draw() }
-        func tap(_ c: Choice, left: Bool = false) { tap(box { $0 == .choose(c) }!, left: left) }
+        /// A chooser's left edge goes back, its right edge on.
+        func tap(_ c: Choice, left: Bool = false) {
+            let r = box { $0 == .choose(c) }!, x = left ? r.x + 2 : r.maxX - 3
+            #expect(s.grab(1, x, r.midY)); s.release(1, x, r.midY); draw()
+        }
     }
 
     @Test func theMixer() {
@@ -224,25 +228,17 @@ import Testing
     }
 
     /// SCREEN held, the first dial: the tabs go by. Not held: they do not.
+    /// While SCREEN is down the dials do not reach the sound (the OS's SCREEN screen sends them as CC 105-108): a sound value that
+    /// changes then is not a page.
     @Test func screenAndTheFirstDialTurnThePages() {
         let d = Desk(.track)
         var i = d.s.input
-        func turn(_ by: Int, held: Bool) {
-            let p = i.address!.pattern
-            for _ in 0..<abs(by) {
-                var b = i.bank!.bytes
-                let at = p * OPZ.patternSize + OPZ.soundAt + 5 * 18
-                b[at] = UInt8(max(0, min(255, Int(b[at]) + by.signum())))
-                i.bank = Bank(b); i.revision += 1; i.panel.screen = held; i.panel.page = 0
-                d.s.input = i
-            }
-        }
-        var b = i.bank!.bytes; b[i.address!.pattern * OPZ.patternSize + OPZ.soundAt + 5 * 18] = 120; i.bank = Bank(b); i.revision += 1; d.s.input = i
-        turn(20, held: false)
+        var b = i.bank!.bytes; b[i.address!.pattern * OPZ.patternSize + OPZ.soundAt + 5 * 18] = 200; i.bank = Bank(b); i.revision += 1; i.panel.screen = true
+        d.s.input = i
         #expect(d.s.page == .track)
-        turn(17, held: true)
+        for _ in 0..<2 * Int(Stage.jogClicks) { _ = d.s.screenDial(0, value: 1) }
         #expect(d.s.page == .mix)
-        turn(-9, held: true)
+        for _ in 0..<Int(Stage.jogClicks) { _ = d.s.screenDial(0, value: 127) }
         #expect(d.s.page == .grid)
     }
 
@@ -273,5 +269,86 @@ import Testing
         d.sent = []
         d.s.set(.encoder(0), to: 99)
         #expect(d.sent == [.sound(track: 5, param: 2, value: 99)] && d.s.value(of: .encoder(0)) == 99)
+    }
+
+    /// A finger dragged along a chooser goes through its values as it goes, and they are kept once, when it lets go.
+    @Test func draggingGoesThroughTheValues() {
+        for (w, h) in [(360, 240), (235, 460), (180, 140), (453, 228)] {
+            let d = Desk(.play, w, h, track: 7)
+            var keeps = 0
+            d.s.kept = { keeps += 1 }
+            d.s.player.settings.tool = .progression
+            d.draw()
+            let r = d.box { $0 == .choose(.progression) }!, first = Progressions.index(named: d.s.player.settings.progression)!
+            #expect(d.s.grab(1, r.x + 3, r.midY))
+            var seen = Set<String>()
+            for k in 1...10 { d.s.drag(1, r.x + 3 + k * 4, r.midY); d.draw(); seen.insert(d.s.player.settings.progression) }
+            #expect(seen.count == 10 && keeps == 0, "\(w)x\(h)")                            // live, one a step
+            d.s.release(1, r.x + 43, r.midY)
+            #expect(Progressions.index(named: d.s.player.settings.progression) == first + 10 && keeps == 1)
+            // up goes on too, down back; past the first it comes round
+            _ = d.s.grab(1, r.midX, r.midY); d.s.drag(1, r.midX, r.midY + 60); d.s.release(1, r.midX, r.midY + 60)
+            #expect(Progressions.index(named: d.s.player.settings.progression) == (first + 10 - 15 + Progressions.all.count) % Progressions.all.count)
+            // a short list goes slower; OCTAVE stops at its end
+            let o = d.box { $0 == .choose(.octave) }!
+            _ = d.s.grab(2, o.midX, o.midY); d.s.drag(2, o.midX - 200, o.midY); d.s.release(2, o.midX - 200, o.midY)
+            #expect(d.s.octave == -3)
+            d.s.letGo()
+            // a switch is not dragged through
+            d.draw()
+            let p = d.box { $0 == .choose(.panic) }!
+            d.sent = []; keeps = 0
+            _ = d.s.grab(1, p.x + 2, p.midY); d.s.drag(1, p.x + 40, p.midY); d.s.release(1, p.x + 40, p.midY)
+            #expect(keeps == 0)
+        }
+        // a groove dragged through ends its notes the way a tap does
+        let d = Desk(.play, track: 7)
+        d.s.player.settings.groove = Groove.library[0].name
+        d.draw()
+        let g = d.box { $0 == .choose(.groove) }!
+        _ = d.s.grab(1, g.x + 3, g.midY); d.s.drag(1, g.x + 3 + 20, g.midY); d.s.release(1, g.x + 23, g.midY)
+        #expect(d.s.player.settings.groove == Groove.library[5].name)
+    }
+
+    /// The middle of a long choice opens all its values: one tapped is chosen and it closes; dragged, it scrolls; its top closes it.
+    @Test func pickingFromTheList() {
+        for (w, h) in [(360, 240), (235, 460), (180, 140), (453, 228)] {
+            let d = Desk(.play, w, h, track: 7)
+            d.s.player.settings.tool = .progression
+            d.draw()
+            let r = d.box { $0 == .choose(.progression) }!
+            d.tap(r)                                                                     // its middle
+            #expect(d.s.picking?.choice == .progression, "\(w)x\(h)")
+            func cells() -> [(DotRect, Int)] { d.s.touches.compactMap { if case .grip(.pick(let i)) = $0.1, i >= 0 { ($0.0, i) } else { nil } } }
+            let body = d.box { $0 == .pick(-1) }!
+            #expect(cells().count >= 8 && cells().allSatisfy { $0.0.w >= 20 && $0.0.h >= 8 && body.contains($0.0.x, $0.0.y) && $0.0.maxX <= body.maxX && $0.0.maxY <= body.maxY }, "\(cells().map(\.0)) \(body)")
+            // scrolled down, others come into sight
+            let last = cells().map(\.1).max()!
+            #expect(d.s.grab(1, body.midX, body.midY + 30)); for k in 1...20 { d.s.drag(1, body.midX, body.midY + 30 - k * 4) }; d.s.release(1, body.midX, body.midY - 50)
+            d.draw()
+            #expect(d.s.picking != nil && cells().map(\.1).max()! > last, "\(w)x\(h)")
+            // one chosen: what a tap chooses, and closed
+            let (cell, i) = cells().last!
+            d.tap(cell)
+            #expect(d.s.player.settings.progression == Progressions.all[i].name && d.s.picking == nil)
+            // the grooves; the top closes them
+            d.tap(d.box { $0 == .choose(.groove) }!)
+            #expect(d.s.picking?.choice == .groove)
+            d.tap(d.box { $0 == .unpick }!)
+            #expect(d.s.picking == nil && d.s.player.settings.groove == nil)
+            d.tap(d.box { $0 == .choose(.groove) }!)
+            d.tap(cells().first { $0.1 == 3 }!.0)
+            #expect(d.s.player.settings.groove == Groove.library[2].name)
+            // the edges still go one at a time; a short list's middle goes on
+            d.tap(.scale); d.tap(.scale); d.tap(.scale, left: true)
+            #expect(d.s.player.settings.scale == .major && d.s.picking == nil)
+            d.tap(d.box { $0 == .choose(.hold) }!)
+            #expect(d.s.player.settings.hold == .hold && d.s.picking == nil)
+            // another page closes it
+            d.tap(d.box { $0 == .choose(.key) }!)
+            #expect(d.s.picking?.choice == .key)
+            d.s.page = .mix; d.draw(); d.s.page = .play; d.draw()
+            #expect(d.s.picking == nil)
+        }
     }
 }

@@ -3,6 +3,32 @@ import Observation
 import OPZLink
 import UIKit
 
+/// The system's microphone permission (what it calls any sound coming in, the OP-Z's over the cable too), asked for once: what the
+/// system already knows is used as it is, and a question already on screen is waited for rather than asked again. The sound path is
+/// built again whenever a device comes or goes, and every time used to ask.
+@MainActor enum Microphone {
+    private static var asking: Task<Bool, Never>?
+    static var denied: Bool { AVAudioApplication.shared.recordPermission == .denied }
+
+    static func allowed() async -> Bool {
+        switch AVAudioApplication.shared.recordPermission {
+        case .granted: return true
+        case .denied: return false
+        default:
+            if let asking { return await asking.value }
+            let t = Task { await AVAudioApplication.requestRecordPermission() }
+            asking = t
+            defer { asking = nil }
+            return await t.value
+        }
+    }
+
+    /// The system's settings for this app, where the microphone can be allowed after a no.
+    static func openSettings() {
+        if let url = URL(string: UIApplication.openSettingsURLString) { UIApplication.shared.open(url) }
+    }
+}
+
 /// Where the OP-Z is heard: from itself, or over the cable from this device. Its sound is only passed on: nothing is recorded, and no
 /// microphone is used.
 @MainActor @Observable
@@ -74,8 +100,8 @@ final class AudioOut {
         let me = run
         let changed: @MainActor () -> Void = { [weak self] in self?.restart() }
         Task {
-            guard await AVAudioApplication.requestRecordPermission() else {
-                if me == run { state = .failed("Allow Galax-z the microphone in the system's settings: that is what it calls any sound coming in. Only the OP-Z's is used.") }
+            guard await Microphone.allowed() else {
+                if me == run { state = .failed("Allow Galax-z the microphone in the system's settings (MICROPHONE below): that is what it calls any sound coming in. Only the OP-Z's is used.") }
                 return
             }
             guard me == run else { return }

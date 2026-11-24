@@ -19,6 +19,10 @@ void os_where(u8 *s, i32 t, i32 *st, i32 *m) { (void)s; (void)t; *st = at_step; 
 void os_record(u8 *s, i32 t, i32 st, i32 m, i32 n, i32 v, i32 l) { (void)s; recs++; r_track = t; r_step = st; r_micro = m; r_note = n; r_vel = v; r_len = l; pat[0xc0 + (st * 55 + os_slot(t)) * 8 + 4] = n; }
 u8 *os_pattern(u8 *s) { (void)s; return pat; }
 i32 os_slot(i32 t) { static const i32 k[] = { 0, 2, 4, 6, 8, 12, 16, 24, 28, 29 }; return k[t]; }
+static int flash_n, flash_page, flash_colour;
+i32 os_pages(i32 t) { return t < 8 ? 7 : 4; }
+i32 os_page_colour(i32 t, i32 p) { (void)t; return p == 3 ? -1 : 0x10 + p; }
+void os_flash(i32 p, i32 c) { flash_n++; flash_page = p; flash_colour = c; }
 static void put(u32 at, i32 v) { memcpy(mem + at, &v, 4); }
 #define CHECK(x) do { if (!(x)) { printf("FAILED line %d: %s\n", __LINE__, #x); fails++; } } while (0)
 static int fails;
@@ -143,6 +147,23 @@ int main(void)
 #include "test_euclid.h"
     clock_ms += 100000000; pages_tick(mem); CHECK(acc < 1000);         /* a long gap: no burst */
     CHECK(vmin >= 38 && vmax <= 127);
+    /* SCREEN held (v14): on the SCREEN screen the blue dial turns the parameter pages, both ways; the flash comes when SCREEN is let go */
+    put(SEQ_TRACK, 4); put(SEQ_PAGE, 0); mem[SEQ_SCREEN_KEY] = 1; flash_n = 0;
+    CHECK(!pages_screen(1, 1) && !pages_screen(3, 1) && !pages_screen(4, -1) && !pages_screen(2, 0));   /* the others: TE's */
+    CHECK(pages_screen(2, 3) && word(mem, SEQ_PAGE) == 0); CHECK(pages_screen(2, 1) && word(mem, SEQ_PAGE) == 1 && flash_n == 0);
+    pages_tick(mem); CHECK(flash_n == 0);                                           /* still down */
+    mem[SEQ_SCREEN_KEY] = 0; pages_tick(mem); CHECK(flash_n == 1 && flash_page == 1 && flash_colour == 0x11); pages_tick(mem); CHECK(flash_n == 1);
+    mem[SEQ_SCREEN_KEY] = 1;
+    CHECK(pages_screen(2, -40) && word(mem, SEQ_PAGE) == 0);                        /* a page at a time, however fast */
+    CHECK(pages_screen(2, -4) && word(mem, SEQ_PAGE) == 6);                         /* round to the last */
+    CHECK(pages_screen(2, 4) && word(mem, SEQ_PAGE) == 0);
+    CHECK(pages_screen(2, 2)); mem[SEQ_SCREEN_KEY] = 0; pages_tick(mem); mem[SEQ_SCREEN_KEY] = 1;
+    CHECK(pages_screen(2, 2) && word(mem, SEQ_PAGE) == 0);                          /* let go: the clicks so far are gone */
+    put(SEQ_PAGE, 2); CHECK(pages_screen(2, 4) && word(mem, SEQ_PAGE) == 3);
+    flash_n = 0; mem[SEQ_SCREEN_KEY] = 0; pages_tick(mem); CHECK(flash_n == 0);      /* no kind there: no flash */
+    put(SEQ_TRACK, 9); put(SEQ_PAGE, 3); mem[SEQ_SCREEN_KEY] = 1; CHECK(pages_screen(2, 4) && word(mem, SEQ_PAGE) == 0);     /* four pages there */
+    { u8 k0 = knob[4][0]; put(SEQ_TRACK, 4); put(SEQ_PAGE, 0); CHECK(!pages_knob(4, 0, 6) && knob[4][0] == k0); }      /* DefaultContext's dials as they were */
+    mem[SEQ_SCREEN_KEY] = 0; pages_tick(mem); put(SEQ_PAGE, 0);
     printf(fails ? "%d FAILED\n" : "ok\n", fails);
     return fails != 0;
 }

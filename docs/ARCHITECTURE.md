@@ -7,7 +7,7 @@ OPZModel     the OP-Z's formats: pattern bank, live edits, panel state, settings
 DotKit       a matrix of lights to draw on, its type, its motion
 OPZPlay      playing it: chords, grooves, performance moves, learned controllers. Events in, MIDI commands out
 ChopKit      the sampler: a source cut up, played, twelve effects. Samples in, samples out
-OPZStage     the screens, drawn on it: TRACK GRID MIX PLAY CHOPS PERFORM FX SONG NOTES LOAD SKY, a look for each kind of engine
+OPZStage     the screens, drawn on it: TRACK GRID MIX PLAY CHOPS PERFORM FX SONG NOTES LOAD SKY SHOW, a look for each kind of engine
 OPZFirmware  OS images, patch records, signed releases, the strict update-mode writer
 OPZLink      SysEx, the StateSync replica, the file service, CoreMIDI, Bluetooth, the demo OP-Z
 App          the Metal view that shows the dots, the hub, settings

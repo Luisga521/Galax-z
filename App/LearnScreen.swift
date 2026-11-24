@@ -52,7 +52,7 @@ struct LearnScreen: View {
                 }
             }
             .padding(.horizontal, 20).padding(.vertical, 16)
-            .frame(maxWidth: 1000).frame(maxWidth: .infinity)
+            .frame(maxWidth: 1000, alignment: .leading).frame(maxWidth: .infinity, alignment: .leading)
         }
         .onDisappear { controllers.learn(nil) }
     }

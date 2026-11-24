@@ -1,5 +1,6 @@
 // Draws Galax-z's app icon: a spiral galaxy on a dot matrix, the way an LED grid would show it, in the three
-// versions iOS uses (light, dark, tinted). Writes the PNGs and Contents.json into the app icon set.
+// versions iOS uses: the dark one everywhere (the light one was hard to read), and tinted. Writes the PNGs and Contents.json into the
+// app icon set; Tools/icon/derive.sh makes Android's and Windows' from it.
 //
 //   swift Tools/icon/make-icon.swift App/Assets.xcassets/AppIcon.appiconset
 
@@ -25,8 +26,6 @@ struct Style {
 let styles = [
     Style(name: "icon-dark", centre: hex(0x1A1A1E), edge: hex(0x0C0C0D), dot: hex(0xEDEBE6), core: hex(0xFFD23F),
           offAlpha: 0.10),
-    Style(name: "icon-light", centre: hex(0xF6F4EF), edge: hex(0xE4E1DA), dot: hex(0x141416), core: hex(0xFF5A36),
-          offAlpha: 0.08),
     Style(name: "icon-tinted", centre: hex(0x000000), edge: hex(0x000000), dot: hex(0xFFFFFF), core: hex(0xFFFFFF),
           offAlpha: 0.12),
 ]
@@ -106,9 +105,7 @@ for s in styles {
 let contents = """
 {
   "images" : [
-    { "filename" : "icon-light.png", "idiom" : "universal", "platform" : "ios", "size" : "1024x1024" },
-    { "appearances" : [ { "appearance" : "luminosity", "value" : "dark" } ],
-      "filename" : "icon-dark.png", "idiom" : "universal", "platform" : "ios", "size" : "1024x1024" },
+    { "filename" : "icon-dark.png", "idiom" : "universal", "platform" : "ios", "size" : "1024x1024" },
     { "appearances" : [ { "appearance" : "luminosity", "value" : "tinted" } ],
       "filename" : "icon-tinted.png", "idiom" : "universal", "platform" : "ios", "size" : "1024x1024" }
   ],

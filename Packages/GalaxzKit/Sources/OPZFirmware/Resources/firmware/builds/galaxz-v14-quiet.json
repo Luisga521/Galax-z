@@ -1,0 +1,21 @@
+{
+  "title": "Galax-z v14 quiet",
+  "description": "Galax-z v14 with no sound when the OP-Z is switched on.",
+  "notes": [
+    "Hold SCREEN and turn the blue dial: the OP-Z's parameter pages, both ways.",
+    "No sound when the OP-Z is switched on."
+  ],
+  "patches": [
+    "debounce.json",
+    "galaxy-boot.json",
+    "ab-bars.json",
+    "pages9.json",
+    "usbhost.json",
+    "keys.json",
+    "keep-presets.json",
+    "voices.json",
+    "meter.json",
+    "tell9.json",
+    "no-start-sound.json"
+  ]
+}

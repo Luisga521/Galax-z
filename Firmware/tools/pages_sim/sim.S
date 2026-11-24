@@ -80,6 +80,7 @@ _stand_\n:
     BODY 2
     BODY 3
     BODY 4
+    BODY 8
 _stand_play:
     P1.L = _play_args; P1.H = _play_args;
     [P1] = R0; [P1 + 4] = R1; [P1 + 8] = R2;
@@ -97,6 +98,18 @@ _stand_play:
     CALL _played;
     SP += 12;
     RETS = [SP++];
+    R0.L = 0xdead; R0.H = 0xbeef; R1 = R0; R2 = R0; R3 = R0; P0 = R0; P1 = R0; P2 = R0;
+    RTS;
+_stand_flash:                           /* the overlay's start: R0-R2, four more on the stack */
+    P1.L = _flash_args; P1.H = _flash_args;
+    [P1] = R0; [P1 + 4] = R1; [P1 + 8] = R2;
+    R0 = [SP + 12]; [P1 + 12] = R0;
+    R0 = [SP + 16]; [P1 + 16] = R0;
+    R0 = [SP + 20]; [P1 + 20] = R0;
+    R0 = [SP + 24]; [P1 + 24] = R0;
+    R0 = [P1 + 28];
+    R0 += 1;
+    [P1 + 28] = R0;
     R0.L = 0xdead; R0.H = 0xbeef; R1 = R0; R2 = R0; R3 = R0; P0 = R0; P1 = R0; P2 = R0;
     RTS;
 _stand_ms:
@@ -152,6 +165,10 @@ _stand_knob:                            /* past the dials' hook: not ours */
 
     .section .os_8028294,"ax"
     STAND ms
+    .section .os_803c60c,"ax"
+    STAND flash
+    .section .os_811e51a,"ax"          /* the SCREEN screen's onCC, past our hook: CC 104-107 out */
+    STAND 8
     .section .os_803a9d4,"ax"
     STAND 4
     .section .os_803d3be,"ax"

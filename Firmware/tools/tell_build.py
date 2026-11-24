@@ -17,7 +17,7 @@ import ldr as L  # noqa: E402
 import pages_build as P  # noqa: E402
 
 DIR, TARGET = os.path.join(os.path.dirname(HERE), "tell"), 0x80D30000
-PAGES = os.path.join(os.path.dirname(HERE), "patches", "pages8.json")
+PAGES = os.path.join(os.path.dirname(HERE), "patches", "pages9.json")
 HOOKS = [
     (0x80112a06, "_hook_session", 4, "after the OS looked after its app session, the Galax-z app is told about the pink and teal pages",
      "'CALL 0x80113fac', its only caller, in the UI/sequencer task's loop, every 20 ms (0x8110e5b8 = 20,000,000 ns); R0 = the session, "
@@ -44,7 +44,7 @@ def record(os_ldr: str) -> dict:
     with open(PAGES) as f:
         pages = json.load(f)["blocks"][0]["sha256"]
     return {
-        "name": "galaxz-tell8", "status": "Tested off the OP-Z, not yet on the unit",
+        "name": "galaxz-tell9", "status": "WORKS on the unit (2026-11-24)",
         "description": "The OP-Z tells the Galax-z app (only it) what the tumbler, EUCLID and GROOVE are doing, so that the app shows them. See tell/tell.c.",
         "source": {"file": "os.ldr", "firmware": "1.2.45", "size": 828136,
                    "sha256": "5be99760c8797bdd4797ed20cfb9a92b6588889d3a81109bae5a45646a9bde07", "crc32": 2403806141},
@@ -52,10 +52,10 @@ def record(os_ldr: str) -> dict:
         "edits": [P.branch(img, address, at[hook], n, hook, what, evidence) for address, hook, n, what, evidence in HOOKS],
         "blocks": [{"what": "the hook, what it says, its state", "target": f"0x{TARGET:08x}", "source": "tell/tell.S",
                     "entries": {h: f"0x{a:08x}" for h, a in sorted(at.items())}, "data": data.hex(), "sha256": hashlib.sha256(data).hexdigest()}],
-        "revert": "Flash Galax-z v12 (the hub, or Firmware/flash).",
+        "revert": "Flash Galax-z v13 (the hub, or Firmware/flash).",
         "risk": "Our code runs every 20 ms in the UI/sequencer task; it reads the pages' state and sends messages through the OS's own routine, only while the "
                 "Galax-z app is connected. If it fails, the OP-Z stops answering with the app connected: switch off, take the cable out, "
-                "update mode (SCREEN), flash Galax-z v12 or the original.",
+                "update mode (SCREEN), flash Galax-z v13 or the original.",
     }
 
 
@@ -65,7 +65,7 @@ if __name__ == "__main__":
     text = P.compiled(DIR, "tell.c")
     with open(os.path.join(DIR, "tell.gen.S"), "w") as f:
         f.write(text)
-    rec, path = record(sys.argv[1]), os.path.join(os.path.dirname(HERE), "patches", "tell8.json")
+    rec, path = record(sys.argv[1]), os.path.join(os.path.dirname(HERE), "patches", "tell9.json")
     with open(path, "w") as f:
         json.dump(rec, f, indent=2)
         f.write("\n")

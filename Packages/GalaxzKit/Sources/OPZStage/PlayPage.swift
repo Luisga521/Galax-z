@@ -3,11 +3,24 @@ import OPZModel
 import OPZPlay
 
 extension Stage {
-    /// A choice: its name small, what it is, a mark each side.
+    /// A choice: its name small, what it is, a mark each side where a tap goes back or on, three dots where the middle opens them all.
     func chooser(_ c: DotCanvas, _ r: DotRect, _ what: Choice, _ name: String, _ value: String, _ colour: DotColor, on: Bool = false) {
-        c.frame(r, on ? colour : Palette.ink, on ? 0.8 : 0.22, radius: 2)
-        c.text(DotFont.tiny.fitted(name, r.w - 6), r.x + 4, r.y + 3, Palette.ink, 0.45, font: .tiny)
-        c.text(DotFont.tiny.fitted(value, r.w - 8), r.x + 4, r.y + 10, colour, on ? 1 : 0.85, font: .tiny)
+        let held = grips.values.contains { $0.grip == .choose(what) }, marked = (what.scrubs || what == .kit) && r.w >= 34, more = what.long && marked
+        c.frame(r, on || held ? colour : Palette.ink, held ? 1 : on ? 0.8 : 0.22, radius: 2)
+        c.text(DotFont.tiny.fitted(name, r.w - (more ? 11 : 6)), r.x + 4, r.y + 3, Palette.ink, 0.45, font: .tiny)
+        c.text(DotFont.tiny.fitted(value, r.w - (marked ? 12 : 8)), r.x + (marked ? 6 : 4), r.y + 10, colour, on || held ? 1 : 0.85, font: .tiny)
+        if marked {
+            func mark(_ x: Int, _ tip: Int) { c.set(x, r.y + 11, colour, 0.55); c.set(tip, r.y + 12, colour, 0.55); c.set(x, r.y + 13, colour, 0.55) }
+            mark(r.x + 3, r.x + 2)
+            mark(r.maxX - 4, r.maxX - 3)
+        }
+        if more { for k in 0..<3 { c.set(r.maxX - 4, r.y + 3 + k * 2, Palette.ink, 0.5) } }
+        // going through them: where it is among them
+        if held, what.scrubs, let (names, at) = values(what), names.count > 1 {
+            let w = r.w - 8
+            c.rule(r.x + 4, r.maxY - 3, w, Palette.ink, 0.3, step: 2)
+            c.fill(DotRect(r.x + 4 + (w - 3) * at / (names.count - 1), r.maxY - 3, 3, 1), colour)
+        }
         touches.append((r, .grip(.choose(what))))
     }
     private func row(_ c: DotCanvas, _ r: DotRect, _ all: [(Choice, String, String, DotColor, Bool)]) {
@@ -125,7 +138,7 @@ extension Stage {
     }
 }
 
-private extension String {
+extension String {
     /// The dot type has no flat sign.
     var replacingFlat: String { map { $0 == "♭" ? "B" : $0 == "°" ? "o" : String($0) }.joined() }
 }

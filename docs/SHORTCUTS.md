@@ -41,7 +41,8 @@ After the start a boot animation plays on the keys (v2), and from v11 two Quinda
 | | |
 |---|---|
 | **TEMPO + SCREEN** | The OP-Z's own MIDI settings. Key 2 lets MIDI in, which MIX, PLAY and PERFORM need |
-| **SCREEN + dial 1** | Turns the app's pages. Not yet tried on a unit |
+| **SCREEN + dial 1** (green) | Turns the app's pages, both ways (the OP-Z sends it as CC 105 on channel 16; any OS) |
+| **SCREEN + dial 2** (blue) | The OP-Z's parameter pages, forwards and back; the page flashes when SCREEN is let go. v14 |
 | **Patterns 1 → 2 chained** | The playhead is white on the odd one (A) and purple on the even one (B), v3 |
 
 The picture is made from `Tools/shortcuts/shortcuts.html` by `Tools/shortcuts/render.sh`. Found one that is wrong, or missing? Say so in an issue.

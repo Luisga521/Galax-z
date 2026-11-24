@@ -11,10 +11,30 @@ enum Grip: Equatable {
     case choose(Choice), move(Int), load(String?), amount
     /// A chop's pad, a dial, an effect's light, an effect's dial, the chosen chop's pitch, level or pan.
     case chop(Int), chopDial(Int), effect(Int), effectDial(Int), edit(Int)
+    /// A value of the open list (-1: between them, to scroll it), and its top, which closes it.
+    case pick(Int), unpick
 }
 
-/// A choice of PLAY or PERFORM: the left of it is the one before, the right the next.
-enum Choice: Int, CaseIterable { case key, scale, tool, hold, progression, vary, groove, order, strum, octave, scope, latch, gallery, shelf, panic, kit, source, record, cut, view, module, keys, reverse, choke, chopOn, lights, remove }
+/// A choice of PLAY or PERFORM: the left of it is the one before, the right the next. One of values goes through them under a
+/// dragged finger; one of many values opens them all from its middle.
+enum Choice: Int, CaseIterable {
+    case key, scale, tool, hold, progression, vary, groove, order, strum, octave, scope, latch, gallery, shelf, panic, kit, source, record, cut, view, module, keys, reverse, choke, chopOn, lights, remove, scene, showAuto
+
+    /// Values to go through, not a thing done or a switch (a kit is loaded, so it goes one at a time).
+    var scrubs: Bool {
+        switch self {
+        case .key, .scale, .tool, .hold, .progression, .vary, .groove, .order, .strum, .octave, .scope, .shelf, .source, .cut, .view: true
+        default: false
+        }
+    }
+    /// So many that they are better seen at once.
+    var long: Bool {
+        switch self {
+        case .key, .scale, .tool, .progression, .groove, .octave, .shelf: true
+        default: false
+        }
+    }
+}
 
 struct Held { let grip: Grip; let x, y: Int; var moved = false; var value: Double; let box: DotRect }
 
@@ -165,6 +185,8 @@ extension Stage {
             guard chops.list.indices.contains(chops.chosen) else { break }
             let c = chops.list[chops.chosen]
             v = k == 0 ? Double(c.pitch + 24) / 48 : k == 1 ? c.level : c.pan
+        case .choose(let c): v = Double(values(c)?.at ?? 0)
+        case .pick, .unpick: v = Double(picking?.scroll ?? 0)
         default: break
         }
         grips[id] = Held(grip: g, x: x, y: y, value: v, box: box)
@@ -193,6 +215,14 @@ extension Stage {
             guard let (_, g) = grip(x, y), case .key(let k2, let n2) = g, k2 != k else { return }
             for e in player.release(k, at: moment) + player.press(k2, note: n2, at: moment) { out(e) }
             grips[id] = Held(grip: g, x: x, y: y, moved: true, value: 0, box: h.box)
+        case .choose(let c):                                                                   // through the values, as far as it goes
+            guard c.scrubs, let n = values(c)?.names.count else { break }
+            let dx = x - h.x, dy = h.y - y, by = abs(dx) >= abs(dy) ? dx : dy
+            choose(c, to: Int(h.value) + by / (n > 24 ? 4 : n > 8 ? 6 : 10), keep: false)
+        case .pick, .unpick:
+            guard var p = picking else { break }
+            p.scroll = min(p.most, max(0, Int(h.value) + h.y - y))
+            picking = p
         default: break
         }
     }
@@ -206,7 +236,10 @@ extension Stage {
         case .gain(let t): if !h.moved { _ = tapTrack(t) }
         case .mute(let t): if !h.moved { mute(t) }
         case .pattern(let p): if !h.moved { say(.pattern(project: input.address?.project ?? 0, p)) }
-        case .choose(let c): if !h.moved { choose(c, x < h.box.midX ? -1 : 1) }
+        case .choose(let c):                                                                   // let go off it: nothing
+            if h.moved { if c.scrubs { kept() } } else if h.box.contains(x, y) { touched(c, x, h.box) }
+        case .pick(let i): if !h.moved, let p = picking, i >= 0 { picking = nil; choose(p.choice, to: i) }
+        case .unpick: if !h.moved { picking = nil }
         case .load(let m): if !h.moved { endMove(pad); bay.load(m.flatMap(Move.named), at: pad); kept() }
         case .amount: kept()
         case .chop: ask(.stop(id: 4000 + id))
@@ -230,7 +263,42 @@ extension Stage {
         bay.slots[pad] = m
     }
 
-    func choose(_ c: Choice, _ by: Int) {
+    static let strums = [0, 0.03, 0.06, 0.12, 0.25]
+
+    /// What a choice can be, in order, and which it is now: nil for a thing done or a switch.
+    func values(_ c: Choice) -> (names: [String], at: Int)? {
+        func of<T: CaseIterable & Equatable>(_ v: T, _ name: (T) -> String) -> ([String], Int) { let a = Array(T.allCases); return (a.map(name), a.firstIndex(of: v)!) }
+        let s = player.settings
+        switch c {
+        case .key: return (Palette.noteNames, s.tonic)
+        case .scale: return of(s.scale, \.name)
+        case .tool: return of(s.tool, \.name)
+        case .hold: return of(s.hold, \.name)
+        case .order: return of(s.order, \.name)
+        case .progression: return (Progressions.all.map(\.name), Progressions.index(named: s.progression) ?? 0)
+        case .vary: return ((0...4).map { "\($0 * 25)" }, Int((s.vary * 4).rounded()))
+        case .groove:
+            let names = Groove.library.map(\.name)
+            return (["OFF"] + names, s.groove.flatMap { names.firstIndex(of: $0) }.map { $0 + 1 } ?? 0)
+        case .strum: return (Self.strums.map { $0 == 0 ? "OFF" : "\(Int($0 * 1000)) MS" }, Self.strums.firstIndex(of: s.strum) ?? 0)
+        case .octave: return ((-3...3).map { $0 > 0 ? "+\($0)" : "\($0)" }, octave + 3)
+        case .scope: return bay.slots[pad].map { of($0.scope, \.name) }
+        case .shelf: return (Move.families, shelf % Move.families.count)
+        case .source: return of(chops.source, \.name)
+        case .cut: return of(chops.cut, \.name)
+        case .view: return of(chops.view, \.name)
+        default: return nil
+        }
+    }
+
+    /// Choose the `i`th value, as that many taps would (past the end it comes round; OCTAVE stops).
+    func choose(_ c: Choice, to i: Int, keep: Bool = true) {
+        guard let (names, at) = values(c) else { return }
+        let n = names.count, to = c == .octave ? min(n - 1, max(0, i)) : (i % n + n) % n
+        if to != at { choose(c, to - at, keep: keep) }
+    }
+
+    func choose(_ c: Choice, _ by: Int, keep: Bool = true) {
         func next<T: CaseIterable & Equatable>(_ v: T) -> T { let a = Array(T.allCases); return a[((a.firstIndex(of: v)! + by) % a.count + a.count) % a.count] }
         func place(_ i: Int, _ n: Int) -> Int { ((i + by) % n + n) % n }
         switch c {
@@ -250,7 +318,7 @@ extension Stage {
             player.settings.groove = names[place(names.firstIndex(of: player.settings.groove) ?? 0, names.count)]
         case .order: player.settings.order = next(player.settings.order)
         case .strum:
-            let s = [0, 0.03, 0.06, 0.12, 0.25]
+            let s = Self.strums
             player.settings.strum = s[place(s.firstIndex(of: player.settings.strum) ?? 0, s.count)]
         case .octave: octave = max(-3, min(3, octave + by))
         case .scope: if var m = bay.slots[pad] { endMove(pad); m.scope = next(m.scope); bay.slots[pad] = m }
@@ -271,7 +339,9 @@ extension Stage {
             ask(.edited(chops.list))
         case .lights: lights.toggle(); if !lights { for k in 0..<16 { endMove(k) } }
         case .remove: ask(.removeKit)
+        case .scene: show.turn(by, at: time, bar: showBar.rounded(.down))
+        case .showAuto: show.auto.toggle()
         }
-        kept()
+        if keep { kept() }
     }
 }
