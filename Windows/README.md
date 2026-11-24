@@ -1,7 +1,7 @@
 # Galax-z for Windows
 
 **A test build, second pass.** The same screens as on the Mac, from the same Swift code, in a window of its own, with Settings
-and the Galax-z OS installer over it as on the Mac. Built and run on Windows; nothing of it has met an OP-Z on Windows yet.
+and the Galax-z OS installer over it as on the Mac. Built and run on Windows; its writer has put a boot animation on an OP-Z (2026-11-24).
 
 ## How it is made
 
@@ -102,8 +102,8 @@ and their editor: pattern, three colours, black and white, how bright each row i
 | `galaxz-ports`: which COM port is the OP-Z's | built, **not yet tried**. It lists and opens nothing |
 | `galaxz-ports read`: what is installed (as the Mac's READ) | built, **not yet tried**. Read-only: the console takes only its fixed ping and read frames |
 | Settings: the look, the demo, backups, the key test, the link check | built; backups and the key test **not yet tried** with an OP-Z |
-| **Installing Galax-z OS** (READ, every version, TE's original, the chime) | built, the Mac's hub and writer; **not yet tried** on an OP-Z. Until it has been, install from a Mac |
-| Boot animations: the library, your own, installing one | built, **not yet tried** on an OP-Z |
+| **Installing Galax-z OS** (READ, every version, TE's original, the chime) | built, the Mac's hub and writer. **The writer is tried**: a boot animation went on an OP-Z from Windows (2026-11-24) and it started with it. A Galax-z OS version is **not yet installed** from Windows |
+| Boot animations: the library, your own, installing one | **tried**: one installed on an OP-Z from Windows, 2026-11-24, and shown at start |
 | LEARN (other MIDI controllers) | next pass: Windows opens only the OP-Z's MIDI so far |
 | The OP-Z's sound, CHOPS' recording | later |
 | Bluetooth: PAIR, then the OP-Z over Bluetooth MIDI | pairing **tried** on an OP-Z (Windows paired it, its ports came); the connection itself **not yet**: the OP-Z must be on and not with a phone. Over Bluetooth, backups take minutes and are not taken by themselves; installing Galax-z OS needs the cable |

@@ -60,9 +60,14 @@ two seconds for PROGRESSION (all the way down: none), KEY, LENGTH of a chord, SW
 records it. The app shows it on TRACK. **The chime** (v12: in place of TE's start sound) is chosen in Settings › GALAX-Z OS, and goes with the version when that is installed; `disable_start_sound` in the OP-Z's general.json
 turns it off too.
 
-## Updating Galax-z OS (on a Mac)
+## Updating Galax-z OS (on a Mac or Windows)
 
-**Settings › GALAX-Z OS** takes you through it:
+**Settings › GALAX-Z OS** takes you through it, on a Mac or on Windows (`H` opens it). iPad, iPhone and Android have no installer: they
+cannot reach the OP-Z's update mode, so they never write its OS.
+
+**On Windows the installer is the Mac's writer, unchanged.** It has put a boot animation on an OP-Z; a Galax-z OS version has not been installed from Windows yet.
+Windows adds its own checks ([Windows/README.md](../Windows/README.md#safety-on-windows)): it talks only to teenage engineering's
+port, holds it for itself, gives up on a write that stalls, and asks once more after HOLD TO INSTALL.
 
 1. **Back up.** With the OP-Z on normally and plugged in. Your projects and sounds are copied, reading only.
 2. **Update mode.** Switch off. Hold **SCREEN** and switch on.
@@ -77,7 +82,10 @@ had, or **TE 1.2.45**. If that fails, TE's own update procedure is the next step
 
 Your OP-Z must be on TE's OS **1.2.45** (or a Galax-z version). Anything else is refused.
 
-**This replaces the operating system of your instrument. It has been tried on one OP-Z. You do it at your own risk.**
+The app checks a lot before it writes ([what it checks](../DISCLAIMER.md#what-the-app-checks-before-it-writes)). Those checks make a
+mistake hard to make; they do not make one impossible.
+
+**This replaces the operating system of your instrument. It has been tried on one OP-Z, mostly from a Mac. You do it at your own risk.**
 
 ### New versions
 

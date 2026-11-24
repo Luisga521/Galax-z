@@ -1,8 +1,9 @@
 # Windows and Linux
 
-Both are being worked towards, and help is very welcome. **Windows has a first test build in the making** ([Windows/](../Windows/README.md)):
-the screens, the demo and the OP-Z over USB MIDI, built on Windows with one script; not yet tried with an OP-Z there. Linux has nothing
-to run yet. This is where things stand, so that nobody starts from zero.
+Help is very welcome with both. **Windows has a test build** ([Windows/](../Windows/README.md), and a setup program in
+[Releases](https://github.com/Luisga521/Galax-z/releases)): the screens, the demo, Settings, backups, PAIR over Bluetooth MIDI and the
+Galax-z OS installer, built on Windows with one script. Its writer has put a boot animation on an OP-Z; a whole Galax-z OS version has not been installed from there yet. Linux has
+nothing to run yet. This is where things stand, so that nobody starts from zero.
 
 ## What carries over
 

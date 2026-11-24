@@ -26,6 +26,27 @@ Plain words, so nobody is surprised.
 - A factory reset removes your own content. Back up first, and keep the copy somewhere else too.
 - Loud surprises are possible. Turn the volume down, and take headphones off, the first time you start something new.
 
+## What the app checks before it writes
+
+The installer is built so that a mistake is hard to make. Before and while it writes Galax-z OS, it:
+
+- **Writes only in update mode.** An OP-Z switched on normally cannot be written. You put it in update mode yourself (off, hold SCREEN, on).
+- **Refuses any OS but TE's 1.2.45** or a Galax-z version built from it.
+- **Writes two files and nothing else**, `os.ldr` and `os.crc32`. The bootloader, which holds update mode, and the firmware of the keyboard
+  and Bluetooth chips are never written, so update mode stays there as the way back.
+- **Writes only images it can check**, by SHA-256: TE's own, read off your OP-Z, or one built from it. A release you download is signed, checked
+  against the key in the app, and must build to exactly the image it promises.
+- **Sends only fixed commands.** The update-mode console can format the OP-Z's memory; the app never types into it, and refuses the commands
+  that could.
+- **Saves what is there first**, then reads each file back after writing and compares it byte for byte.
+- **Stops everything if an upload stalls**, until the OP-Z is switched off, so no stray bytes land in the file.
+- **Asks you to hold the button** on a version until it fills. On Windows it also asks once more, talks only to teenage engineering's USB port,
+  and keeps the computer from sleeping or closing the app while it writes.
+
+These checks lower the risk. **They do not remove it.** They were written for one OP-Z and tried on that one, mostly from a Mac. The Windows installer
+uses the same writer; it has put a boot animation on that OP-Z, but no Galax-z OS version has been installed from Windows yet. Nothing above protects against a patch that starts but misbehaves, a cable pulled
+mid-write, a flat battery, or a unit that differs from the one it was made on. Read [SAFETY.md](docs/SAFETY.md) before you install.
+
 ## Responsibility
 
 Please read this as meant: it is what lets somebody share a thing like this at all.

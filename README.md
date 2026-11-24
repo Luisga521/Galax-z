@@ -27,12 +27,14 @@
 > **There are bugs.** The known ones are in [KNOWN-ISSUES.md](docs/KNOWN-ISSUES.md). If you meet another, say so, and if you can fix it, even better. Let's
 > build something good.
 >
-> **Windows and Linux builds are being worked towards.** Much of the code is ready to carry over and [PORTING.md](docs/PORTING.md) says where to begin. If
-> that is your thing, you would be a great help.
+> **Windows has a test build now**, with a setup program and the Galax-z OS installer ([Windows/](Windows/README.md)); it has put a boot animation
+> on an OP-Z. **Linux is still to come**: much of the code is ready to carry over and [PORTING.md](docs/PORTING.md) says where to begin. If that is
+> your thing, you would be a great help.
 
 > [!WARNING]
 > **Galax-z OS replaces the operating system of your instrument, and it has only ever run on one OP-Z.** You could end up with an OP-Z that does not
-> start. The app works without the OS and then flashes nothing. Read [DISCLAIMER.md](DISCLAIMER.md) before you install the OS.
+> start. The app works without the OS and then flashes nothing. The installer has checks that make a mistake hard to make
+> ([what it checks](DISCLAIMER.md#what-the-app-checks-before-it-writes)); they lower the risk, they do not remove it. Read [DISCLAIMER.md](DISCLAIMER.md) before you install the OS.
 
 Not made by, endorsed by or connected with teenage engineering. OP-Z and OP-1 are their trademarks.
 
@@ -50,10 +52,12 @@ Every picture is the app's own demo. The eleventh page, **LOAD**, shows [how har
 
 **The app** follows the OP-Z over a USB-C cable, or over Bluetooth on iPad, iPhone and Android. Looking sends nothing that changes it; **touching a control
 changes the OP-Z by MIDI**, as a knob on it would. It learns any MIDI controller (on a Mac, **Settings › BRIDGE** plays your keyboards and pads straight into the OP-Z, beside its own keys), backs up your projects (reading only), plays the OP-Z's sound through
-your device, and, on a Mac, installs Galax-z OS. No OP-Z? **Settings › DEMO OP-Z** plays a pretend one. **On a Mac, try the test build** from [Releases](https://github.com/Luisga521/Galax-z/releases) (not notarized: allow it once in
+your device, and, on a Mac or Windows, installs Galax-z OS (never on iPad, iPhone or Android: they cannot reach the OP-Z's update mode). No OP-Z? **Settings › DEMO OP-Z** plays a pretend one. **On a Mac, try the test build** from [Releases](https://github.com/Luisga521/Galax-z/releases) (not notarized: allow it once in
 System Settings › Privacy & Security), or build it with one command ([BUILDING.md](docs/BUILDING.md)). It is not in the App Store. **On Android**, the test
 APK is in the same [Releases](https://github.com/Luisga521/Galax-z/releases) (allow installing unknown apps); it is the same screens from the same code,
-and a Mac still installs the OS ([Android/README.md](Android/README.md)).
+and a Mac still installs the OS ([Android/README.md](Android/README.md)). **On Windows**, the test setup program is in the same
+[Releases](https://github.com/Luisga521/Galax-z/releases) (not signed: SmartScreen › More info › Run anyway, once; no administrator needed). It has the
+Galax-z OS installer, the Mac's writer unchanged: it has put a boot animation on an OP-Z, but **no Galax-z OS version has been installed from Windows yet** ([Windows/README.md](Windows/README.md)).
 
 **On the OP-Z itself**, the keys light up when it starts. Six of the sixteen boot animations (Galaxy, Radar, Comet, Rain, Bars, Snake), drawn where the
 OP-Z's lights are; each takes your own colours:
@@ -89,7 +93,7 @@ and what has not is in [STATUS.md](docs/STATUS.md), line by line.
 
 | You want to | Go to | Risk to your OP-Z |
 |---|---|---|
-| Look at it | The Mac or Android test build from [Releases](https://github.com/Luisga521/Galax-z/releases), Settings › DEMO OP-Z | None |
+| Look at it | The Mac, Windows or Android test build from [Releases](https://github.com/Luisga521/Galax-z/releases), Settings › DEMO OP-Z | None |
 | Use the screen | [USING.md](docs/USING.md) | Very low: looking only reads |
 | Play it from the app | [USING.md](docs/USING.md) | Low: MIDI changes what you touch; nothing is written into it |
 | Add synths and effects | [OP-FREE](https://github.com/mutlisensor/op-free), the project this stands on | Low: nothing is flashed |
