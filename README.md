@@ -38,6 +38,16 @@
 
 Not made by, endorsed by or connected with teenage engineering. OP-Z and OP-1 are their trademarks.
 
+## Will it flash my OP-Z?
+
+The questions people ask most, on one page: what Galax-z writes and what it does not, how to install it, which devices can, and what the
+installer checks first. The details are in [DISCLAIMER.md](DISCLAIMER.md#what-the-app-checks-before-it-writes) and [USING.md](docs/USING.md#updating-galax-z-os-on-a-mac-or-windows).
+
+<p align="center"><a href="DISCLAIMER.md#what-the-app-checks-before-it-writes"><picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/screens/faq-dark.png">
+  <img src="docs/screens/faq-light.png" alt="Galax-z questions and answers: it does not install OP-FREE or synths; the OS installs from a Mac or Windows in five steps, never from iPad, iPhone or Android; the installer writes only in update mode, only over TE's 1.2.45, only two files, checks every image and reads it back; these checks lower the risk, they do not remove it" width="820">
+</picture></a></p>
+
 ## What it does
 
 | | |
