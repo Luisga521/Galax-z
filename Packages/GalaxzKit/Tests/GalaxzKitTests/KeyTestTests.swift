@@ -1,4 +1,6 @@
+#if canImport(CoreMIDI)
 import CoreMIDI
+#endif
 import Foundation
 import Testing
 @testable import OPZLink
@@ -58,6 +60,7 @@ import Testing
     }
 }
 
+#if canImport(CoreMIDI)
 /// Notes and start/stop arrive through the same CoreMIDI read block as SysEx, on CoreMIDI's thread.
 @Suite struct KeyEventReaderTests {
     static func at(_ e: KeyEvent) -> Double { if case .playing(_, let t) = e { t } else { -1 } }
@@ -94,3 +97,4 @@ import Testing
         #expect(got == [.noteOn(note: 53, channel: 4, velocity: 100, time: t), .noteOff(note: 53, channel: 4, time: off), .playing(true, time: KeyEventReaderTests.at(got[2]))])
     }
 }
+#endif

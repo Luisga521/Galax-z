@@ -47,3 +47,24 @@ The few bytes of theirs that patch records carry: DISCLAIMER.md in the repositor
 ## Linux
 
 How older Yamaha keyboards speak USB-MIDI was learned from the kernel's USB audio quirks. No kernel code is here.
+
+## swift-crypto and BoringSSL (Apache 2.0; BoringSSL's own notices)
+
+Apple's [swift-crypto](https://github.com/apple/swift-crypto) 5.0.3, pinned in `Packages/GalaxzKit/Package.resolved`, does on Windows what
+CryptoKit does on Apple's systems: release signatures (Ed25519) and SHA-256. It is built into the Windows programs, and with it Google's
+BoringSSL, under the licences in swift-crypto's `LICENSE.txt` and `Sources/CCryptoBoringSSL/LICENSE`. Nothing of it is in the Apple apps.
+
+## Swift's runtime (Apache 2.0 with the Runtime Library Exception)
+
+The Windows zip carries the Swift runtime and Foundation as swift.org builds them (`swiftCore.dll`, `Foundation.dll`, ICU's data in
+`_FoundationICU.dll`, …), unchanged. Licence: <https://swift.org/LICENSE.txt>.
+
+## Microsoft's C++ runtime
+
+`vcruntime140.dll`, `vcruntime140_1.dll` and `msvcp140.dll` sit beside the Windows programs, unchanged, as Microsoft's Visual C++
+redistributable allows, for computers that have never had them.
+
+## puff (zlib licence)
+
+`Packages/GalaxzKit/Sources/OPZLink/Inflate.swift` is written for Galax-z in Swift, following the way Mark Adler's `puff.c` (in zlib's
+`contrib/puff`) decodes deflate. Altered and rewritten; not the original.

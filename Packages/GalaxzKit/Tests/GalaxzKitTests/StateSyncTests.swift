@@ -1,4 +1,6 @@
+#if canImport(CoreMIDI)
 import CoreMIDI
+#endif
 import Foundation
 import Testing
 @testable import OPZLink
@@ -54,6 +56,7 @@ struct Vector: @unchecked Sendable { // read-only after load
         #expect(StateSyncClient.helloFrame() == Vector.shared.transcript[0].bytes)
     }
 
+    #if canImport(CoreMIDI)
     @Test func umpRoundTrip() async {
         let short = StateSyncClient.helloFrame() // one UMP message
         let long = StateSyncClient.ackFrame(transfer: 3, index: 513) // start, continue, end
@@ -68,8 +71,10 @@ struct Vector: @unchecked Sendable { // read-only after load
         for await f in stream { got.append(f) }
         #expect(got == [short, long])
     }
+    #endif
 }
 
+#if canImport(CoreMIDI)
 /// The 0.1 crash: CoreMIDI calls the receive block on its own thread. Call it the same way.
 @Suite struct MIDIThreadTests {
     struct Call: @unchecked Sendable { let block: MIDIReceiveBlock; let list: UnsafeMutablePointer<MIDIEventList> }
@@ -96,6 +101,7 @@ struct Vector: @unchecked Sendable { // read-only after load
         #expect(got == [StateSyncClient.helloFrame()])
     }
 }
+#endif
 
 @Suite struct StateSyncTests {
     /// Edits on the OP-Z (`$02`): one fresh bank once they pause (or after 0.6 s of non-stop edits), never mid-transfer.

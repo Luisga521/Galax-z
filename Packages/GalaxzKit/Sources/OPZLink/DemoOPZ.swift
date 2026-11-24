@@ -8,7 +8,7 @@ import OPZModel
 public final class DemoOPZCore {
     private let ack: [UInt8]
     private let burst: [[UInt8]]
-    private let parts: [[UInt8]]
+    let parts: [[UInt8]]          // internal: the tests read it
     private let fileOpen: [UInt8]?
     /// file id → its `$53` parts in order
     private let fileParts: [UInt32: [[UInt8]]]

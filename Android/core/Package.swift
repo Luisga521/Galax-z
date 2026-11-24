@@ -4,8 +4,12 @@ import PackageDescription
 
 let package = Package(
     name: "GalaxzAndroid",
-    platforms: [.macOS(.v15)],                       // for its tests on a Mac; Android takes no version here
-    products: [.library(name: "GalaxzAndroid", type: .dynamic, targets: ["GalaxzAndroid"])],
+    platforms: [.macOS(.v15)],                       // for its tests on a Mac; Android and Windows take no version here
+    products: [
+        .library(name: "GalaxzAndroid", type: .dynamic, targets: ["GalaxzAndroid"]),
+        // The same core, linked into another app: Galax-z for Windows (`../../Windows`). JNI and AAudio are Android's only.
+        .library(name: "GalaxzCore", targets: ["GalaxzAndroid"]),
+    ],
     dependencies: [.package(path: "../../Packages/GalaxzKit")],
     targets: [
         // jni.h, from the NDK.

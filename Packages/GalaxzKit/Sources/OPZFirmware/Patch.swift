@@ -1,4 +1,8 @@
+#if canImport(CryptoKit)
 import CryptoKit
+#else
+import Crypto        // swift-crypto: the same API, on Windows and Linux
+#endif
 import Foundation
 
 /// A Galax-z OS patch record (Firmware/patches/*.json; op-free's format plus our own code blocks).

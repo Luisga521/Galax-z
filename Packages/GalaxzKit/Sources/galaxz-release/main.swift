@@ -1,4 +1,8 @@
+#if canImport(CryptoKit)
 import CryptoKit
+#else
+import Crypto        // swift-crypto: the same API, on Windows and Linux
+#endif
 import Foundation
 import OPZFirmware
 

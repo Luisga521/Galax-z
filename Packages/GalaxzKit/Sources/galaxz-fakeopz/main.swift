@@ -1,3 +1,4 @@
+#if canImport(CoreMIDI)
 import CoreMIDI
 import Foundation
 import OPZLink
@@ -133,3 +134,6 @@ Task { @MainActor in await device.play() }
 print("virtual OP-Z on")
 Task { try? await Task.sleep(for: .seconds(seconds)); exit(0) }
 RunLoop.main.run()
+#else
+print("galaxz-fakeopz needs a Mac for now (CoreMIDI, CoreGraphics)")
+#endif

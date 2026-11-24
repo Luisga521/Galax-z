@@ -17,10 +17,12 @@ import Testing
         #expect(OPZCommand.noteOn(track: 3, note: 60, velocity: 0).bytes == [0x93, 60, 1])            // never a note off by mistake
     }
 
+    #if canImport(CoreMIDI)      // the Mac's MIDI packing
     @Test func shortMessagesAreWhole() {
         #expect(MIDITransport.umpWord([0xB2, 50, 100]) == 0x20B2_3264 && MIDITransport.umpWord([0xFA]) == 0x10FA_0000 && MIDITransport.umpWord([0xC1, 5]) == 0x20C1_0500)
         for b: [UInt8] in [[], [0x40, 1, 2], [0xF0, 1], [0x90, 200, 1], [0x90, 1, 2, 3]] { #expect(MIDITransport.umpWord(b) == nil) }
     }
+    #endif
 
     /// Whatever is pressed, changed and let go, every note that began ends, once.
     @Test func everyNoteEnds() {

@@ -1,3 +1,4 @@
+#if canImport(CoreGraphics) && canImport(ImageIO)
 import CoreGraphics
 import ChopKit
 import DotKit
@@ -183,3 +184,6 @@ if only.contains("load") || only.isEmpty {
     t = run(1, from: t)
     write(canvas, "8-load-report")
 }
+#else
+print("galaxz-shots needs a Mac for now (CoreMIDI, CoreGraphics)")
+#endif

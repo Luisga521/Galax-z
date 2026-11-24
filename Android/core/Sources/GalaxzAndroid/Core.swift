@@ -7,12 +7,23 @@ import OPZStage
 #if canImport(Android)
 import Android
 #endif
+#if os(Windows)
+import WinSDK
+#endif
 
-/// Seconds of the monotonic clock: the one Android's `System.nanoTime` and its MIDI time stamps count in.
+/// Seconds of the monotonic clock: the one Android's `System.nanoTime` and its MIDI time stamps count in (on Windows, the
+/// performance counter, which Galax-z's MIDI sender waits on too).
 func monotonic() -> Double {
+    #if os(Windows)
+    var count = LARGE_INTEGER(), frequency = LARGE_INTEGER()
+    QueryPerformanceCounter(&count)
+    QueryPerformanceFrequency(&frequency)
+    return Double(count.QuadPart) / Double(frequency.QuadPart)
+    #else
     var t = timespec()
     clock_gettime(CLOCK_MONOTONIC, &t)
     return Double(t.tv_sec) + Double(t.tv_nsec) / 1e9
+    #endif
 }
 
 /// The connection to the OP-Z (or the demo one) and the screen: `App/Live.swift` for Android, without tasks or actors.

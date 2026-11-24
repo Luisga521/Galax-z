@@ -5,7 +5,7 @@
 
 #if canImport(Compression)
 import Compression
-#else
+#elseif os(Android) || os(Linux)
 import CZlib
 /// zlib's own (inside `Zlib`, `inflate` is ours).
 private func zlibInflate(_ z: inout z_stream, _ flush: Int32) -> Int32 { inflate(&z, flush) }
@@ -92,7 +92,7 @@ public enum Zlib {
                 compression_decode_buffer(dst.baseAddress!, dst.count, src.baseAddress!, src.count, nil, COMPRESSION_ZLIB)
             }
         }
-        #else
+        #elseif os(Android) || os(Linux)
         // the system's zlib, told the stream has no header (window bits -15), as Apple's COMPRESSION_ZLIB reads it
         var z = z_stream()
         guard inflateInit2_(&z, -15, ZLIB_VERSION, Int32(MemoryLayout<z_stream>.size)) == Z_OK else { return Int.max }
@@ -108,6 +108,9 @@ public enum Zlib {
                 return r == Z_STREAM_END || r == Z_BUF_ERROR || r == Z_OK ? Int(z.total_out) : Int.max
             }
         }
+        #else
+        // no zlib on Windows: Galax-z's own (Inflate.swift)
+        return Inflate.raw(raw, into: &out) ?? Int.max
         #endif
     }
 

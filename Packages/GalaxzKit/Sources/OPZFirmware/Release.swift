@@ -1,4 +1,8 @@
+#if canImport(CryptoKit)
 import CryptoKit
+#else
+import Crypto        // swift-crypto: the same API, on Windows and Linux
+#endif
 import Foundation
 
 /// A Galax-z OS release, as it travels: one file (`.galaxz`), signed. It holds a build and its patch records (addresses, the

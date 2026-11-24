@@ -1,6 +1,8 @@
 # Windows and Linux
 
-Both are being worked towards, and help is very welcome. There is nothing to run yet: this is where things stand, so that nobody starts from zero.
+Both are being worked towards, and help is very welcome. **Windows has a first test build in the making** ([Windows/](../Windows/README.md)):
+the screens, the demo and the OP-Z over USB MIDI, built on Windows with one script; not yet tried with an OP-Z there. Linux has nothing
+to run yet. This is where things stand, so that nobody starts from zero.
 
 ## What carries over
 
@@ -17,7 +19,10 @@ Counted on 2026-11-22. Most of the app is plain Swift that knows nothing of Appl
 | `OPZLink` SysEx, sessions | 1,315 | CoreMIDI, CoreBluetooth, Compression | split: `OPFree/` needs only zlib; MIDI and Bluetooth need each system's own |
 | `App` | | SwiftUI, Metal, AVFoundation | new: a window, a GPU pass, sound out |
 
-None of it has been built on Linux or Windows yet. **It has been built for Android** ([Android/](../Android/README.md)), which is Linux underneath: the
+On Windows it builds with the Swift toolchain for Windows ([Windows/](../Windows/README.md)): CryptoKit is swift-crypto there, zlib is
+Galax-z's own inflate (`OPZLink/Inflate.swift`), the update mode is `COMn` (`SerialPortWindows.swift`, and only a teenage engineering
+device's port: `UpdatePorts.swift`), MIDI is WinMM, and the dots are drawn by the CPU (`Windows/Sources/GalaxzDesktop/DotRenderer.swift`).
+Nothing of it has been built on Linux yet. **It has been built for Android** ([Android/](../Android/README.md)), which is Linux underneath: the
 modules above as they are, `OPZLink` with the system's zlib where Apple's Compression is (`CZlib`), Float maths from the C library where it has only
 Double's (`ChopKit/FloatMath.swift`), the package's files from a folder (`PackageFiles`). The same should carry a Linux build most of the way.
 

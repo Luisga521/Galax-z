@@ -1,3 +1,4 @@
+#if canImport(CoreMIDI)
 // galaxz-probe: run Galax-z's own protocol code against an OP-Z on this Mac (USB or Bluetooth) and print what the app
 // would show: the active pattern, and every track's sound by name and slot. Read-only: StateSync hellos and acks,
 // and a file-service pull of the two settings files.
@@ -78,3 +79,6 @@ enum Probe {
 }
 
 exit(await Probe.run())
+#else
+print("galaxz-probe needs a Mac for now (CoreMIDI, CoreGraphics)")
+#endif
