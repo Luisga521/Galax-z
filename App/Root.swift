@@ -13,8 +13,11 @@ struct Root: View {
     @State private var offered = false
     @Environment(\.scenePhase) private var phase
     @AppStorage("fineness") private var fineness = 240
-    @AppStorage("glow") private var glow = 0.8
-    @AppStorage("afterglow") private var afterglow = 0.3
+    @AppStorage("glow") private var glow = DotDisplay.Look.defaultGlow
+    @AppStorage("afterglow") private var afterglow = DotDisplay.Look.defaultAfterglow
+    @AppStorage("stars") private var stars = true
+    /// At least 600 points both ways: an unfolded iPhone Duo (the folded one is 466 wide).
+    @State private var roomy = false
 
     /// What the offer to pair waits on: it starts again when one of these changes.
     private struct Looking: Equatable { let bluetooth: BluetoothLink.State, active: Bool }
@@ -23,7 +26,7 @@ struct Root: View {
     typealias Over = SettingsScreen.Tab
 
     var body: some View {
-        DotDisplay(live: live, look: .init(fineness: fineness, glow: glow, afterglow: afterglow), covered: over != nil || live.keyTestOpen) { what in
+        DotDisplay(live: live, look: .init(fineness: fineness, glow: glow, afterglow: afterglow, stars: stars), covered: over != nil || live.keyTestOpen) { what in
             switch what {
             case .hub: over = .os
             case .settings: over = .general
@@ -33,7 +36,9 @@ struct Root: View {
             }
         }
         .ignoresSafeArea(.container, edges: ignored)
+        .defersSystemGestures(on: roomy ? .bottom : [])      // a tab under the home bar takes a tap, not the first swipe
         .background(Color.black.ignoresSafeArea())
+        .onGeometryChange(for: Bool.self) { $0.size.width >= 600 && $0.size.height >= 600 } action: { roomy = $0 }
         .fullScreenCover(item: $over) { o in
             SettingsScreen(live: live, hub: hub, tab: o) { live.openKeyTest(); over = nil }
         }
@@ -63,7 +68,11 @@ struct Root: View {
     }
 
     /// Dots to the very edge on the Mac and iPad; clear of the island and the home bar on a phone.
-    private var ignored: Edge.Set { UIDevice.current.userInterfaceIdiom == .phone ? [] : .all }
+    /// A phone that unfolds (the iPhone Duo's inner screen) has an iPad's room: the dots go under its home bar too.
+    private var ignored: Edge.Set {
+        guard UIDevice.current.userInterfaceIdiom == .phone else { return .all }
+        return roomy ? .bottom : []
+    }
 
     /// No OP-Z by itself (an advertising one is linked within a second or two): the pairing list opens, and can be had again from the start screen.
     /// On the Mac, PAIR is on the start screen while there is no OP-Z, and nothing opens by itself: the Mac never searches Bluetooth unasked.

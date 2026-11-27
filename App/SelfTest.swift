@@ -28,7 +28,9 @@ import UIKit
     private static func say(_ s: String) { lines.append(s); print("selftest:", s) }
 
     static func start(_ live: Live, _ hub: Hub) {
-        guard let dir = value("-selftest").map({ URL(filePath: $0) }) else { return }
+        // a relative folder is the app's own Documents: on an iPhone or iPad nothing else can be written
+        // (xcrun devicectl device copy from --domain-type appDataContainer --source Documents/<folder> brings it back)
+        guard let dir = value("-selftest").map({ $0.hasPrefix("/") ? URL(filePath: $0) : URL.documentsDirectory.appending(path: $0) }) else { return }
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         Task {
             live.stage.set(.chopDial(7), to: 12)                  // hardly to be heard
@@ -116,15 +118,17 @@ import UIKit
         }
         guard let view, let w = view.window else { return say("no window") }
         try? await Task.sleep(for: .seconds(2))
+        say("pacing: \(view.pacing); low power \(ProcessInfo.processInfo.isLowPowerModeEnabled), thermal \(ProcessInfo.processInfo.thermalState.rawValue)")
         say("window \(Int(w.bounds.width))x\(Int(w.bounds.height)) on \(Int(w.screen.bounds.width))x\(Int(w.screen.bounds.height)) at \(w.screen.maximumFramesPerSecond) Hz; scene \(w.windowScene?.activationState.rawValue ?? -9); \(view.shape)")
         for p in Stage.Page.allCases {
             live.stage.page = p
             view.changed()
             try? await Task.sleep(for: .milliseconds(500))
-            let f = view.framesDrawn, c = cpu(), t = CACurrentMediaTime()
+            let f = view.framesDrawn, k = view.ticks, c = cpu(), t = CACurrentMediaTime()
+            _ = view.gpuTime()
             try? await Task.sleep(for: .seconds(2))
-            let s = CACurrentMediaTime() - t
-            say(String(format: "%@: %.0f frames a second on the display, %.1f %% of a core", p.name, Double(view.framesDrawn - f) / s, (cpu() - c) / s * 100))
+            let s = CACurrentMediaTime() - t, g = view.gpuTime()
+            say(String(format: "%@: %.0f frames a second on the display (%.0f display-link ticks), %.1f %% of a core, GPU %.1f ms a frame (worst %.1f); %@", p.name, Double(view.framesDrawn - f) / s, Double(view.ticks - k) / s, (cpu() - c) / s * 100, g.average, g.worst, view.pacing))
         }
         // resized, as a person drags it
         for size in [CGSize(width: 760, height: 560), CGSize(width: 1500, height: 900)] {

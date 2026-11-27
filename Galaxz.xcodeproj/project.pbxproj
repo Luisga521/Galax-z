@@ -343,6 +343,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "Galaxz-mac.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GALAXZ_NAME = "Galax-z Duo";
+				"GALAXZ_NAME[sdk=macosx*]" = "Galax-z";
 				INFOPLIST_FILE = App/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -426,6 +428,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "Galaxz-mac.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GALAXZ_NAME = "Galax-z Duo";
+				"GALAXZ_NAME[sdk=macosx*]" = "Galax-z";
 				INFOPLIST_FILE = App/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

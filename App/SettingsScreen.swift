@@ -394,8 +394,9 @@ private struct Combo: View {
 
 private struct DisplaySection: View {
     @AppStorage("fineness") private var fineness = 240
-    @AppStorage("glow") private var glow = 0.8
-    @AppStorage("afterglow") private var afterglow = 0.3
+    @AppStorage("glow") private var glow = DotDisplay.Look.defaultGlow
+    @AppStorage("afterglow") private var afterglow = DotDisplay.Look.defaultAfterglow
+    @AppStorage("stars") private var stars = true
 
     var body: some View {
         Page {
@@ -408,12 +409,17 @@ private struct DisplaySection: View {
                 .pickerStyle(.segmented).controlSize(.large).frame(minHeight: 44)
                 Level(name: "GLOW", value: $glow)
                 Level(name: "AFTERGLOW", value: $afterglow)
+                Toggle(isOn: $stars) { Text("STARS").font(Face.mono(12)) }
+                    .accessibilityHint("Stars, light and sparks behind every page")
                 HStack(spacing: 0) {
                     Text("Glow is the light around a dot; afterglow, how long it lingers.").font(Face.mono(10)).opacity(0.45)
                         .fixedSize(horizontal: false, vertical: true)
                     Spacer(minLength: 8)
-                    Button("RESET") { (fineness, glow, afterglow) = (240, 0.8, 0.3) }.buttonStyle(TallPill())
-                        .disabled(fineness == 240 && glow == 0.8 && afterglow == 0.3)
+                    Button("CRISP") { (glow, afterglow) = (0, 0) }.buttonStyle(TallPill())
+                        .disabled(glow == 0 && afterglow == 0)
+                    Spacer(minLength: 8).frame(maxWidth: 8)
+                    Button("RESET") { (fineness, glow, afterglow) = (240, DotDisplay.Look.defaultGlow, DotDisplay.Look.defaultAfterglow) }.buttonStyle(TallPill())
+                        .disabled(fineness == 240 && glow == DotDisplay.Look.defaultGlow && afterglow == DotDisplay.Look.defaultAfterglow)
                 }
             }
         }
