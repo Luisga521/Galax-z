@@ -38,6 +38,9 @@ public final class Stage {
     var linkFade = Spring(0, stiffness: 60, damping: 16)
     var trail = Trail()
     var sky = Sky()
+    var ambient = Ambience()
+    /// Stars, light and sparks under every page but SKY and SHOW (Settings › Screen).
+    public var ambienceOn = true
     var show = Show()
     var field = Field()
     var loads: [Double] = []                       // the meter's means, for a history
@@ -262,6 +265,7 @@ public final class Stage {
         if strikes[t].count > 8 { strikes[t].removeFirst() }
         trail.add(track: t, note: note, velocity: velocity, at: time, until: seconds.map { time + min(30, max(0.04, $0)) })
         sky.hit(t, velocity)
+        ambient.hit(t, velocity)
     }
 
     public func select(track t: Int) {
@@ -323,7 +327,7 @@ public final class Stage {
     /// Nothing on screen moves: the picture can wait for the next change.
     public var still: Bool {
         guard input.link == .live, !playhead.playing, page != .sky, page != .fx, page != .chops, page != .show, grips.isEmpty, performer.isEmpty, player.isEmpty, machinePage == nil, turned > 1, linkFade.settled, tabX.settled else { return false }
-        guard hitFlashes.allSatisfy({ $0.level == 0 }), levels.allSatisfy({ $0.level == 0 }), trail.isEmpty(at: time) else { return false }
+        guard hitFlashes.allSatisfy({ $0.level == 0 }), levels.allSatisfy({ $0.level == 0 }), trail.isEmpty(at: time), ambient.quiet else { return false }
         return page != .track && knobs[track].allSatisfy(\.settled)
     }
 
@@ -354,6 +358,7 @@ public final class Stage {
         let head = 15, foot = 13
         let body = DotRect(4, head + 2, c.width - 8, c.height - head - foot - 4)
         header(c, DotRect(4, 2, c.width - 8, head - 2))
+        ambience(c, body, dt)
         switch page {
         case .track: trackPage(c, body, dt)
         case .grid: gridPage(c, body, dt)

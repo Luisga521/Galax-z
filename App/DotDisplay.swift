@@ -19,6 +19,8 @@ struct DotDisplay: UIViewRepresentable {
         var afterglow = Look.defaultAfterglow
         /// Crisp by default: at the old 0.8 and 0.3 the glow and trails sat over the dots like a haze on a large sharp screen.
         static let defaultGlow = 0.2, defaultAfterglow = 0.1
+        /// Stars, light and sparks under every page (the stage's ambience).
+        var stars = true
     }
 
     func makeUIView(context: Context) -> DotView { DotView(stage: live.stage) }
@@ -38,7 +40,7 @@ final class DotView: UIView, UIGestureRecognizerDelegate, CAMetalDisplayLinkDele
     override class var layerClass: AnyClass { CAMetalLayer.self }
     private var metal: CAMetalLayer { layer as! CAMetalLayer }
 
-    var look = DotDisplay.Look() { didSet { if look != oldValue { relayout(); changed() } } }
+    var look = DotDisplay.Look() { didSet { if look != oldValue { stage.ambienceOn = look.stars; relayout(); changed() } } }
     var action: (Stage.Action) -> Void = { _ in }
 
     /// How long after its moment a frame was shown, now and then.

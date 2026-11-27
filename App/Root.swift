@@ -15,6 +15,7 @@ struct Root: View {
     @AppStorage("fineness") private var fineness = 240
     @AppStorage("glow") private var glow = DotDisplay.Look.defaultGlow
     @AppStorage("afterglow") private var afterglow = DotDisplay.Look.defaultAfterglow
+    @AppStorage("stars") private var stars = true
     /// At least 600 points both ways: an unfolded iPhone Duo (the folded one is 466 wide).
     @State private var roomy = false
 
@@ -25,7 +26,7 @@ struct Root: View {
     typealias Over = SettingsScreen.Tab
 
     var body: some View {
-        DotDisplay(live: live, look: .init(fineness: fineness, glow: glow, afterglow: afterglow), covered: over != nil || live.keyTestOpen) { what in
+        DotDisplay(live: live, look: .init(fineness: fineness, glow: glow, afterglow: afterglow, stars: stars), covered: over != nil || live.keyTestOpen) { what in
             switch what {
             case .hub: over = .os
             case .settings: over = .general
