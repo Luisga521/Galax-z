@@ -45,7 +45,7 @@ targets:
     info:
       path: App/Info.plist
       properties:
-        CFBundleDisplayName: Galax-z
+        CFBundleDisplayName: $(GALAXZ_NAME)                 # "Galax-z Duo" on iPhone and iPad, "Galax-z" on the Mac
         GalaxzByline: $(GALAXZ_BYLINE)
         NSBluetoothAlwaysUsageDescription: >-
           Galax-z uses Bluetooth only to find your OP-Z and connect it as a MIDI device. Nothing leaves this device.
@@ -85,6 +85,8 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: $(GALAXZ_ID)
+        GALAXZ_NAME: Galax-z Duo
+        "GALAXZ_NAME[sdk=macosx*]": Galax-z
         "CODE_SIGN_ENTITLEMENTS[sdk=macosx*]": Galaxz-mac.entitlements
         TARGETED_DEVICE_FAMILY: "1,2"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
