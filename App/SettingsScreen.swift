@@ -394,8 +394,8 @@ private struct Combo: View {
 
 private struct DisplaySection: View {
     @AppStorage("fineness") private var fineness = 240
-    @AppStorage("glow") private var glow = 0.8
-    @AppStorage("afterglow") private var afterglow = 0.3
+    @AppStorage("glow") private var glow = DotDisplay.Look.defaultGlow
+    @AppStorage("afterglow") private var afterglow = DotDisplay.Look.defaultAfterglow
 
     var body: some View {
         Page {
@@ -412,8 +412,11 @@ private struct DisplaySection: View {
                     Text("Glow is the light around a dot; afterglow, how long it lingers.").font(Face.mono(10)).opacity(0.45)
                         .fixedSize(horizontal: false, vertical: true)
                     Spacer(minLength: 8)
-                    Button("RESET") { (fineness, glow, afterglow) = (240, 0.8, 0.3) }.buttonStyle(TallPill())
-                        .disabled(fineness == 240 && glow == 0.8 && afterglow == 0.3)
+                    Button("CRISP") { (glow, afterglow) = (0, 0) }.buttonStyle(TallPill())
+                        .disabled(glow == 0 && afterglow == 0)
+                    Spacer(minLength: 8).frame(maxWidth: 8)
+                    Button("RESET") { (fineness, glow, afterglow) = (240, DotDisplay.Look.defaultGlow, DotDisplay.Look.defaultAfterglow) }.buttonStyle(TallPill())
+                        .disabled(fineness == 240 && glow == DotDisplay.Look.defaultGlow && afterglow == DotDisplay.Look.defaultAfterglow)
                 }
             }
         }

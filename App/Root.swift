@@ -13,8 +13,8 @@ struct Root: View {
     @State private var offered = false
     @Environment(\.scenePhase) private var phase
     @AppStorage("fineness") private var fineness = 240
-    @AppStorage("glow") private var glow = 0.8
-    @AppStorage("afterglow") private var afterglow = 0.3
+    @AppStorage("glow") private var glow = DotDisplay.Look.defaultGlow
+    @AppStorage("afterglow") private var afterglow = DotDisplay.Look.defaultAfterglow
     /// At least 600 points both ways: an unfolded iPhone Duo (the folded one is 466 wide).
     @State private var roomy = false
 

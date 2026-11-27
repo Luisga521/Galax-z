@@ -15,8 +15,10 @@ struct DotDisplay: UIViewRepresentable {
     struct Look: Equatable {
         /// Dots along the short side.
         var fineness = 240
-        var glow = 0.8
-        var afterglow = 0.5
+        var glow = Look.defaultGlow
+        var afterglow = Look.defaultAfterglow
+        /// Crisp by default: at the old 0.8 and 0.3 the glow and trails sat over the dots like a haze on a large sharp screen.
+        static let defaultGlow = 0.2, defaultAfterglow = 0.1
     }
 
     func makeUIView(context: Context) -> DotView { DotView(stage: live.stage) }
@@ -32,7 +34,7 @@ struct DotDisplay: UIViewRepresentable {
     static func dismantleUIView(_ view: DotView, coordinator: ()) { view.stop() }
 }
 
-final class DotView: UIView, UIGestureRecognizerDelegate {
+final class DotView: UIView, UIGestureRecognizerDelegate, CAMetalDisplayLinkDelegate {
     override class var layerClass: AnyClass { CAMetalLayer.self }
     private var metal: CAMetalLayer { layer as! CAMetalLayer }
 
@@ -47,7 +49,9 @@ final class DotView: UIView, UIGestureRecognizerDelegate {
     private let stage: Stage
     private let canvas = DotCanvas(width: 1, height: 1)
     private let gpu: GPU?
-    private var link: CADisplayLink?
+    private var link: CAMetalDisplayLink?
+    /// The last two frames' moments, for the interval the link gives.
+    private var lastTarget = 0.0, interval = 0.0
     private var lastTime = 0.0
     private var lead = 0.0
     private var movedAt = 0.0
@@ -55,6 +59,16 @@ final class DotView: UIView, UIGestureRecognizerDelegate {
     private var touchStart: (CGPoint, Double)?
     private var fingers: [UITouch: Int] = [:], nextFinger = 0
     private(set) var framesDrawn = 0
+    /// Display-link callbacks, drawn or not: with framesDrawn, whether the screen or the drawing sets the rate (self test).
+    private(set) var ticks = 0
+    /// The GPU's time a frame since the last ask (self test).
+    func gpuTime() -> (average: Double, worst: Double) { gpu?.timing.take() ?? (0, 0) }
+    /// What the display link was asked for and gives (self test).
+    var pacing: String {
+        guard let link else { return "no display link" }
+        let r = link.preferredFrameRateRange
+        return String(format: "asked %.0f-%.0f (%.0f), link interval %.1f ms", r.minimum, r.maximum, r.preferred ?? 0, interval * 1000)
+    }
     /// For the self test.
     var shape: String { "\(canvas.width)x\(canvas.height) dots of \(pitch) px, drawable \(Int(metal.drawableSize.width))x\(Int(metal.drawableSize.height))" }
 
@@ -67,7 +81,7 @@ final class DotView: UIView, UIGestureRecognizerDelegate {
         metal.device = gpu?.device
         metal.pixelFormat = .bgra8Unorm
         metal.framebufferOnly = true
-        metal.maximumDrawableCount = 2               // a third would be a frame further behind
+        metal.maximumDrawableCount = 3
         metal.isOpaque = true
         isMultipleTouchEnabled = true
         isAccessibilityElement = true
@@ -89,7 +103,12 @@ final class DotView: UIView, UIGestureRecognizerDelegate {
         super.didMoveToWindow()
         guard window != nil else { return stop() }
         guard link == nil else { return }
-        let l = CADisplayLink(target: self, selector: #selector(tick(_:)))
+        // The layer's own link hands over a drawable with each frame, on whatever screen the layer is (the iPhone Duo's inner or outer
+        // one). A CADisplayLink with nextDrawable() waited for one on the main thread 95 % of the time on the Duo's inner screen,
+        // and iOS gave it 30 frames a second (60 with three drawables) where the screen goes to 120.
+        let l = CAMetalDisplayLink(metalLayer: metal)
+        l.delegate = self
+        l.preferredFrameLatency = 2
         l.add(to: .main, forMode: .common)
         link = l
         l.isPaused = covered
@@ -116,20 +135,28 @@ final class DotView: UIView, UIGestureRecognizerDelegate {
         link.preferredFrameRateRange = CAFrameRateRange(minimum: top, maximum: top, preferred: top)
     }
 
-    @objc private func tick(_ l: CADisplayLink) {
-        let now = l.targetTimestamp
+    nonisolated func metalDisplayLink(_ link: CAMetalDisplayLink, needsUpdate update: CAMetalDisplayLink.Update) {
+        nonisolated(unsafe) let drawable = update.drawable     // made for this call and used only in it, on the main thread
+        let now = update.targetPresentationTimestamp
+        MainActor.assumeIsolated { tick(drawable, now) }       // the link runs on the main run loop
+    }
+
+    private func tick(_ drawable: CAMetalDrawable, _ now: Double) {
+        ticks += 1
+        if lastTarget > 0 { interval = now - lastTarget }
+        lastTarget = now
         // after the last change, long enough for the afterglow to go out: the same frame again is not drawn (the link keeps its rate)
         if stage.still, CACurrentMediaTime() - movedAt > 1.2 {
             lastTime = 0
             return
         }
-        draw(now, dt: lastTime == 0 ? l.targetTimestamp - l.timestamp : min(0.1, max(0.001, now - lastTime)))
+        let first = interval > 0 ? interval : 1 / Double(max(60, window?.screen.maximumFramesPerSecond ?? 120))
+        draw(drawable, now, dt: lastTime == 0 ? first : min(0.1, max(0.001, now - lastTime)))
         lastTime = now
     }
 
-    private func draw(_ now: Double, dt: Double) {
+    private func draw(_ drawable: CAMetalDrawable, _ now: Double, dt: Double) {
         guard let gpu, bounds.width > 1, metal.drawableSize.width > 1 else { return }
-        guard let drawable = metal.nextDrawable() else { return }
         stage.frame(canvas, time: now + lead, dt: dt)
         gpu.draw(canvas, to: drawable, GPU.Look(origin: origin, pitch: Float(pitch), glow: Float(look.glow) * 0.42, unlit: 0.0046,
                                                 decay: look.afterglow <= 0 ? 0 : Float(pow(0.5, dt / (0.012 + look.afterglow * 0.06))),
@@ -286,6 +313,18 @@ final class GPU {
     private var dots: [MTLTexture] = [], light: [MTLTexture] = [], blur: [MTLTexture] = []
     private var frame = 0
     private let free = DispatchSemaphore(value: 3)
+    /// The GPU's own time a frame, for the self test.
+    let timing = Timing()
+    final class Timing: @unchecked Sendable {
+        private let lock = NSLock()
+        private var total = 0.0, count = 0, worst = 0.0
+        func add(_ s: Double) { lock.lock(); total += s; count += 1; worst = max(worst, s); lock.unlock() }
+        /// Average and worst in ms since the last call.
+        func take() -> (average: Double, worst: Double) {
+            lock.lock(); defer { total = 0; count = 0; worst = 0; lock.unlock() }
+            return (count > 0 ? total / Double(count) * 1000 : 0, worst * 1000)
+        }
+    }
 
     init?() {
         guard let d = MTLCreateSystemDefaultDevice(), let q = d.makeCommandQueue(), let lib = try? d.makeLibrary(source: dotShaders, options: nil),
@@ -352,7 +391,10 @@ final class GPU {
             e.endEncoding()
         }
         if let drawable { b.present(drawable) }
-        b.addCompletedHandler { [free] _ in free.signal() }
+        b.addCompletedHandler { [free, timing] b in
+            timing.add(b.gpuEndTime - b.gpuStartTime)
+            free.signal()
+        }
         b.commit()
         return b
     }
